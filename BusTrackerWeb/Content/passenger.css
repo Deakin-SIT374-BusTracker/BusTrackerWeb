@@ -23,6 +23,13 @@ textarea {
     max-width: 280px;
 }
 
+
+.vcenter {
+    display: inline-block;
+    vertical-align: middle;
+    float: none;
+}
+
 .map {
 	min-height:500px;
 	height:100%;
@@ -106,6 +113,7 @@ textarea {
 	max-height: 500px;
 }
 	
+	
 .sidenav .dropdown-menu {
     margin-left: calc(50% - 80px);
     margin-right: calc(50% - 80px);
@@ -160,4 +168,74 @@ textarea {
 .list-group-item {
 	white-space: normal;
 	word-wrap: break-word;
+}
+#loading .modal-dialog, #routeInfoModal .modal-dialog {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -moz-transform: translate(-50%, -75%);
+    -webkit-transform: translate(-50%, -75%);
+    -o-transform: translate(-50%, -75%);
+    transform: translate(-50%, -75%);
+}
+
+.modal-body .glyphicon { top: 3px; }
+
+#routeModal .panel, #routeModal .modal-content { margin: 0px; border: 0; }
+#routeModal .routes-number-badge { font-family: 'Helvetica'; width: auto; margin-right: 2px;}
+#routeModal .panel-title .glyphicon { margin-right:5px; top: 2px; }
+#routeModal .panel-title .glyphicon-new-window { margin-left:5px; top: 2px; }
+
+#routeInfoModal .panel, #routeInfoModal .modal-content { margin: 0px; border: 0; }
+#routeInfoModal .routes-number-badge { font-family: 'Helvetica'; width: auto; margin-right: 2px;}
+#routeInfoModal .panel-title .glyphicon { margin-right:5px; top: 2px; }
+#routeInfoModal .panel-title .glyphicon-new-window { margin-left:5px; top: 2px; }
+
+#loader {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	z-index: 1;
+	width: 150px;
+	height: 150px;
+	margin: -75px 0 0 -75px;
+	border: 16px solid #f3f3f3;
+	border-radius: 50%;
+	border-top: 16px solid blue;
+	border-right: 16px solid green;
+	border-bottom: 16px solid red;
+	border-left: 16px solid pink;
+	width: 120px;
+	height: 120px;
+	-webkit-animation: spin 2s linear infinite;
+	animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Add animation to "page content" */
+.animate-bottom {
+  position: relative;
+  -webkit-animation-name: animatebottom;
+  -webkit-animation-duration: 1s;
+  animation-name: animatebottom;
+  animation-duration: 1s
+}
+
+@-webkit-keyframes animatebottom {
+  from { bottom:-100px; opacity:0 } 
+  to { bottom:0px; opacity:1 }
+}
+
+@keyframes animatebottom { 
+  from{ bottom:-100px; opacity:0 } 
+  to{ bottom:0; opacity:1 }
 }

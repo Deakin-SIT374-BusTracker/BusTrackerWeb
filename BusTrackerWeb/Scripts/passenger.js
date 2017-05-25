@@ -1,9 +1,20 @@
-function initializeRoutes(){
-	var $routes_group = {};
+$(document).ready(function(){
+	var routeModal_title,
+		routeModal_body,
+		routeInfoModal_title,
+		routeInfoModal_body,
+		$routes_group = {};
+	
+	var domain = "";
+	
+	routeModal_title = $("#routeModal .panel-title");
+	routeModal_body = $("#routeModal .modal-body");
+	routeInfoModal_title = $("#routeInfoModal .panel-title");
+	routeInfoModal_body = $("#routeInfoModal .modal-body");
 	
 	jQuery.ajax({
 		type: "GET",
-		url: "/api/Route/GetRoutes",
+		url: domain + "/api/Route/GetRoutes",
 		headers: {          
 			Accept: "application/xml"  
 		},
@@ -19,9 +30,13 @@ function initializeRoutes(){
 			
 			$routes.each(function () {
 				var routename = $(this).find('RouteName').text();
-				var index = routename.indexOf('-');
-				if(routename[index + 1] == ' ') {
-					routename = routename.substring(0, index != -1 ? index : routename.length);
+				var index_seperator = routename.indexOf('-');
+				var index_to = routename.indexOf('to');
+				if(routename[index_seperator + 1] == ' ') {
+					routename = routename.substring(0, index_seperator != -1 ? index_seperator : routename.length);
+					routename = routename.trim();
+				} else if (routename[index_to + 2] == ' ') {
+					routename = routename.substring(0, index_to != -1 ? index_to : routename.length);
 					routename = routename.trim();
 				}
 				if(!stops[routename]) {
@@ -34,9 +49,14 @@ function initializeRoutes(){
 				
 				$routes.each(function () {
 					var routename = $(this).find('RouteName').text();
-					var index = routename.indexOf('-');
-					if(routename[index + 1] == ' ') {
-						routename = routename.substring(0, index != -1 ? index : routename.length);
+					var index_seperator = routename.indexOf('-');
+					var index_to = routename.indexOf('to');
+					
+					if(routename[index_seperator + 1] == ' ') {
+						routename = routename.substring(0, index_seperator != -1 ? index_seperator : routename.length);
+						routename = routename.trim();
+					} else if (routename[index_to + 2] == ' ') {
+						routename = routename.substring(0, index_to != -1 ? index_to : routename.length);
 						routename = routename.trim();
 					}
 										
@@ -60,11 +80,11 @@ function initializeRoutes(){
 	});
 	
 	$('#searchroutes').keyup(function(){
-		var current_query = $('#searchroutes').val();
+		var current_query = $('#searchroutes').val().toLowerCase();
 		if (current_query !== "") {
 			$(".routes-group-list .list-group-item").hide();
 			$(".routes-group-list .list-group-item").each(function(){
-				var current_keyword = $(this).clone().children().remove().end().text();
+				var current_keyword = $(this).clone().children().remove().end().text().toLowerCase();;
 				if (current_keyword.indexOf(current_query) >=0) {
 					$(this).show();    	 	
 				};
@@ -77,21 +97,124 @@ function initializeRoutes(){
 	$('body').on('click', '.routes-group-list a', function() {
 		var stationName = $(this).clone().children().remove().end().text();
 		
-		$("#routeModal .route-name").text(stationName);
+		routeModal_title.html("<span class=\"glyphicon glyphicon-info-sign\"></span>Routes departuring from '" + stationName + "'");
+		
 		var $routesavailable = $routes_group[stationName];
-		console.log($($routesavailable[0]).find("RouteName").text());
+		
+		routeModal_body.html("<div class=\"list-group routes-list\"></div>");
+		
 		$(".routes-list").empty();
 		$.each($routesavailable, function(key, value) {
 			$(".routes-list").append(
-				"<a href=\"javascript:void(0)\" class=\"list-group-item justify-content-between\">"
-				+ "Route Id: " + $(value).find("RouteId").text() + "<br>"
-				+ "Route Name: " + $(value).find("RouteName").text() + "<br>"
-				+ "Route Number: " + $(value).find("RouteNumber").text() + "<br>"
-				+ "Route Type: " + $(value).find("RouteType").text() + "<br>"
+				"<a href=\"javascript:void(0)\" class=\"list-group-item justify-content-between\" data-route-id=\"" + $(value).find("RouteId").text() + "\">"
+				+ $(value).find("RouteName").text()
+				+ "<span class=\"routes-number-badge form-control-feedback\"><span class=\"badge badge-default badge-pill\">" + $(value).find("RouteNumber").text() + "</span></span>"
 				+ "</a>"
 			);
 		});
-		
 		$('#routeModal').modal("show");
 	});
-};
+	
+	$('body').on('click', '#routeModal .routes-list a', function() {
+		var route_id = $(this).data("route-id");
+		jQuery.ajax({
+			type: "GET",
+			url: domain + "/api/Route/GetRouteDirections?routeId=" + route_id,
+			headers: {          
+				Accept: "application/xml"  
+			},
+			dataType: "text",
+            beforeSend: function () {
+               	$('#loading').modal("show");
+            },
+			success: function (directionsInformation) {
+				jQuery.ajax({
+					type: "GET",
+					url: domain + "/api/Route/GetRoute?routeId=" + route_id,
+					headers: {          
+						Accept: "application/xml"  
+					},
+					dataType: "text",
+					success: function (routeInformation) {
+						
+						var routeDirections = $.parseXML(directionsInformation),
+							$routeDirections = $(routeDirections);
+						var $directions = $routeDirections.find('DirectionModel');
+						
+						var routeInfo = $.parseXML(routeInformation),
+							$routeInfo = $(routeInfo);
+						var $route = $routeInfo.find('RouteModel');
+						
+		               	$('#loading').modal("hide");
+						routeInfoModal_title.html("<span class=\"glyphicon glyphicon-info-sign\"></span>" + $route.find("RouteName").text());
+						
+						$("#routeInfoModal .modal-body #route_id").html($route.find("RouteId").text());
+						$("#routeInfoModal .modal-body #route_number").html($route.find("RouteNumber").text());
+						$("#routeInfoModal .modal-body #route_type").html($route.find("RouteType").text());
+						$("#routeInfoModal .modal-body #direction_from").html($directions.eq(0).find('DirectionName').text()).data("data-direction-id", $directions.eq(0).find('DirectionId').text());
+						$("#routeInfoModal .modal-body #direction_towards").html($directions.eq(1).find('DirectionName').text()).data("data-direction-id", $directions.eq(1).find('DirectionId').text());
+						
+						$('#routeInfoModal').modal("show");
+					}
+				});
+			}
+		});
+	});
+	
+	$('body').on('click', '#routeInfoModal #swap-directions', function() {
+		var direction_from = $("#routeInfoModal .modal-body #direction_from").html();
+		var direction_from_id = $("#routeInfoModal .modal-body #direction_from").data("data-direction-id");
+		var direction_towards = $("#routeInfoModal .modal-body #direction_towards").html();
+		var direction_towards_id = $("#routeInfoModal .modal-body #direction_towards").data("data-direction-id");
+		
+		$("#routeInfoModal .modal-body #direction_from").html(direction_towards).data("data-direction-id", direction_towards_id);
+		$("#routeInfoModal .modal-body #direction_towards").html(direction_from).data("data-direction-id", direction_from_id);
+	});
+	
+	
+	$('body').on('click', '#routeInfoModal #get-directions', function() {
+		var route_id = $("#routeInfoModal .modal-body #route_id").html();
+		var direction_id = $("#routeInfoModal .modal-body #direction_towards").data("data-direction-id");
+		jQuery.ajax({
+			type: "GET",
+			url: domain + "/api/Route/GetRouteNextRun?routeId=" + route_id + "&directionId=" + direction_id,
+			headers: {          
+				Accept: "application/xml"  
+			},
+			dataType: "text",
+            beforeSend: function () {
+               	$('#routeInfoModal').modal("hide");
+               	$('#routeModal').modal("hide");
+               	$('#loading').modal("show");
+            },
+			success: function (data) {
+               	$('#loading').modal("hide");
+				
+				var xmlDoc = $.parseXML(data),
+					$xml = $(xmlDoc);
+				var $stops = $xml.find('Stop');
+				
+				var stops_json = "{\n";
+				stops_json +="  \"stops\": [\n";
+				for(var i = 0; i < $stops.length - 2; i++) {
+					stops_json += "    { \n";
+					stops_json += "        \"stop_name\": \"" + $stops.eq(i).find("StopName").text() + "\",\n";
+					stops_json += "        \"stop_id\": " + $stops.eq(i).find("StopId").text() + ",\n";
+					stops_json += "        \"stop_latitude\": " + $stops.eq(i).find("StopLatitude").text() + ",\n";
+					stops_json += "        \"stop_longitude\": " + $stops.eq(i).find("StopLongitude").text() + "\n";
+					stops_json += "    },\n";
+				}
+				stops_json += "    { \n";
+				stops_json += "        \"stop_name\": \"" + $stops.eq($stops.length - 1).find("StopName").text() + "\",\n";
+				stops_json += "        \"stop_id\": " + $stops.eq($stops.length - 1).find("StopId").text() + ",\n";
+				stops_json += "        \"stop_latitude\": " + $stops.eq($stops.length - 1).find("StopLatitude").text() + ",\n";
+				stops_json += "        \"stop_longitude\": " + $stops.eq($stops.length - 1).find("StopLongitude").text() + "\n";
+				stops_json += "    }\n";
+				stops_json += "  ]\n";
+				stops_json += "}\n";
+				
+				startSimulation(stops_json);
+			}
+		});
+	});
+});
