@@ -5,7 +5,7 @@ $(document).ready(function(){
 		routeInfoModal_body,
 		$routes_group = {};
 	
-	var domain = "";
+	var domain = "http://bustrackerweb.azurewebsites.net";
 	
 	routeModal_title = $("#routeModal .panel-title");
 	routeModal_body = $("#routeModal .modal-body");
@@ -192,6 +192,8 @@ $(document).ready(function(){
 				
 				var xmlDoc = $.parseXML(data),
 					$xml = $(xmlDoc);
+				var $scheduled_departures = $xml.find('ScheduledDeparture');
+				var $estimated_departures = $xml.find('EstimatedDeparture');
 				var $stops = $xml.find('Stop');
 				
 				var stops_json = "{\n";
@@ -202,6 +204,8 @@ $(document).ready(function(){
 					stops_json += "        \"stop_id\": " + $stops.eq(i).find("StopId").text() + ",\n";
 					stops_json += "        \"stop_latitude\": " + $stops.eq(i).find("StopLatitude").text() + ",\n";
 					stops_json += "        \"stop_longitude\": " + $stops.eq(i).find("StopLongitude").text() + "\n";
+					stops_json += "        \"scheduled_departure\": " + $scheduled_departures.eq(i).text() + "\n";
+					stops_json += "        \"estimated_departure\": " + $estimated_departures.eq(i).text() + "\n";
 					stops_json += "    },\n";
 				}
 				stops_json += "    { \n";
@@ -209,6 +213,8 @@ $(document).ready(function(){
 				stops_json += "        \"stop_id\": " + $stops.eq($stops.length - 1).find("StopId").text() + ",\n";
 				stops_json += "        \"stop_latitude\": " + $stops.eq($stops.length - 1).find("StopLatitude").text() + ",\n";
 				stops_json += "        \"stop_longitude\": " + $stops.eq($stops.length - 1).find("StopLongitude").text() + "\n";
+                stops_json += "        \"scheduled_departure\": " + $scheduled_departures.eq($stops.length - 1).text() + "\n";
+                stops_json += "        \"estimated_departure\": " + $estimated_departures.eq($stops.length - 1).text() + "\n";
 				stops_json += "    }\n";
 				stops_json += "  ]\n";
 				stops_json += "}\n";
