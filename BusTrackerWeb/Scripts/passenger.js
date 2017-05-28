@@ -203,8 +203,8 @@ $(document).ready(function(){
 					stops_json += "        \"stop_name\": \"" + $stops.eq(i).find("StopName").text() + "\",\n";
 					stops_json += "        \"stop_id\": " + $stops.eq(i).find("StopId").text() + ",\n";
 					stops_json += "        \"stop_latitude\": " + $stops.eq(i).find("StopLatitude").text() + ",\n";
-					stops_json += "        \"stop_longitude\": " + $stops.eq(i).find("StopLongitude").text() + "\n";
-					stops_json += "        \"scheduled_departure\": " + $scheduled_departures.eq(i).text() + "\n";
+					stops_json += "        \"stop_longitude\": " + $stops.eq(i).find("StopLongitude").text() + ",\n";
+					stops_json += "        \"scheduled_departure\": " + $scheduled_departures.eq(i).text() + ",\n";
 					stops_json += "        \"estimated_departure\": " + $estimated_departures.eq(i).text() + "\n";
 					stops_json += "    },\n";
 				}
@@ -212,13 +212,13 @@ $(document).ready(function(){
 				stops_json += "        \"stop_name\": \"" + $stops.eq($stops.length - 1).find("StopName").text() + "\",\n";
 				stops_json += "        \"stop_id\": " + $stops.eq($stops.length - 1).find("StopId").text() + ",\n";
 				stops_json += "        \"stop_latitude\": " + $stops.eq($stops.length - 1).find("StopLatitude").text() + ",\n";
-				stops_json += "        \"stop_longitude\": " + $stops.eq($stops.length - 1).find("StopLongitude").text() + "\n";
-                stops_json += "        \"scheduled_departure\": " + $scheduled_departures.eq($stops.length - 1).text() + "\n";
+				stops_json += "        \"stop_longitude\": " + $stops.eq($stops.length - 1).find("StopLongitude").text() + ",\n";
+                stops_json += "        \"scheduled_departure\": " + $scheduled_departures.eq($stops.length - 1).text() + ",\n";
                 stops_json += "        \"estimated_departure\": " + $estimated_departures.eq($stops.length - 1).text() + "\n";
 				stops_json += "    }\n";
 				stops_json += "  ]\n";
 				stops_json += "}\n";
-				
+                
 				startSimulation(stops_json);
 			}
 		});
