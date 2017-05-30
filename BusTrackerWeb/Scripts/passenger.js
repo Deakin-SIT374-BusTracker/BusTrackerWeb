@@ -199,22 +199,36 @@ $(document).ready(function(){
 				var stops_json = "{\n";
 				stops_json +="  \"stops\": [\n";
 				for(var i = 0; i < $stops.length - 2; i++) {
+                    var scheduled_departure = $scheduled_departures.eq(i).text().toString().split("T");
+                    var scheduled_departure_date = scheduled_departure[0];
+                    var scheduled_departure_time = (scheduled_departure[1].split("+"))[0];
+                    
+                    var estimated_departure = $estimated_departures.eq(i).text().toString().split("T");
+                    var estimated_departure_date = estimated_departure[0];
+                    var estimated_departure_time = (estimated_departure[1].split("+"))[0];
 					stops_json += "    { \n";
 					stops_json += "        \"stop_name\": \"" + $stops.eq(i).find("StopName").text() + "\",\n";
 					stops_json += "        \"stop_id\": " + $stops.eq(i).find("StopId").text() + ",\n";
 					stops_json += "        \"stop_latitude\": " + $stops.eq(i).find("StopLatitude").text() + ",\n";
 					stops_json += "        \"stop_longitude\": " + $stops.eq(i).find("StopLongitude").text() + ",\n";
-					stops_json += "        \"scheduled_departure\": " + $scheduled_departures.eq(i).text() + ",\n";
-					stops_json += "        \"estimated_departure\": " + $estimated_departures.eq(i).text() + "\n";
+					stops_json += "        \"scheduled_departure\": \"" + scheduled_departure_date + ", " + scheduled_departure_time + "\",\n";
+					stops_json += "        \"estimated_departure\": \"" + estimated_departure_date + ", " + estimated_departure_time + "\"\n";
 					stops_json += "    },\n";
 				}
+                var scheduled_departure = $scheduled_departures.eq($stops.length - 1).text().toString().split("T");
+                var scheduled_departure_date = scheduled_departure[0];
+                var scheduled_departure_time = (scheduled_departure[1].split("+"))[0];
+                
+                var estimated_departure = $estimated_departures.eq($stops.length - 1).text().toString().split("T");
+                var estimated_departure_date = estimated_departure[0];
+                var estimated_departure_time = (estimated_departure[1].split("+"))[0];
 				stops_json += "    { \n";
 				stops_json += "        \"stop_name\": \"" + $stops.eq($stops.length - 1).find("StopName").text() + "\",\n";
 				stops_json += "        \"stop_id\": " + $stops.eq($stops.length - 1).find("StopId").text() + ",\n";
 				stops_json += "        \"stop_latitude\": " + $stops.eq($stops.length - 1).find("StopLatitude").text() + ",\n";
 				stops_json += "        \"stop_longitude\": " + $stops.eq($stops.length - 1).find("StopLongitude").text() + ",\n";
-                stops_json += "        \"scheduled_departure\": " + $scheduled_departures.eq($stops.length - 1).text() + ",\n";
-                stops_json += "        \"estimated_departure\": " + $estimated_departures.eq($stops.length - 1).text() + "\n";
+                stops_json += "        \"scheduled_departure\": \"" + scheduled_departure_date + ", " + scheduled_departure_time + "\",\n";
+                stops_json += "        \"estimated_departure\": \"" + estimated_departure_date + ", " + estimated_departure_time + "\"\n";
 				stops_json += "    }\n";
 				stops_json += "  ]\n";
 				stops_json += "}\n";
