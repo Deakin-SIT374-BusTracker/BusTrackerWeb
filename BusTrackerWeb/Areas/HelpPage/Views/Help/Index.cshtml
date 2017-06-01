@@ -6,7 +6,7 @@
 @model Collection<ApiDescription>
 
 @{
-    ViewBag.Title = "Bus Tracker Web API Help Page";
+    ViewBag.Title = "<img style="max - width:25px; margin - top: -4px; margin - right: 10px; float:left; " src=" / logo.png">Bus HoP Web API Help Page";
 
     // Group APIs by controller
     ILookup<HttpControllerDescriptor, ApiDescription> apiGroups = Model.ToLookup(api => api.ActionDescriptor.ControllerDescriptor);
