@@ -6,7 +6,7 @@
 @model Collection<ApiDescription>
 
 @{
-    ViewBag.Title = "<img style="max - width:25px; margin - top: -4px; margin - right: 10px; float:left; " src=" / logo.png">Bus HoP Web API Help Page";
+    ViewBag.Title = "Bus HoP Web API Help Page";
 
     // Group APIs by controller
     ILookup<HttpControllerDescriptor, ApiDescription> apiGroups = Model.ToLookup(api => api.ActionDescriptor.ControllerDescriptor);
@@ -16,7 +16,7 @@
 <header class="help-page">
     <div class="content-wrapper">
         <div class="float-left">
-            <h1>@ViewBag.Title</h1>
+            <h1><img style="max-width:50px; margin-top: -4px; margin-right: 10px; float:left;" src="/logo.png">@ViewBag.Title</h1>
         </div>
     </div>
 </header>
