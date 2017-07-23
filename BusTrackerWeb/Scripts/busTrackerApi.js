@@ -6,3 +6,5 @@ var apiGetRoutesUrl = 'api/Route/GetRoutes';
 
 var apiGetRouteDirectionsUrl = 'api/Route/GetRouteDirections?';
 
+var apiGetNextRouteRunUrl = 'api/Route/GetRouteNextRun?';
+

@@ -25,20 +25,37 @@
 </div>
 
 @* Route Search Form *@
-<form>
-    <div class="form-group" style="vertical-align:bottom">
-        <label>Route:</label>
-        <select id="routeSelect" class="form-control">
-            <option value="" selected disabled>Select Route...</option>
-        </select>
+<div class="row">
+    <form>
+        <div class="form-group" style="vertical-align:bottom">
+            <label>Route:</label>
+            <select id="routeSelect" class="form-control">
+                <option value="" selected disabled>Select Route...</option>
+            </select>
+        </div>
+        <div class="form-group" style="vertical-align:bottom">
+            <label>Direction:</label>
+            <select id="directionSelect" class="form-control">
+                <option value="" selected disabled>Select Direction...</option>
+            </select>
+        </div>
+        <div class="form-group" style="vertical-align:bottom">
+            <button type="button" id="searchButton" class="btn btn-primary">Search</button>
+        </div>
+    </form>
+</div>
+
+<hr />
+
+<div class="row">
+    <div class="col-md-6">
+        <table id="scheduleTable" class="table table-striped">
+            <tr>
+                <th>Route Departures:</th>
+            </tr>
+        </table>
     </div>
-    <div class="form-group" style="vertical-align:bottom">
-        <label>Direction:</label>
-        <select id="directionSelect" class="form-control">
-            <option value="" selected disabled>Select Direction...</option>
-        </select>
+    <div class="col-md-6">
+        Google Map
     </div>
-    <div class="form-group" style="vertical-align:bottom">
-        <button type="submit" class="btn btn-primary">Search</button>
-    </div>
-</form>
+</div>
