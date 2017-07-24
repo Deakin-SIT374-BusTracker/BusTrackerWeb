@@ -4,21 +4,18 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@* Bustracker Api JavaScripts *@
+<script type="text/javascript" src="~/Scripts/busTrackerApi.js"></script>
 
-@section Scripts{
-    @* Bustracker Api JavaScripts *@
-    <script type="text/javascript" src="~/Scripts/busTrackerApi.js"></script>
+@* Passenger View JavaScripts *@
+<script type="text/javascript" src="~/Scripts/passenger2.js"></script>
 
-    @* Passenger View JavaScripts *@
-    <script type="text/javascript" src="~/Scripts/passenger2.js"></script>
-
-    <script type="text/javascript" asp mv>
+<script type="text/javascript" asp mv>
         // Document Ready
         $(document).ready(function () {
             getDepartureRouteList();
         });
-    </script>
-}
+</script>
 
 <div class="page-header">
     <h1><img style="max-width:50px; margin-top: -4px; margin-right: 10px; float:left;" src="/logo.png"> Bus HoP >> Passengers</h1>
@@ -56,6 +53,20 @@
         </table>
     </div>
     <div class="col-md-6">
-        Google Map
+        <div id="map_canvas" style="width:50em; height:50em"></div>
     </div>
 </div>
+
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqZFelSFhnk3JDbFVx7qovf8IIG1ZViVs"></script>
+<script type="text/javascript">
+    function initialize() {
+        var latlng = new google.maps.LatLng(40.716948, -74.003563);
+        var options = {
+            zoom: 14, center: latlng,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        var map = new google.maps.Map(document.getElementById("map_canvas"), options);
+    }
+
+    initialize();
+</script>

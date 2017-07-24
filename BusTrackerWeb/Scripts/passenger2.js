@@ -62,3 +62,5 @@ $('#searchButton').click(function () {
         buildScheduleTable(data);
     });
 });
+
+

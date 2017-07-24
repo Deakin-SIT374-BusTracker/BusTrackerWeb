@@ -277,9 +277,10 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <None Include="Views\Passenger\Index.cshtml.bak" />
-    <Content Include="Views\Driver\Index.cshtml" />
-    <Content Include="Views\Passenger\Index.cshtml" />
+    <None Include="Views\Passenger\Index.cshtml.old" />
+    <None Include="Views\Driver\Index.cshtml.bak" />
+    <None Include="Views\Passenger\Index.cshtml" />
+    <None Include="Views\Passenger\Index.cshtml.ok" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
