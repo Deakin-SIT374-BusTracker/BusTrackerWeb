@@ -24,22 +24,49 @@
 @* Route Search Form *@
 <div class="row">
     <form>
-        <div class="form-group" style="vertical-align:bottom">
-            <label>Route:</label>
-            <select id="routeSelect" class="form-control">
-                <option value="" selected disabled>Select Route...</option>
-            </select>
+        <div class="col-md-6">
+            <div class="form-group" style="vertical-align:bottom">
+                <label>My Rider ID:</label>
+                <select id="riderSelect" class="form-control">
+                    <option value="" selected disabled>My Rider Id...</option>
+                    <option value="">Jill-BusDriver</option>
+                    <option value="">Jack-Commuter</option>
+                </select>
+            </div>
+            <div class="form-group" style="vertical-align:bottom">
+                <label>Route:</label>
+                <select id="routeSelect" class="form-control">
+                    <option value="" selected disabled>Select Route...</option>
+                </select>
+            </div>
+            <div class="form-group" style="vertical-align:bottom">
+                <label>Direction:</label>
+                <select id="directionSelect" class="form-control">
+                    <option value="" selected disabled>Select Direction...</option>
+                </select>
+            </div>
         </div>
-        <div class="form-group" style="vertical-align:bottom">
-            <label>Direction:</label>
-            <select id="directionSelect" class="form-control">
-                <option value="" selected disabled>Select Direction...</option>
-            </select>
+        <div class="col-md-6">
+            <div class="form-group" style="vertical-align:bottom">
+                <label>GPS Mode:</label>
+                <select id="routeSelect" class="form-control">
+                    <option value="">Subscribe</option>
+                    <option value="">Share</option>
+                </select>
+            </div>
+            <div class="form-group" style="vertical-align:bottom">
+                <label>Follow Rider:</label>
+                <select id="routeSelect" class="form-control">
+                    <option value="" selected disabled>Their Rider ID...</option>
+                    <option value="">Jill-BusDriver</option>
+                    <option value="">Jack-Commuter</option>
+                </select>
+            </div>
+            <div class="form-group" style="vertical-align:bottom">
+                <button type="button" id="searchButton" class="btn btn-primary">Search</button>
+            </div>
         </div>
-        <div class="form-group" style="vertical-align:bottom">
-            <button type="button" id="searchButton" class="btn btn-primary">Search</button>
-        </div>
-    </form>
+</form>
 </div>
 
 <hr />
@@ -67,6 +94,8 @@
         };
         var map = new google.maps.Map(document.getElementById("map_canvas"), options);
     }
+
+    getDepartureRouteList();
 
     initialize();
 </script>

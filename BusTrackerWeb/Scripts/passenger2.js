@@ -1,4 +1,4 @@
-﻿// Passenger View Javascripts
+﻿ // Passenger View Javascripts
 
 /*
 Function: getDepartureRouteList()
