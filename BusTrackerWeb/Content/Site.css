@@ -16,3 +16,24 @@ textarea {
     max-width: 280px;
 }
 
+.search-title {
+    font-family:Calibri;
+    font-size:xx-large;
+    text-align:center;
+    margin-top:1em
+}
+
+.search-destination {
+    margin: 0 auto;
+    margin-top: 2em
+}
+
+.search-button {
+    display: flex;
+    justify-content: center;
+    margin-top:2em
+}
+
+.search-table {
+    margin-top:3em
+}

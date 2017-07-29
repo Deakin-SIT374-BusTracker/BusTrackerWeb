@@ -526,6 +526,17 @@
             </summary>
             <returns>Passenger View.</returns>
         </member>
+        <member name="T:BusTrackerWeb.Controllers.JourneyController">
+            <summary>
+            Controls all Bus Tracker Journey View actions.
+            </summary>
+        </member>
+        <member name="M:BusTrackerWeb.Controllers.JourneyController.Search">
+            <summary>
+            Open the Search View.
+            </summary>
+            <returns>Search View.</returns>
+        </member>
         <member name="T:BusTrackerWeb.Controllers.PassengerController">
             <summary>
             Controls all Bus Tracker Passenger View actions.

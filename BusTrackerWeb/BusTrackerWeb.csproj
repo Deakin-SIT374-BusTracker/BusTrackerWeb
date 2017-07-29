@@ -161,6 +161,7 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\BusController.cs" />
     <Compile Include="Controllers\DriverController.cs" />
+    <Compile Include="Controllers\JourneyController.cs" />
     <Compile Include="Controllers\PassengerController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MapsApiClientController.cs" />
@@ -250,6 +251,7 @@
     </None>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\busTrackerApi.js" />
+    <Content Include="Scripts\journey.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <Content Include="Scripts\map-epoly.js" />
@@ -277,6 +279,9 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Journey\Search.cshtml" />
+    <Content Include="Views\Journey\Journeys.cshtml" />
+    <Content Include="Views\Journey\YourJourney.cshtml" />
     <None Include="Views\Passenger\Index.cshtml.old" />
     <None Include="Views\Driver\Index.cshtml.bak" />
     <None Include="Views\Passenger\Index.cshtml" />
