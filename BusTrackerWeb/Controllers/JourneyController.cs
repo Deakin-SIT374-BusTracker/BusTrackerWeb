@@ -21,5 +21,28 @@ namespace BusTrackerWeb.Controllers
 
             return View();
         }
+
+        /// <summary>
+        /// Open the Journeys View.
+        /// </summary>
+        /// <returns>Journeys View.</returns>
+        public ActionResult Journeys()
+        {
+            ViewBag.Title = "Journeys Page";
+
+            return View();
+        }
+
+        /// <summary>
+        /// Open the Your Journey View.
+        /// </summary>
+        /// <returns>Your Journey View.</returns>
+        public ActionResult YourJourney()
+        {
+            ViewBag.Title = "Your Journey Page";
+
+            return View();
+        }
+
     }
 }

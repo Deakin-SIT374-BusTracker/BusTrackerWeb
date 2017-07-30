@@ -37,3 +37,10 @@ textarea {
 .search-table {
     margin-top:3em
 }
+
+.journeys-title {
+    font-family: Calibri;
+    font-size: xx-large;
+    text-align: left;
+    margin-top: 1em
+}
