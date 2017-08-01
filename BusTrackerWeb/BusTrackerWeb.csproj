@@ -123,9 +123,7 @@
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\HttpClient\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -160,10 +158,8 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\BusController.cs" />
-    <Compile Include="Controllers\DriverController.cs" />
     <Compile Include="Controllers\JourneyController.cs" />
-    <Compile Include="Controllers\PassengerController.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\AboutController.cs" />
     <Compile Include="Controllers\MapsApiClientController.cs" />
     <Compile Include="Controllers\PtvApiClientController.cs" />
     <Compile Include="Controllers\RouteController.cs" />
@@ -214,11 +210,11 @@
     <Content Include="Content\map-icons.css" />
     <Content Include="Content\map-icons.min.css" />
     <Content Include="Content\passenger.css" />
-    <Content Include="favicon.ico" />
-    <Content Include="fonts\glyphicons-halflings-regular.svg" />
-    <Content Include="fonts\map-icons.svg" />
+    <Content Include="Content\Images\bushop-icon.ico" />
+    <Content Include="Fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Fonts\map-icons.svg" />
     <Content Include="Global.asax" />
-    <Content Include="logo.png" />
+    <Content Include="Content\Images\bushop-logo.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Areas\HelpPage\Views\Web.config" />
@@ -240,9 +236,9 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
-    <Content Include="fonts\map-icons.eot" />
-    <Content Include="fonts\map-icons.ttf" />
-    <Content Include="fonts\map-icons.woff" />
+    <Content Include="Fonts\map-icons.eot" />
+    <Content Include="Fonts\map-icons.ttf" />
+    <Content Include="Fonts\map-icons.woff" />
     <None Include="Properties\PublishProfiles\BusTrackerWeb - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\BusTrackerWeb - Web Deploy.pubxml" />
     <None Include="Properties\Settings.settings">
@@ -276,22 +272,18 @@
     <Content Include="Scripts\_references.js" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\About\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Journey\Search.cshtml" />
     <Content Include="Views\Journey\Journeys.cshtml" />
     <Content Include="Views\Journey\YourJourney.cshtml" />
-    <None Include="Views\Passenger\Index.cshtml.old" />
-    <None Include="Views\Driver\Index.cshtml.bak" />
-    <None Include="Views\Passenger\Index.cshtml" />
-    <None Include="Views\Passenger\Index.cshtml.ok" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Content Include="fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Fonts\glyphicons-halflings-regular.eot" />
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
@@ -299,6 +291,9 @@
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Content\Images\bushop-icon.ico</ApplicationIcon>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />

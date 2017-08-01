@@ -7,17 +7,17 @@ using System.Web.Mvc;
 namespace BusTrackerWeb.Controllers
 {
     /// <summary>
-    /// Controls all Bus Tracker Home View actions.
+    /// Controls all Bus Tracker About View actions.
     /// </summary>
-    public class HomeController : Controller
+    public class AboutController : Controller
     {
         /// <summary>
-        /// Open the Home View.
+        /// Open the About View.
         /// </summary>
         /// <returns>Index View.</returns>
         public ActionResult Index()
         {
-            ViewBag.Title = "Home Page";
+            ViewBag.Title = "BusHop > About";
 
             return View();
         }

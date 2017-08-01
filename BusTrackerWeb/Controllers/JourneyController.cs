@@ -17,7 +17,7 @@ namespace BusTrackerWeb.Controllers
         /// <returns>Search View.</returns>
         public ActionResult Search()
         {
-            ViewBag.Title = "Search Page";
+            ViewBag.Title = "BusHop > Search";
 
             return View();
         }
@@ -28,7 +28,7 @@ namespace BusTrackerWeb.Controllers
         /// <returns>Journeys View.</returns>
         public ActionResult Journeys()
         {
-            ViewBag.Title = "Journeys Page";
+            ViewBag.Title = "BusHop > Journeys";
 
             return View();
         }
@@ -39,10 +39,9 @@ namespace BusTrackerWeb.Controllers
         /// <returns>Your Journey View.</returns>
         public ActionResult YourJourney()
         {
-            ViewBag.Title = "Your Journey Page";
+            ViewBag.Title = "BusHop > Your Journey";
 
             return View();
         }
-
     }
 }

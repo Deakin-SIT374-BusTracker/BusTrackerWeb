@@ -515,17 +515,6 @@
             <param name="routeId">The PTV Route Id of the buses to be returned.</param>
             <returns>A collection of Bus Model objects.</returns>
         </member>
-        <member name="T:BusTrackerWeb.Controllers.DriverController">
-            <summary>
-            Controls all Bus Tracker Driver View actions.
-            </summary>
-        </member>
-        <member name="M:BusTrackerWeb.Controllers.DriverController.Index">
-            <summary>
-            Open the Passenger Landing View.
-            </summary>
-            <returns>Passenger View.</returns>
-        </member>
         <member name="T:BusTrackerWeb.Controllers.JourneyController">
             <summary>
             Controls all Bus Tracker Journey View actions.
@@ -549,25 +538,14 @@
             </summary>
             <returns>Your Journey View.</returns>
         </member>
-        <member name="T:BusTrackerWeb.Controllers.PassengerController">
+        <member name="T:BusTrackerWeb.Controllers.AboutController">
             <summary>
-            Controls all Bus Tracker Passenger View actions.
+            Controls all Bus Tracker About View actions.
             </summary>
         </member>
-        <member name="M:BusTrackerWeb.Controllers.PassengerController.Index">
+        <member name="M:BusTrackerWeb.Controllers.AboutController.Index">
             <summary>
-            Open the Passenger Landing View.
-            </summary>
-            <returns>Passenger View.</returns>
-        </member>
-        <member name="T:BusTrackerWeb.Controllers.HomeController">
-            <summary>
-            Controls all Bus Tracker Home View actions.
-            </summary>
-        </member>
-        <member name="M:BusTrackerWeb.Controllers.HomeController.Index">
-            <summary>
-            Open the Home View.
+            Open the About View.
             </summary>
             <returns>Index View.</returns>
         </member>
