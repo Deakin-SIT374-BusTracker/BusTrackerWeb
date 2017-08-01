@@ -23,6 +23,15 @@ namespace BusTrackerWeb.Controllers
         }
 
         /// <summary>
+        /// Return the search results as a partial view.
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult SearchRoutes()
+        {
+            return PartialView("~/Views/Journey/_SearchRoutes.cshtml");
+        }
+
+        /// <summary>
         /// Open the Journeys View.
         /// </summary>
         /// <returns>Journeys View.</returns>

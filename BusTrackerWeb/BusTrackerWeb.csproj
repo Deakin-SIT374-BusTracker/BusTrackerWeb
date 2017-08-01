@@ -247,7 +247,6 @@
     </None>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\busTrackerApi.js" />
-    <Content Include="Scripts\journey.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <Content Include="Scripts\map-epoly.js" />
@@ -278,6 +277,7 @@
     <Content Include="Views\Journey\Search.cshtml" />
     <Content Include="Views\Journey\Journeys.cshtml" />
     <Content Include="Views\Journey\YourJourney.cshtml" />
+    <Content Include="Views\Journey\_SearchRoutes.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
