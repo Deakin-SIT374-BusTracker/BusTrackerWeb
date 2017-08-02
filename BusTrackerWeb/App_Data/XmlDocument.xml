@@ -526,6 +526,12 @@
             </summary>
             <returns>Search View.</returns>
         </member>
+        <member name="M:BusTrackerWeb.Controllers.JourneyController.SearchRoutes">
+            <summary>
+            Return the search results as a partial view.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:BusTrackerWeb.Controllers.JourneyController.Journeys">
             <summary>
             Open the Journeys View.
