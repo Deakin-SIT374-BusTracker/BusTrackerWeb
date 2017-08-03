@@ -32,8 +32,26 @@ namespace BusTrackerWeb.Controllers
         {
             List<RouteModel> routes = await WebApiApplication.PtvApiControl.GetRoutesByNameAsync(destination);
 
-            return PartialView("~/Views/Journey/_SearchRoutes.cshtml", routes);
+            List<SearchRouteModel> searchRoutes = new List<SearchRouteModel>();
+
+            foreach (RouteModel route in routes)
+            {
+                List<DirectionModel> directions = await WebApiApplication.PtvApiControl.GetRouteDirectionsAsync(route);
+
+                searchRoutes.Add(new SearchRouteModel(route, directions));
+            }
+
+            return PartialView("~/Views/Journey/_SearchRoutes.cshtml", searchRoutes);
         }
+
+        public ActionResult SelectRoute(int routeId, int directionId)
+        {
+            int route = routeId;
+            int dest = directionId;
+
+            return PartialView("~/Views/Journey/Journeys.cshtml");
+        }
+
 
         /// <summary>
         /// Open the Journeys View.

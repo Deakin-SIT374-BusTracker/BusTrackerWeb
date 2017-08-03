@@ -177,6 +177,7 @@
     <Compile Include="Models\PtvApi\PtvApiRouteResponse.cs" />
     <Compile Include="Models\PtvApi\PtvApiStopGeosearch.cs" />
     <Compile Include="Models\PtvApi\PtvApiStopsByDistanceResponse.cs" />
+    <Compile Include="Models\SearchRouteModel.cs" />
     <Compile Include="Models\StoppingPatternModel.cs" />
     <Compile Include="Models\PtvApi\PtvApiDisruptionRoute.cs" />
     <Compile Include="Models\PtvApi\PtvApiDisruptionDirection.cs" />

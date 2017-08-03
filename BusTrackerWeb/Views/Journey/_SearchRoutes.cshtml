@@ -1,4 +1,4 @@
-﻿@model  IEnumerable<BusTrackerWeb.Models.RouteModel>
+﻿@model  IEnumerable<BusTrackerWeb.Models.SearchRouteModel>
 
 <table id="routeTable" class="table table-striped search-table">
     <tr>
@@ -7,12 +7,26 @@
         <th>Link</th>
     </tr>
 
-    @foreach (var item in Model)
+    @foreach (var searchRoute in Model)
     {
-        <tr>
-            <td>@Html.DisplayFor(modelItem => item.RouteName)</td>
-            <td>Direction</td>
-            <td>@Html.ActionLink("Select", "SelectRoute", new { id=item.RouteId }, new { @class = "btn btn-default" })</td>
-        </tr>
+        for (var i = 0; i < searchRoute.Directions.Count(); i++)
+        {
+            if (i == 0)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => searchRoute.Route.RouteName)</td>
+                    <td>@Html.DisplayFor(modelItem => searchRoute.Directions[i].DirectionName)</td>
+                    <td>@Html.ActionLink("Select", "SelectRoute", new { routeId = searchRoute.Route.RouteId, directionId = searchRoute.Directions[i].DirectionId }, new { @class = "btn btn-default" })</td>
+                </tr>
+            }
+            else
+            {
+                <tr>
+                    <td></td>
+                    <td>@Html.DisplayFor(modelItem => searchRoute.Directions[i].DirectionName)</td>
+                    <td>@Html.ActionLink("Select", "SelectRoute", new { routeId = searchRoute.Route.RouteId, directionId = searchRoute.Directions[i].DirectionId }, new { @class = "btn btn-default" })</td>
+                </tr>
+            }
+        }
     }
 </table>

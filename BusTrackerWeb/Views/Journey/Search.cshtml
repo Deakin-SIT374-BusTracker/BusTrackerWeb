@@ -9,7 +9,7 @@
         Load the search results partial view.
         */
         $('#searchButton').click(function () {
-            $("#searchResults").load('@Url.Action("SearchRoutes","Journey", new {destination = "deakin"})');
+            $("#searchResults").load('@Url.Action("SearchRoutes","Journey", new {destination = "deakin" })');
         });
     </script>
 }
@@ -22,7 +22,7 @@
     <div class="search-title">Where are you travelling?</div>
     <form>
         <div class="form-group">
-            <input type="email" class="form-control search-destination" id="destinationInput" placeholder="Find routes near me">
+            <input id="searchText" type="email" class="form-control search-destination" id="destinationInput" placeholder="Find routes near me">
         </div>
         <div style="text-align: center">
             <button id="searchButton" type="button" class="btn btn-primary">Search</button>
