@@ -1,6 +1,8 @@
-﻿using System;
+﻿using BusTrackerWeb.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -26,9 +28,11 @@ namespace BusTrackerWeb.Controllers
         /// Return the search results as a partial view.
         /// </summary>
         /// <returns></returns>
-        public ActionResult SearchRoutes()
+        public async Task<ActionResult> SearchRoutes(string destination)
         {
-            return PartialView("~/Views/Journey/_SearchRoutes.cshtml");
+            List<RouteModel> routes = await WebApiApplication.PtvApiControl.GetRoutesByNameAsync(destination);
+
+            return PartialView("~/Views/Journey/_SearchRoutes.cshtml", routes);
         }
 
         /// <summary>

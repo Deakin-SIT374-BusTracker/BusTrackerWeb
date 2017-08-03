@@ -526,7 +526,7 @@
             </summary>
             <returns>Search View.</returns>
         </member>
-        <member name="M:BusTrackerWeb.Controllers.JourneyController.SearchRoutes">
+        <member name="M:BusTrackerWeb.Controllers.JourneyController.SearchRoutes(System.String)">
             <summary>
             Return the search results as a partial view.
             </summary>

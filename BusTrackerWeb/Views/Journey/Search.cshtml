@@ -9,7 +9,7 @@
         Load the search results partial view.
         */
         $('#searchButton').click(function () {
-            $("#searchResults").load('@Url.Action("SearchRoutes","Journey")');
+            $("#searchResults").load('@Url.Action("SearchRoutes","Journey", new {destination = "deakin"})');
         });
     </script>
 }
