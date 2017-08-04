@@ -25,25 +25,34 @@ namespace BusTrackerWeb.Controllers
         }
 
         /// <summary>
-        /// Return the search results as a partial view.
+        /// Get all routes and associated directions for the given destination.
+        /// Return a summary table as a partial view.
         /// </summary>
+        /// <param name="destination">Route name filter.</param>
         /// <returns></returns>
         public async Task<ActionResult> SearchRoutes(string destination)
         {
+            // Get all routes matching the destination.
             List<RouteModel> routes = await WebApiApplication.PtvApiControl.GetRoutesByNameAsync(destination);
 
+            // For each route get the associated directions and build a new 
+            // collection.
             List<SearchRouteModel> searchRoutes = new List<SearchRouteModel>();
-
             foreach (RouteModel route in routes)
             {
                 List<DirectionModel> directions = await WebApiApplication.PtvApiControl.GetRouteDirectionsAsync(route);
-
                 searchRoutes.Add(new SearchRouteModel(route, directions));
             }
 
             return PartialView("~/Views/Journey/_SearchRoutes.cshtml", searchRoutes);
         }
 
+        /// <summary>
+        /// Get the next departures for the selected route and diraction.
+        /// </summary>
+        /// <param name="routeId">Selected Route Id.</param>
+        /// <param name="directionId">Selected Direction Id.</param>
+        /// <returns></returns>
         public ActionResult SelectRoute(int routeId, int directionId)
         {
             int route = routeId;
@@ -51,8 +60,7 @@ namespace BusTrackerWeb.Controllers
 
             return PartialView("~/Views/Journey/Journeys.cshtml");
         }
-
-
+        
         /// <summary>
         /// Open the Journeys View.
         /// </summary>
