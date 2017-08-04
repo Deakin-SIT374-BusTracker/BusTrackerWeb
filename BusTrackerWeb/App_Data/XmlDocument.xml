@@ -528,8 +528,18 @@
         </member>
         <member name="M:BusTrackerWeb.Controllers.JourneyController.SearchRoutes(System.String)">
             <summary>
-            Return the search results as a partial view.
+            Get all routes and associated directions for the given destination.
+            Return a summary table as a partial view.
             </summary>
+            <param name="destination">Route name filter.</param>
+            <returns></returns>
+        </member>
+        <member name="M:BusTrackerWeb.Controllers.JourneyController.SelectRoute(System.Int32,System.Int32)">
+            <summary>
+            Get the next departures for the selected route and diraction.
+            </summary>
+            <param name="routeId">Selected Route Id.</param>
+            <param name="directionId">Selected Direction Id.</param>
             <returns></returns>
         </member>
         <member name="M:BusTrackerWeb.Controllers.JourneyController.Journeys">

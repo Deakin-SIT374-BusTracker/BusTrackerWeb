@@ -53,14 +53,69 @@ namespace BusTrackerWeb.Controllers
         /// <param name="routeId">Selected Route Id.</param>
         /// <param name="directionId">Selected Direction Id.</param>
         /// <returns></returns>
-        public ActionResult SelectRoute(int routeId, int directionId)
+        public async Task<ActionResult> SelectRoute(int routeId, int directionId)
         {
-            int route = routeId;
-            int dest = directionId;
+            // Get the route.
+            RouteModel route = await WebApiApplication.PtvApiControl.GetRouteAsync(routeId);
 
-            return PartialView("~/Views/Journey/Journeys.cshtml");
+            // Get route direction.
+            DirectionModel direction = await WebApiApplication.PtvApiControl.
+                GetDirectionAsync(directionId, route);
+
+            // Get all runs for a route.
+            List<RunModel> routeRuns = await WebApiApplication.PtvApiControl.
+                GetRouteRunsAsync(route);
+
+            // Index through all runs to find those that have not expired.
+            List<RunModel> currentRuns = new List<RunModel>();
+            foreach (RunModel run in routeRuns)
+            {
+                // Check if the run is new or already cached.
+                if (!WebApiApplication.RunsCache.Exists(r => r.RunId == run.RunId))
+                {
+                    // Get run info from the PTV API.
+                    run.StoppingPattern = await WebApiApplication.PtvApiControl.
+                        GetStoppingPatternAsync(run);
+
+                    // Update the local cache to minimise future API calls.
+                    WebApiApplication.RunsCache.Add(run);
+                }
+                else
+                {
+                    // Get the cached run.
+                    run.StoppingPattern = WebApiApplication.RunsCache.
+                        Single(r => r.RunId == run.RunId).StoppingPattern;
+                }
+
+
+                // Check the current run for optimisation sentinals.
+                DateTime runLastStoptime = run.StoppingPattern.Departures.Last().ScheduledDeparture;
+                int runDirectionId = run.StoppingPattern.Departures.Last().DirectionId;
+
+                // Add current and future runs to a collection.
+                if ((runDirectionId == directionId) && (runLastStoptime > DateTime.Now))
+                {
+                    run.Direction = direction;
+                    currentRuns.Add(run);
+                }
+            }
+
+            // Order the current run collection by Last Stop Scheduled Departure Time, the first 
+            // run in the ordered collection will be the next run.
+            currentRuns = currentRuns.
+                OrderBy(r => r.StoppingPattern.Departures.Last().ScheduledDeparture).ToList();
+
+
+            return View("~/Views/Journey/Journeys.cshtml", currentRuns);
         }
-        
+
+        public ActionResult SelectRun(int runId)
+        {
+            int run = runId;
+
+            return View("~/Views/Journey/YourJourney.cshtml");
+        }
+
         /// <summary>
         /// Open the Journeys View.
         /// </summary>

@@ -1,39 +1,35 @@
-﻿@{ 
+﻿@model  IEnumerable<BusTrackerWeb.Models.RunModel>
+
+@{ 
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="page-header">
-    <h1><img style="max-width:50px; margin-top: -4px; margin-right: 10px; float:left;" src="/logo.png">@ViewBag.Title</h1>
+    <h1><img style="max-width:50px; margin-top: -4px; margin-right: 10px; float:left;" src="~/Content/Images/bushop-logo.png">@ViewBag.Title</h1>
 </div>
 
 <div class="journeys-title">Which journey would you like?</div>
 
-<div id="searchResults">
+<div id="runResults">
     <table id="journeyTable" class="table table-striped search-table">
         <tr>
-            <th>Origin</th>
-            <th>Destination</th>
-            <th>Departure Time</th>
-            <th>Arrival Time</th>
+            <th>Route</th>
+            <th>Direction</th>
+            <th>Origin Departure Time</th>
+            <th>Destination Arrival Time</th>
             <th>Link</th>
         </tr>
-        <tr>
-            <td>Geelong Station</td>
-            <td>Deakin University</td>
-            <td>26/07/2017 12:00 PM</td>
-            <td>26/07/2017 13:00 PM</td>
-            <td><button type="button" class="btn btn-default">GO</button></td>
-        </tr>
-        <tr>
-            <td>Geelong Station</td>
-            <td>Deakin University</td>
-            <td>26/07/2017 14:00 PM</td>
-            <td>26/07/2017 15:00 PM</td>
-            <td><button type="button" class="btn btn-default">GO</button></td>
-        </tr>
+
+        @foreach (var routeRun in Model)
+        {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => routeRun.Route.RouteName)</td>
+                    <td>@Html.DisplayFor(modelItem => routeRun.Direction.DirectionName)</td>
+                    <td>@Html.DisplayFor(modelItem => routeRun.StoppingPattern.Departures.First().ScheduledDeparture)</td>
+                    <td>@Html.DisplayFor(modelItem => routeRun.StoppingPattern.Departures.Last().ScheduledDeparture)</td>
+                    <td>@Html.ActionLink("Select", "SelectRun", new { runId = routeRun.RunId }, new { @class = "btn btn-default" })</td>
+                </tr>
+        }
     </table>
 </div>
-
-<a href="@Url.Action("YourJourney", "Journey")">Journeys Demo</a>
-
 
