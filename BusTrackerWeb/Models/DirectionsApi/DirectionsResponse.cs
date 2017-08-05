@@ -6,7 +6,7 @@ using System.Web;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 
-namespace BusTrackerWeb.Models.MapsApi
+namespace BusTrackerWeb.Models.DirectionsApi
 {
     [DataContract]
     public class DirectionsResponse

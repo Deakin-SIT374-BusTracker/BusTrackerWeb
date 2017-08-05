@@ -92,7 +92,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\MapsApiClientControllerTests.cs" />
+    <Compile Include="Controllers\DirectionsApiClientControllerTests.cs" />
+    <Compile Include="Controllers\DistanceApiClientControllerTests.cs" />
     <Compile Include="Controllers\PtvApiClientControllerTests.cs" />
     <Compile Include="Models\PtvApiSignerModelTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

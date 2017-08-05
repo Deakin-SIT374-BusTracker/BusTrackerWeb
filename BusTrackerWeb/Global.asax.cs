@@ -15,7 +15,7 @@ namespace BusTrackerWeb
     {
         public static PtvApiClientController PtvApiControl;
 
-        public static MapsApiClientController MapsApiControl;
+        public static DirectionsApiClientController MapsApiControl;
 
         public static List<BusModel> TrackedBuses;
 
@@ -33,7 +33,7 @@ namespace BusTrackerWeb
             PtvApiControl = new Controllers.PtvApiClientController();
 
             // Setup a single app Google Directions API Client i.e. to prevent http port exhaustion.
-            MapsApiControl = new Controllers.MapsApiClientController();
+            MapsApiControl = new Controllers.DirectionsApiClientController();
             
             // Setup a static collection of tracked buses.
             TrackedBuses = new List<BusModel>();

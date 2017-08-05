@@ -1,5 +1,5 @@
 ﻿using BusTrackerWeb.Models;
-using BusTrackerWeb.Models.MapsApi;
+using BusTrackerWeb.Models.DirectionsApi;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -18,9 +18,9 @@ using System.Text;
 namespace BusTrackerWeb.Controllers
 {
     /// <summary>
-    /// Controls all Google Maps API requests.
+    /// Controls all Google Maps Directions API requests.
     /// </summary>
-    public class MapsApiClientController
+    public class DirectionsApiClientController
     {
         const string MAPS_API_BASE_URL = "https://maps.googleapis.com/maps/api/directions/json?";
         const int MAPS_MAX_WAYPOINTS = 23;
@@ -30,7 +30,7 @@ namespace BusTrackerWeb.Controllers
         /// <summary>
         /// Initialise the client controller.
         /// </summary>
-        public MapsApiClientController()
+        public DirectionsApiClientController()
         {
             Client = new HttpClient();
             Client.DefaultRequestHeaders.Accept.Clear();

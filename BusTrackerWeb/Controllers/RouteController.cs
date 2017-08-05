@@ -1,5 +1,5 @@
 ﻿using BusTrackerWeb.Models;
-using BusTrackerWeb.Models.MapsApi;
+using BusTrackerWeb.Models.DirectionsApi;
 using System;
 using System.Collections.Generic;
 using System.Device.Location;

@@ -515,6 +515,16 @@
             <param name="routeId">The PTV Route Id of the buses to be returned.</param>
             <returns>A collection of Bus Model objects.</returns>
         </member>
+        <member name="T:BusTrackerWeb.Controllers.DistanceApiClientController">
+            <summary>
+            Controls all Google Maps Distance Matrix API requests.
+            </summary>
+        </member>
+        <member name="M:BusTrackerWeb.Controllers.DistanceApiClientController.#ctor">
+            <summary>
+            Initialise the client controller.
+            </summary>
+        </member>
         <member name="T:BusTrackerWeb.Controllers.JourneyController">
             <summary>
             Controls all Bus Tracker Journey View actions.
@@ -565,12 +575,12 @@
             </summary>
             <returns>Index View.</returns>
         </member>
-        <member name="T:BusTrackerWeb.Controllers.MapsApiClientController">
+        <member name="T:BusTrackerWeb.Controllers.DirectionsApiClientController">
             <summary>
-            Controls all Google Maps API requests.
+            Controls all Google Maps Directions API requests.
             </summary>
         </member>
-        <member name="M:BusTrackerWeb.Controllers.MapsApiClientController.#ctor">
+        <member name="M:BusTrackerWeb.Controllers.DirectionsApiClientController.#ctor">
             <summary>
             Initialise the client controller.
             </summary>

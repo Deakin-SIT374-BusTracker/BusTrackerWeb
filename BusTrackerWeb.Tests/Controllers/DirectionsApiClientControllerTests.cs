@@ -7,17 +7,17 @@ using System.Text;
 using System.Threading.Tasks;
 using BusTrackerWeb.Models;
 using System.Device.Location;
-using BusTrackerWeb.Models.MapsApi;
+using BusTrackerWeb.Models.DirectionsApi;
 
 namespace BusTrackerWeb.Controllers.Tests
 {
     [TestClass()]
-    public class MapsApiClientControllerTests
+    public class DirectionsApiClientControllerTests
     {
         [TestMethod()]
         public void BuildDirectionsQueryTest()
         {
-            MapsApiClientController controller = new MapsApiClientController();
+            DirectionsApiClientController controller = new DirectionsApiClientController();
 
             List<GeoCoordinate> routePoints = new List<GeoCoordinate>();
 
@@ -34,7 +34,7 @@ namespace BusTrackerWeb.Controllers.Tests
         [TestMethod()]
         public void GetDirectionsTest()
         {
-            MapsApiClientController controller = new MapsApiClientController();
+            DirectionsApiClientController controller = new DirectionsApiClientController();
 
             List<GeoCoordinate> routePoints = new List<GeoCoordinate>();
 
