@@ -3,7 +3,6 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 
     // Link Twitter Typeahead CSS.
-    <link href="http://twitter.github.io/typeahead.js/css/examples.css" rel="stylesheet" />
 }
 
 
@@ -20,7 +19,7 @@
     <form>
         <div style="text-align: center">
             <div id="search-hints">
-                <input type="text" class="typeahead form-control search-destination" placeholder="Destination">
+                <input id="search-input" type="text" class="typeahead form-control search-destination" placeholder="Destination">
             </div>
 
             <button id="searchButton" type="button" class="search-button btn btn-primary">Search</button>
@@ -29,7 +28,7 @@
 </div>
 
 @* Bus Hop Search - Results Partial View Placeholder *@
-<div id="searchResults"></div>
+<div class="search-table" id="searchResults"></div>
 
 
 
@@ -66,7 +65,7 @@
         Use Jquery to get the search results partial view.
         */
         $('#searchButton').click(function () {
-            $.get("/Journey/SearchRoutes", { destination: $("#searchInput").val() }, function (response) {
+            $.get("/Journey/SearchRoutes", { destination: $("#search-input").val() }, function (response) {
                 $("#searchResults").html(response);
             });
         });

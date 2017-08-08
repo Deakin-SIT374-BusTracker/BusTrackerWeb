@@ -1,6 +1,7 @@
 ﻿using BusTrackerWeb.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -24,9 +25,11 @@ namespace BusTrackerWeb.Controllers
             return View();
         }
 
-        public JsonResult SearchHints(string q)
+        public async Task<JsonResult> SearchHints(string q)
         {
-            string[] hints = new string[] { "Frankston", "Geelong", "City" };
+            List<RouteModel> routes = await WebApiApplication.PtvApiControl.GetRoutesAsync();
+
+            string[] hints = routes.Select(r => r.RouteName).ToArray();
 
             return Json(hints, JsonRequestBehavior.AllowGet);
         }
@@ -39,8 +42,14 @@ namespace BusTrackerWeb.Controllers
         /// <returns></returns>
         public async Task<ActionResult> SearchRoutes(string destination)
         {
+            StringWriter writer = new StringWriter();
+            Server.UrlEncode(destination, writer);
+            String EncodedString = writer.ToString();
+
+
+
             // Get all routes matching the destination.
-            List<RouteModel> routes = await WebApiApplication.PtvApiControl.GetRoutesByNameAsync(destination);
+            List<RouteModel> routes = await WebApiApplication.PtvApiControl.GetRoutesByNameAsync(EncodedString);
 
             // For each route get the associated directions and build a new 
             // collection.
