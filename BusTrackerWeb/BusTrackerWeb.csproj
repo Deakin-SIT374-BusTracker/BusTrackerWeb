@@ -243,6 +243,7 @@
     <Content Include="Fonts\map-icons.eot" />
     <Content Include="Fonts\map-icons.ttf" />
     <Content Include="Fonts\map-icons.woff" />
+    <Content Include="Data\countries.json" />
     <None Include="Properties\PublishProfiles\BusTrackerWeb - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\BusTrackerWeb - Web Deploy.pubxml" />
     <None Include="Properties\Settings.settings">

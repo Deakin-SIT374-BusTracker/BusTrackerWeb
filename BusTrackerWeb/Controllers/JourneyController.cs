@@ -24,6 +24,13 @@ namespace BusTrackerWeb.Controllers
             return View();
         }
 
+        public JsonResult SearchHints(string q)
+        {
+            string[] hints = new string[] { "Frankston", "Geelong", "City" };
+
+            return Json(hints, JsonRequestBehavior.AllowGet);
+        }
+
         /// <summary>
         /// Get all routes and associated directions for the given destination.
         /// Return a summary table as a partial view.
