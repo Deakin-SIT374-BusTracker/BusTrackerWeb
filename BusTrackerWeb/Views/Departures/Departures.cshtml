@@ -27,7 +27,7 @@
                     <td>@Html.DisplayFor(modelItem => routeRun.Direction.DirectionName)</td>
                     <td>@Html.DisplayFor(modelItem => routeRun.StoppingPattern.Departures.First().ScheduledDeparture)</td>
                     <td>@Html.DisplayFor(modelItem => routeRun.StoppingPattern.Departures.Last().ScheduledDeparture)</td>
-                    <td>@Html.ActionLink("Select", "SelectRun", new { runId = routeRun.RunId }, new { @class = "btn btn-default" })</td>
+                    <td>@Html.ActionLink("Select", "GetJourney", "Journey", new { runId = routeRun.RunId }, new { @class = "btn btn-default" })</td>
                 </tr>
         }
     </table>

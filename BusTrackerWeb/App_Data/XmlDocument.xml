@@ -515,6 +515,20 @@
             <param name="routeId">The PTV Route Id of the buses to be returned.</param>
             <returns>A collection of Bus Model objects.</returns>
         </member>
+        <member name="M:BusTrackerWeb.Controllers.DeparturesController.Departures">
+            <summary>
+            Open the Departures View.
+            </summary>
+            <returns>Journeys View.</returns>
+        </member>
+        <member name="M:BusTrackerWeb.Controllers.DeparturesController.GetDepartures(System.Int32,System.Int32)">
+            <summary>
+            Get the next departures for the selected route and diraction.
+            </summary>
+            <param name="routeId">Selected Route Id.</param>
+            <param name="directionId">Selected Direction Id.</param>
+            <returns></returns>
+        </member>
         <member name="T:BusTrackerWeb.Controllers.GeoCodeApiClientController">
             <summary>
             Controls all Google GeoCode API requests.
@@ -539,34 +553,6 @@
             <summary>
             Controls all Bus Tracker Journey View actions.
             </summary>
-        </member>
-        <member name="M:BusTrackerWeb.Controllers.JourneyController.Search">
-            <summary>
-            Open the Search View.
-            </summary>
-            <returns>Search View.</returns>
-        </member>
-        <member name="M:BusTrackerWeb.Controllers.JourneyController.SearchRoutes(System.String)">
-            <summary>
-            Get all routes and associated directions for the given destination.
-            Return a summary table as a partial view.
-            </summary>
-            <param name="destination">Route name filter.</param>
-            <returns></returns>
-        </member>
-        <member name="M:BusTrackerWeb.Controllers.JourneyController.SelectRoute(System.Int32,System.Int32)">
-            <summary>
-            Get the next departures for the selected route and diraction.
-            </summary>
-            <param name="routeId">Selected Route Id.</param>
-            <param name="directionId">Selected Direction Id.</param>
-            <returns></returns>
-        </member>
-        <member name="M:BusTrackerWeb.Controllers.JourneyController.Journeys">
-            <summary>
-            Open the Journeys View.
-            </summary>
-            <returns>Journeys View.</returns>
         </member>
         <member name="M:BusTrackerWeb.Controllers.JourneyController.YourJourney">
             <summary>
@@ -716,6 +702,27 @@
             <param name="routeId">PTV Bus Route Id.</param>
             <param name="directionId">PTV Direction Id.</param>
             <returns>A RunModel object.</returns>
+        </member>
+        <member name="M:BusTrackerWeb.Controllers.SearchController.Search">
+            <summary>
+            Open the Search View.
+            </summary>
+            <returns>Search View.</returns>
+        </member>
+        <member name="M:BusTrackerWeb.Controllers.SearchController.SearchHints(System.String)">
+            <summary>
+            Return all PTV routes as hints for the Search Typeahead.
+            </summary>
+            <param name="q">Route name filter.</param>
+            <returns></returns>
+        </member>
+        <member name="M:BusTrackerWeb.Controllers.SearchController.SearchRoutes(System.String)">
+            <summary>
+            Get all routes and associated directions for the given destination.
+            Return a summary table as a partial view.
+            </summary>
+            <param name="destination">Route name filter.</param>
+            <returns></returns>
         </member>
         <member name="T:BusTrackerWeb.Models.BusModel">
             <summary>

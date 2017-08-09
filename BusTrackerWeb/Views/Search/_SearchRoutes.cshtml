@@ -16,7 +16,7 @@
                 <tr>
                     <td>@Html.DisplayFor(modelItem => searchRoute.Route.RouteName)</td>
                     <td>@Html.DisplayFor(modelItem => searchRoute.Directions[i].DirectionName)</td>
-                    <td>@Html.ActionLink("Select", "SelectRoute", new { routeId = searchRoute.Route.RouteId, directionId = searchRoute.Directions[i].DirectionId }, new { @class = "btn btn-default" })</td>
+                    <td>@Html.ActionLink("Select", "GetDepartures", "Departures", new { routeId = searchRoute.Route.RouteId, directionId = searchRoute.Directions[i].DirectionId }, new { @class = "btn btn-default" })</td>
                 </tr>
             }
             else
@@ -24,7 +24,7 @@
                 <tr>
                     <td></td>
                     <td>@Html.DisplayFor(modelItem => searchRoute.Directions[i].DirectionName)</td>
-                    <td>@Html.ActionLink("Select", "SelectRoute", new { routeId = searchRoute.Route.RouteId, directionId = searchRoute.Directions[i].DirectionId }, new { @class = "btn btn-default" })</td>
+                    <td>@Html.ActionLink("Select", "GetDepartures", "Departures", new { routeId = searchRoute.Route.RouteId, directionId = searchRoute.Directions[i].DirectionId }, new { @class = "btn btn-default" })</td>
                 </tr>
             }
         }

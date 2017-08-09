@@ -47,7 +47,7 @@
                 datumTokenizer: Bloodhound.tokenizers.whitespace,
                 queryTokenizer: Bloodhound.tokenizers.whitespace,
                 prefetch: {
-                    url: '/Journey/SearchHints?q=%QUERY&nocache=' + (new Date()).getTime(),
+                    url: '/Search/SearchHints?q=%QUERY&nocache=' + (new Date()).getTime(),
                     wildcard: '%QUERY'
                 }
             });
@@ -65,7 +65,7 @@
         Use Jquery to get the search results partial view.
         */
         $('#searchButton').click(function () {
-            $.get("/Journey/SearchRoutes", { destination: $("#search-input").val() }, function (response) {
+            $.get("/Search/SearchRoutes", { destination: $("#search-input").val() }, function (response) {
                 $("#searchResults").html(response);
             });
         });
