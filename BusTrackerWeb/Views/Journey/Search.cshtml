@@ -21,12 +21,20 @@
 </div>
 
 <div>
-    <div class="search-title">Where are you travelling?</div>
+    <div class="search-title">Where are you travelling to?</div>
     <form>
         <div class="form-group">
-            <input id="searchInput" type="email" class="form-control search-destination" placeholder="Find routes near me">
+            <input id="searchInput" type="text" class="form-control search-destination" placeholder="Find routes near me">
         </div>
         <div style="text-align: center">
+            @*<div class="search-title">
+                ...and when?
+            </div>
+            <input type="radio" name="time" value="now" checked> Now
+                <input type="radio" name="time" value="laterToday"> Later today 
+            <input type="radio" name="time" value="showAll"> Show me all times
+            <br /><br />*@
+            @*the button doesn't work when you press enter*@
             <button id="searchButton" type="button" class="btn btn-primary">Search</button>
         </div>
     </form>

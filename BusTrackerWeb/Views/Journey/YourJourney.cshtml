@@ -1,4 +1,4 @@
-﻿@{ 
+﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -6,32 +6,41 @@
     <h1><img style="max-width:50px; margin-top: -4px; margin-right: 10px; float:left;" src="/logo.png">@ViewBag.Title</h1>
 </div>
 
-<table id="scheduleTable" class="table table-striped">
-    <tr>
-        <th>Bus Stop:</th>
-        <th>Status:</th>
-        <th>Scheduled Time:</th>
-        <th>Estimated Time:</th>
-    </tr>
-    <tr>
-        <td>Geelong Station</td>
-        <td>Departed</td>
-        <td>26/07/2017 12:00 PM</td>
-        <td>26/07/2017 12:00 PM</td>
-    </tr>
-    <tr>
-        <td>Cr East Street and West Court</td>
-        <td>On Time</td>
-        <td>26/07/2017 12:20 PM</td>
-        <td>26/07/2017 12:20 PM</td>
-    </tr>
-    <tr>
-        <td>Deakin University</td>
-        <td>Late</td>
-        <td>26/07/2017 13:00 PM</td>
-        <td>26/07/2017 13:10 PM</td>
-    </tr>
-</table>
+<div class="journeys-title">
+    <p>Route 41 Geelong to Deakin University at currentDateTime</p>
+</div>
+
+<div style="width: 100%;">
+    <div style="float:left; width: 40%">
+
+        <table id="scheduleTable" class="table table-striped">
+            <tr>
+                <th>Bus Stop:</th>
+                <th>Status:</th>
+                <th>Scheduled Time:</th>
+                <th>Estimated Time:</th>
+            </tr>
+            <tr>
+                <td>Geelong Station</td>
+                <td>Departed</td>
+                <td>12:00 PM</td>
+                <td>12:00 PM</td>
+            </tr>
+            <tr>
+                <td>Cr East Street and West Court</td>
+                <td>On Time</td>
+                <td>12:20 PM</td>
+                <td>12:20 PM</td>
+            </tr>
+            <tr>
+                <td>Deakin University</td>
+                <td>Late</td>
+                <td>13:00 PM</td>
+                <td>13:10 PM</td>
+            </tr>
+        </table>
+    </div>
+    <div style="float:right; width: 60%">
 
 <div id="map_canvas" style="min-height:20em; width:100%"></div>
 
@@ -48,3 +57,6 @@
 
     initialize();
 </script>
+            </div>
+</div>
+<div style="clear:both"></div>
