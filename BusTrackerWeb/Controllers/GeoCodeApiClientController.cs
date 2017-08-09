@@ -19,19 +19,18 @@ using BusTrackerWeb.Models.GoogleApi;
 namespace BusTrackerWeb.Controllers
 {
     /// <summary>
-    /// Controls all Google Maps Distance Matrix API requests.
+    /// Controls all Google GeoCode API requests.
     /// </summary>
-    public class DistanceApiClientController
+    public class GeoCodeApiClientController
     {
-        const string MAPS_API_BASE_URL = "https://maps.googleapis.com/maps/api/distancematrix/json?";
-        const int MAPS_MAX_WAYPOINTS = 23;
+        const string MAPS_API_BASE_URL = "https://maps.googleapis.com/maps/api/geocode/json?";
 
         HttpClient Client { get; set; }
 
         /// <summary>
         /// Initialise the client controller.
         /// </summary>
-        public DistanceApiClientController()
+        public GeoCodeApiClientController()
         {
             Client = new HttpClient();
             Client.DefaultRequestHeaders.Accept.Clear();
@@ -39,13 +38,13 @@ namespace BusTrackerWeb.Controllers
         }
 
 
-        public decimal GetDistance(GeoCoordinate origin , GeoCoordinate destination)
+        public string GetAddress(GeoCoordinate location)
         {
-            decimal returnDistance = 0.0M;
+            string returnAddress = string.Empty;
 
             try
             {
-                string urlquery = BuildDistanceQuery(origin, destination);
+                string urlquery = BuildAddressQuery(location);
 
                 HttpWebRequest request = WebRequest.Create(urlquery) as HttpWebRequest;
 
@@ -58,35 +57,33 @@ namespace BusTrackerWeb.Controllers
                         response.StatusDescription));
                     }
 
-                    DataContractJsonSerializer jsonSerializer = new DataContractJsonSerializer(typeof(DistanceResponse));
+                    DataContractJsonSerializer jsonSerializer = new DataContractJsonSerializer(typeof(GeoCodeResponse));
                     object objResponse = jsonSerializer.ReadObject(response.GetResponseStream());
-                    DistanceResponse jsonResponse = objResponse as DistanceResponse;
+                    GeoCodeResponse jsonResponse = objResponse as GeoCodeResponse;
 
-                    returnDistance = Convert.ToDecimal(jsonResponse.rows.First().elements.First().distance.value)/1000;
+                    returnAddress = jsonResponse.results.First().formatted_address;
                 }
             }
             catch (Exception e)
             {
             }
 
-            return returnDistance;
+            return returnAddress;
         }
 
-        public string BuildDistanceQuery(GeoCoordinate origin, GeoCoordinate destination)
+        public string BuildAddressQuery(GeoCoordinate location)
         {
             StringBuilder queryBuilder = new StringBuilder();
             
             // Build coordinate parameters.
-            string originParam = string.Format("origins={0},{1}", origin.Latitude, origin.Longitude);
-            string destinationParam = string.Format("&destinations={0},{1}", destination.Latitude, destination.Longitude);
+            string locationParam = string.Format("latlng={0},{1}", location.Latitude, location.Longitude);
 
             // Set the API key.
             string apiKey = Properties.Settings.Default.MapsApiDeveloperKey;
 
             // Build the API query.
-            queryBuilder.AppendFormat("{0}{1}{2}&key={3}",
-                MAPS_API_BASE_URL, originParam, destinationParam, apiKey);
-
+            queryBuilder.AppendFormat("{0}{1}&key={2}",
+                MAPS_API_BASE_URL, locationParam, apiKey);
 
             return queryBuilder.ToString();
         }

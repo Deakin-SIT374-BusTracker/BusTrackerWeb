@@ -93,6 +93,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\DirectionsApiClientControllerTests.cs" />
+    <Compile Include="Controllers\GeoCodeApiClientControllerTests.cs" />
     <Compile Include="Controllers\DistanceApiClientControllerTests.cs" />
     <Compile Include="Controllers\PtvApiClientControllerTests.cs" />
     <Compile Include="Models\PtvApiSignerModelTests.cs" />

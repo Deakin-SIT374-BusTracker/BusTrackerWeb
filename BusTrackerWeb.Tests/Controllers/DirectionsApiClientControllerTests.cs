@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BusTrackerWeb.Models;
 using System.Device.Location;
-using BusTrackerWeb.Models.DirectionsApi;
+using BusTrackerWeb.Models.GoogleApi;
 
 namespace BusTrackerWeb.Controllers.Tests
 {
