@@ -55,17 +55,13 @@ namespace BusTrackerWeb.Controllers
                 {
                     try
                     {
-                        // Temporarily restrict results to Geelong based routes.
-                        if (apiRoute.route_name.Contains("Geelong"))
+                        routes.Add(new RouteModel
                         {
-                            routes.Add(new RouteModel
-                            {
-                                RouteId = apiRoute.route_id,
-                                RouteName = apiRoute.route_name,
-                                RouteNumber = apiRoute.route_number,
-                                RouteType = apiRoute.route_type
-                            });
-                        }
+                            RouteId = apiRoute.route_id,
+                            RouteName = apiRoute.route_name,
+                            RouteNumber = apiRoute.route_number,
+                            RouteType = apiRoute.route_type
+                        });
                     }
                     catch (Exception e)
                     {

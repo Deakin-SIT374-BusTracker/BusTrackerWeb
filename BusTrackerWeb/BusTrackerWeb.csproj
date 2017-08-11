@@ -218,6 +218,7 @@
     <Content Include="Fonts\map-icons.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Images\bushop-logo.png" />
+    <Content Include="Scripts\bloodhound.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Areas\HelpPage\Views\Web.config" />
@@ -242,6 +243,7 @@
     <Content Include="Fonts\map-icons.eot" />
     <Content Include="Fonts\map-icons.ttf" />
     <Content Include="Fonts\map-icons.woff" />
+    <Content Include="Data\countries.json" />
     <None Include="Properties\PublishProfiles\BusTrackerWeb - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\BusTrackerWeb - Web Deploy.pubxml" />
     <None Include="Properties\Settings.settings">
@@ -261,6 +263,9 @@
     <Content Include="Scripts\passenger2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\typeahead.bundle.js" />
+    <Content Include="Scripts\typeahead.bundle.min.js" />
+    <Content Include="Scripts\typeahead.jquery.js" />
     <Content Include="Scripts\typeahead.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
