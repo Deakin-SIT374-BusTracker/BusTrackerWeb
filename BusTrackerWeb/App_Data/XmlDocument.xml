@@ -603,6 +603,14 @@
             <param name="routeId">PTV Bus Route Id.</param>
             <returns>A RouteModel object.</returns>
         </member>
+        <member name="M:BusTrackerWeb.Controllers.PtvApiClientController.GetDeparturesAsync(System.Int32,BusTrackerWeb.Models.StopModel)">
+            <summary>
+            Get a list of PTV departures for a specific route and stop.
+            </summary>
+            <param name="routeId">PTV Route Id.</param>
+            <param name="stop">PTV Stop.</param>
+            <returns>A DirectionModel object.</returns>
+        </member>
         <member name="M:BusTrackerWeb.Controllers.PtvApiClientController.GetDirectionAsync(System.Int32,BusTrackerWeb.Models.RouteModel)">
             <summary>
             Get a list of PTV directions for a specific route.
@@ -625,12 +633,13 @@
             <param name="route">The route for which to find all stops.</param>
             <returns>PTV API Stopping Pattern.</returns>
         </member>
-        <member name="M:BusTrackerWeb.Controllers.PtvApiClientController.GetStopsByDistanceAsync(System.Decimal,System.Decimal,System.Int32)">
+        <member name="M:BusTrackerWeb.Controllers.PtvApiClientController.GetStopsByDistanceAsync(System.Decimal,System.Decimal,System.Int32,System.Int32)">
             <summary>
             Get the stop in proximity to a GPS location from the PTV API.
             </summary>
             <param name="latitude">The location latitude.</param>
             <param name="longitude">The location longitude.</param>
+            <param name="maxStops">The maximum nuber of stops to return.</param>
             <param name="maxDistance">The proximity radius in meters.</param>
             <returns>Stop Model collection.</returns>
         </member>

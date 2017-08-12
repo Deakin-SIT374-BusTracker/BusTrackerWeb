@@ -22,7 +22,7 @@ namespace BusTrackerWeb.Controllers
         {
             ViewBag.Title = "BusHop > Your Journey";
 
-            return View("~/Views/Journey/Journey.cshtml");
+            return View("~/Views/Journey/Index.cshtml");
         }
     }
 }

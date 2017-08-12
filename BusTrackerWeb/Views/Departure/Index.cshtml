@@ -10,7 +10,7 @@
 
 <div class="departure-address" id="user-location"></div>
 
-<div id="depertureRuns">
+<div id="departure-runs">
 </div>
 
 @section scripts {
@@ -35,7 +35,7 @@
 
         function getDepartures(geolatitude, geolongitude) {
             $.get("/Departure/GetDepartures", { routeId: @ViewBag.RouteId, directionId: @ViewBag.DirectionId, latitude: geolatitude, longitude: geolongitude }, function (response) {
-                $("#depertureRuns").html(response);
+                $("#departure-runs").html(response);
             });
         };
 

@@ -290,8 +290,8 @@
     <Content Include="Views\Departure\Index.cshtml" />
     <Content Include="Views\Journey\Index.cshtml" />
     <Content Include="Views\Search\_SearchRoutes.cshtml" />
-    <Content Include="Views\Departure\_DeparureRuns.cshtml" />
-    <Content Include="Views\Departure\_DeparureAddress.cshtml" />
+    <Content Include="Views\Departure\_DepartureRuns.cshtml" />
+    <Content Include="Views\Departure\_DepartureAddress.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

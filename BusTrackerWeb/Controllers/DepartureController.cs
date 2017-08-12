@@ -33,13 +33,13 @@ namespace BusTrackerWeb.Controllers
 
             ViewBag.DepartureAddress = googleAddress;
 
-            return PartialView("~/Views/Departure/_DeparureAddress.cshtml");
+            return PartialView("~/Views/Departure/_DepartureAddress.cshtml");
         }
 
         public async Task<ActionResult> GetDepartures(int routeId, int directionId, double latitude, double longitude)
         {
             // Get a list of bus stops in proximity to user location.
-            List<StopModel> proximiytStops = await WebApiApplication.PtvApiControl.GetStopsByDistanceAsync(Convert.ToDecimal(latitude), Convert.ToDecimal(longitude), Properties.Settings.Default.ProximityStopMaxDistance);
+            List<StopModel> proximiytStops = await WebApiApplication.PtvApiControl.GetStopsByDistanceAsync(Convert.ToDecimal(latitude), Convert.ToDecimal(longitude), Properties.Settings.Default.BusStopMaxResults, Properties.Settings.Default.ProximityStopMaxDistance);
 
             // Get a list of bus stops for the current route.
             List<StopModel> routeStops = await WebApiApplication.PtvApiControl.GetRouteStopsAsync(new RouteModel { RouteId = routeId });
@@ -59,8 +59,15 @@ namespace BusTrackerWeb.Controllers
             StopModel departureStop = commonStops.OrderBy(s => s.StopDistance).First();
 
             // Get the route departures from the closest stop.
+            List<DepartureModel> departures = await WebApiApplication.PtvApiControl.GetDeparturesAsync(routeId, departureStop);
 
-            return PartialView("~/Views/Departure/_DepartureRuns.cshtml");
+            // Filter for correct directions.
+            departures = departures.Where(d => d.DirectionId == directionId).ToList();
+
+            // Filter for future runs only.
+            departures = departures.Where(d => d.ScheduledDeparture >= DateTime.Now).ToList();
+
+            return PartialView("~/Views/Departure/_DepartureRuns.cshtml", departures);
         }
         
         public ActionResult SelectRun(int runId)

@@ -32,6 +32,7 @@ namespace BusTrackerWeb.Controllers
                 // Check for any stops in close proximity to the bus location.
                 List<StopModel> proximiytStops = await WebApiApplication.PtvApiControl.
                     GetStopsByDistanceAsync(bus.BusLatitude, bus.BusLongitude,
+                    Properties.Settings.Default.BusStopMaxResults,
                     Properties.Settings.Default.BusStopMaxDistance);
 
                 // Get the stops on route.

@@ -70,10 +70,19 @@ namespace BusTrackerWeb.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("4000")]
+        [global::System.Configuration.DefaultSettingValueAttribute("100000")]
         public int ProximityStopMaxDistance {
             get {
                 return ((int)(this["ProximityStopMaxDistance"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100000")]
+        public int BusStopMaxResults {
+            get {
+                return ((int)(this["BusStopMaxResults"]));
             }
         }
     }
