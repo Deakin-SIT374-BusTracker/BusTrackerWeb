@@ -1,4 +1,6 @@
-﻿@{ 
+﻿@model  IEnumerable<BusTrackerWeb.Models.DepartureModel>
+
+@{ 
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -12,28 +14,16 @@
             <table id="scheduleTable" class="table table-striped">
                 <tr>
                     <th>Bus Stop:</th>
-                    <th>Status:</th>
-                    <th>Scheduled Time:</th>
-                    <th>Estimated Time:</th>
+                    <th>Departure Time:</th>
                 </tr>
-                <tr>
-                    <td>Geelong Station</td>
-                    <td>Departed</td>
-                    <td>26/07/2017 12:00 PM</td>
-                    <td>26/07/2017 12:00 PM</td>
-                </tr>
-                <tr>
-                    <td>Cr East Street and West Court</td>
-                    <td>On Time</td>
-                    <td>26/07/2017 12:20 PM</td>
-                    <td>26/07/2017 12:20 PM</td>
-                </tr>
-                <tr>
-                    <td>Deakin University</td>
-                    <td>Late</td>
-                    <td>26/07/2017 13:00 PM</td>
-                    <td>26/07/2017 13:10 PM</td>
-                </tr>
+                
+                @foreach (var departure in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => departure.Stop.StopName)</td>
+                        <td>@Html.DisplayFor(modelItem => departure.ScheduledDeparture)</td>
+                    </tr>
+                }
             </table>
         </div>
         <div class="col-md-6">

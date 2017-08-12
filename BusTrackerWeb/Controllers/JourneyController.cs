@@ -18,11 +18,16 @@ namespace BusTrackerWeb.Controllers
         /// Open the Your Journey View.
         /// </summary>
         /// <returns>Your Journey View.</returns>
-        public ActionResult Index(int runId)
+        public async Task<ActionResult> Index(int runId, int routeId)
         {
             ViewBag.Title = "BusHop > Your Journey";
 
-            return View("~/Views/Journey/Index.cshtml");
+            RouteModel departureRoute = new RouteModel { RouteId = routeId };
+            RunModel departureRun = new RunModel { RunId = runId, Route = departureRoute };
+
+            StoppingPatternModel pattern = await WebApiApplication.PtvApiControl.GetStoppingPatternAsync(departureRun);
+
+            return View("~/Views/Journey/Index.cshtml", pattern.Departures);
         }
     }
 }

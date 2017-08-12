@@ -12,7 +12,7 @@
         <tr>
             <td>@Html.DisplayFor(modelItem => departure.Stop.StopName)</td>
             <td>@Html.DisplayFor(modelItem => departure.ScheduledDeparture)</td>
-            <td>@Html.ActionLink("Select", "Index", "Journey", new { runId = departure.RunId }, new { @class = "btn btn-default" })</td>
+            <td>@Html.ActionLink("Select", "Index", "Journey", new { runId = departure.RunId, routeId = departure.RouteId }, new { @class = "btn btn-default" })</td>
         </tr>
     }
 </table>
