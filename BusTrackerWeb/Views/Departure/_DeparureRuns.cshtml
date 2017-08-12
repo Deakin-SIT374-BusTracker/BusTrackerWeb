@@ -1,0 +1,24 @@
+﻿@model  IEnumerable<BusTrackerWeb.Models.RunModel>
+
+<table id="journeyTable" class="table table-striped search-table">
+    <tr>
+        <th>Route</th>
+        <th>Direction</th>
+        <th>Origin Departure Time</th>
+        <th>Destination Arrival Time</th>
+        <th>Link</th>
+    </tr>
+
+    @foreach (var routeRun in Model)
+    {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => routeRun.Route.RouteName)</td>
+            <td>@Html.DisplayFor(modelItem => routeRun.Direction.DirectionName)</td>
+            <td>@Html.DisplayFor(modelItem => routeRun.StoppingPattern.Departures.First().ScheduledDeparture)</td>
+            <td>@Html.DisplayFor(modelItem => routeRun.StoppingPattern.Departures.Last().ScheduledDeparture)</td>
+            <td>@Html.ActionLink("Select", "Journey", new { runId = routeRun.RunId }, new { @class = "btn btn-default" })</td>
+        </tr>
+    }
+</table>
+
+

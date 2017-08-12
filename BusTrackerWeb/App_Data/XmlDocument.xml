@@ -515,13 +515,13 @@
             <param name="routeId">The PTV Route Id of the buses to be returned.</param>
             <returns>A collection of Bus Model objects.</returns>
         </member>
-        <member name="M:BusTrackerWeb.Controllers.DeparturesController.Departures">
+        <member name="M:BusTrackerWeb.Controllers.DepartureController.Index(System.Int32,System.Int32)">
             <summary>
             Open the Departures View.
             </summary>
             <returns>Journeys View.</returns>
         </member>
-        <member name="M:BusTrackerWeb.Controllers.DeparturesController.GetDepartures(System.Int32,System.Int32)">
+        <member name="M:BusTrackerWeb.Controllers.DepartureController.SelectRun(System.Int32)">
             <summary>
             Get the next departures for the selected route and diraction.
             </summary>
@@ -554,7 +554,7 @@
             Controls all Bus Tracker Journey View actions.
             </summary>
         </member>
-        <member name="M:BusTrackerWeb.Controllers.JourneyController.GetJourney(System.Int32)">
+        <member name="M:BusTrackerWeb.Controllers.JourneyController.Index(System.Int32)">
             <summary>
             Open the Your Journey View.
             </summary>
@@ -703,7 +703,7 @@
             <param name="directionId">PTV Direction Id.</param>
             <returns>A RunModel object.</returns>
         </member>
-        <member name="M:BusTrackerWeb.Controllers.SearchController.Search">
+        <member name="M:BusTrackerWeb.Controllers.SearchController.Index">
             <summary>
             Open the Search View.
             </summary>

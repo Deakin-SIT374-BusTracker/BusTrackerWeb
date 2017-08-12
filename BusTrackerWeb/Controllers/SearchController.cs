@@ -15,7 +15,7 @@ namespace BusTrackerWeb.Controllers
         /// Open the Search View.
         /// </summary>
         /// <returns>Search View.</returns>
-        public ActionResult Search()
+        public ActionResult Index()
         {
             ViewBag.Title = "BusHop > Search";
 

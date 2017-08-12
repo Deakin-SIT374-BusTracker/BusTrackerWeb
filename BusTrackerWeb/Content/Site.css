@@ -46,6 +46,15 @@ textarea {
     text-align: left
 }
 
+departure-prompt {
+    font-size: x-large;
+}
+
+departure-address {
+    font-size: large;
+    text-align: left;
+}
+
 
 .journeys-title {
     font-family: Calibri;
