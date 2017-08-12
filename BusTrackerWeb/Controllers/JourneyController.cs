@@ -18,11 +18,11 @@ namespace BusTrackerWeb.Controllers
         /// Open the Your Journey View.
         /// </summary>
         /// <returns>Your Journey View.</returns>
-        public ActionResult GetJourney()
+        public ActionResult GetJourney(int runId)
         {
             ViewBag.Title = "BusHop > Your Journey";
 
-            return View();
+            return View("~/Views/Journey/Journey.cshtml");
         }
     }
 }

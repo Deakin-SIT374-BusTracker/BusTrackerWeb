@@ -554,7 +554,7 @@
             Controls all Bus Tracker Journey View actions.
             </summary>
         </member>
-        <member name="M:BusTrackerWeb.Controllers.JourneyController.YourJourney">
+        <member name="M:BusTrackerWeb.Controllers.JourneyController.GetJourney(System.Int32)">
             <summary>
             Open the Your Journey View.
             </summary>

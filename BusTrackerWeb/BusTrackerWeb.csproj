@@ -164,7 +164,6 @@
     <Compile Include="Controllers\JourneyController.cs" />
     <Compile Include="Controllers\AboutController.cs" />
     <Compile Include="Controllers\DirectionsApiClientController.cs" />
-    <Compile Include="Controllers\JourneysController.cs" />
     <Compile Include="Controllers\PtvApiClientController.cs" />
     <Compile Include="Controllers\RouteController.cs" />
     <Compile Include="Controllers\SearchController.cs" />

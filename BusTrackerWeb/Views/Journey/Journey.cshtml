@@ -3,37 +3,46 @@
 }
 
 <div class="page-header">
-    <h1><img style="max-width:50px; margin-top: -4px; margin-right: 10px; float:left;" src="/logo.png">@ViewBag.Title</h1>
+    <h1><img style="max-width:50px; margin-top: -4px; margin-right: 10px; float:left;" src="~/Content/Images/bushop-logo.png">Your Journey</h1>
 </div>
 
-<table id="scheduleTable" class="table table-striped">
-    <tr>
-        <th>Bus Stop:</th>
-        <th>Status:</th>
-        <th>Scheduled Time:</th>
-        <th>Estimated Time:</th>
-    </tr>
-    <tr>
-        <td>Geelong Station</td>
-        <td>Departed</td>
-        <td>26/07/2017 12:00 PM</td>
-        <td>26/07/2017 12:00 PM</td>
-    </tr>
-    <tr>
-        <td>Cr East Street and West Court</td>
-        <td>On Time</td>
-        <td>26/07/2017 12:20 PM</td>
-        <td>26/07/2017 12:20 PM</td>
-    </tr>
-    <tr>
-        <td>Deakin University</td>
-        <td>Late</td>
-        <td>26/07/2017 13:00 PM</td>
-        <td>26/07/2017 13:10 PM</td>
-    </tr>
-</table>
+<div>
+    <div class="row" style="width: 100%">
+        <div class="col-md-6">
+            <table id="scheduleTable" class="table table-striped">
+                <tr>
+                    <th>Bus Stop:</th>
+                    <th>Status:</th>
+                    <th>Scheduled Time:</th>
+                    <th>Estimated Time:</th>
+                </tr>
+                <tr>
+                    <td>Geelong Station</td>
+                    <td>Departed</td>
+                    <td>26/07/2017 12:00 PM</td>
+                    <td>26/07/2017 12:00 PM</td>
+                </tr>
+                <tr>
+                    <td>Cr East Street and West Court</td>
+                    <td>On Time</td>
+                    <td>26/07/2017 12:20 PM</td>
+                    <td>26/07/2017 12:20 PM</td>
+                </tr>
+                <tr>
+                    <td>Deakin University</td>
+                    <td>Late</td>
+                    <td>26/07/2017 13:00 PM</td>
+                    <td>26/07/2017 13:10 PM</td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-md-6">
+            <div id="map_canvas" style="min-height:40em; width:100%"></div>
+        </div>
+    </div>
+</div>
 
-<div id="map_canvas" style="min-height:20em; width:100%"></div>
+
 
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqZFelSFhnk3JDbFVx7qovf8IIG1ZViVs"></script>
 <script type="text/javascript">
