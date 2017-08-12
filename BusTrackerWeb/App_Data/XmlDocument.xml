@@ -515,6 +515,22 @@
             <param name="routeId">The PTV Route Id of the buses to be returned.</param>
             <returns>A collection of Bus Model objects.</returns>
         </member>
+        <member name="M:BusTrackerWeb.Controllers.DepartureController.Index(System.Int32,System.Int32)">
+            <summary>
+            Open the Departures View.
+            </summary>
+            <returns>Journeys View.</returns>
+        </member>
+        <member name="T:BusTrackerWeb.Controllers.GeoCodeApiClientController">
+            <summary>
+            Controls all Google GeoCode API requests.
+            </summary>
+        </member>
+        <member name="M:BusTrackerWeb.Controllers.GeoCodeApiClientController.#ctor">
+            <summary>
+            Initialise the client controller.
+            </summary>
+        </member>
         <member name="T:BusTrackerWeb.Controllers.DistanceApiClientController">
             <summary>
             Controls all Google Maps Distance Matrix API requests.
@@ -530,35 +546,7 @@
             Controls all Bus Tracker Journey View actions.
             </summary>
         </member>
-        <member name="M:BusTrackerWeb.Controllers.JourneyController.Search">
-            <summary>
-            Open the Search View.
-            </summary>
-            <returns>Search View.</returns>
-        </member>
-        <member name="M:BusTrackerWeb.Controllers.JourneyController.SearchRoutes(System.String)">
-            <summary>
-            Get all routes and associated directions for the given destination.
-            Return a summary table as a partial view.
-            </summary>
-            <param name="destination">Route name filter.</param>
-            <returns></returns>
-        </member>
-        <member name="M:BusTrackerWeb.Controllers.JourneyController.SelectRoute(System.Int32,System.Int32)">
-            <summary>
-            Get the next departures for the selected route and diraction.
-            </summary>
-            <param name="routeId">Selected Route Id.</param>
-            <param name="directionId">Selected Direction Id.</param>
-            <returns></returns>
-        </member>
-        <member name="M:BusTrackerWeb.Controllers.JourneyController.Journeys">
-            <summary>
-            Open the Journeys View.
-            </summary>
-            <returns>Journeys View.</returns>
-        </member>
-        <member name="M:BusTrackerWeb.Controllers.JourneyController.YourJourney">
+        <member name="M:BusTrackerWeb.Controllers.JourneyController.Index(System.Int32,System.Int32)">
             <summary>
             Open the Your Journey View.
             </summary>
@@ -615,6 +603,14 @@
             <param name="routeId">PTV Bus Route Id.</param>
             <returns>A RouteModel object.</returns>
         </member>
+        <member name="M:BusTrackerWeb.Controllers.PtvApiClientController.GetDeparturesAsync(System.Int32,BusTrackerWeb.Models.StopModel)">
+            <summary>
+            Get a list of PTV departures for a specific route and stop.
+            </summary>
+            <param name="routeId">PTV Route Id.</param>
+            <param name="stop">PTV Stop.</param>
+            <returns>A DirectionModel object.</returns>
+        </member>
         <member name="M:BusTrackerWeb.Controllers.PtvApiClientController.GetDirectionAsync(System.Int32,BusTrackerWeb.Models.RouteModel)">
             <summary>
             Get a list of PTV directions for a specific route.
@@ -637,12 +633,13 @@
             <param name="route">The route for which to find all stops.</param>
             <returns>PTV API Stopping Pattern.</returns>
         </member>
-        <member name="M:BusTrackerWeb.Controllers.PtvApiClientController.GetStopsByDistanceAsync(System.Decimal,System.Decimal,System.Int32)">
+        <member name="M:BusTrackerWeb.Controllers.PtvApiClientController.GetStopsByDistanceAsync(System.Decimal,System.Decimal,System.Int32,System.Int32)">
             <summary>
             Get the stop in proximity to a GPS location from the PTV API.
             </summary>
             <param name="latitude">The location latitude.</param>
             <param name="longitude">The location longitude.</param>
+            <param name="maxStops">The maximum nuber of stops to return.</param>
             <param name="maxDistance">The proximity radius in meters.</param>
             <returns>Stop Model collection.</returns>
         </member>
@@ -706,6 +703,27 @@
             <param name="routeId">PTV Bus Route Id.</param>
             <param name="directionId">PTV Direction Id.</param>
             <returns>A RunModel object.</returns>
+        </member>
+        <member name="M:BusTrackerWeb.Controllers.SearchController.Index">
+            <summary>
+            Open the Search View.
+            </summary>
+            <returns>Search View.</returns>
+        </member>
+        <member name="M:BusTrackerWeb.Controllers.SearchController.SearchHints(System.String)">
+            <summary>
+            Return all PTV routes as hints for the Search Typeahead.
+            </summary>
+            <param name="q">Route name filter.</param>
+            <returns></returns>
+        </member>
+        <member name="M:BusTrackerWeb.Controllers.SearchController.SearchRoutes(System.String)">
+            <summary>
+            Get all routes and associated directions for the given destination.
+            Return a summary table as a partial view.
+            </summary>
+            <param name="destination">Route name filter.</param>
+            <returns></returns>
         </member>
         <member name="T:BusTrackerWeb.Models.BusModel">
             <summary>
@@ -944,6 +962,11 @@
         <member name="P:BusTrackerWeb.Models.StopModel.StopLongitude">
             <summary>
             The stop GPS longitude.
+            </summary>
+        </member>
+        <member name="P:BusTrackerWeb.Models.StopModel.StopDistance">
+            <summary>
+            The sto pdistace from the current geolocation.
             </summary>
         </member>
         <member name="T:BusTrackerWeb.Models.RunModel">

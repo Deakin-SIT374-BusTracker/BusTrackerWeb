@@ -17,5 +17,11 @@
     <Setting Name="MapsApiDeveloperKey" Type="System.String" Scope="Application">
       <Value Profile="(Default)">AIzaSyAyEgv4_85K8azHU2fYz78xxGAT3ne3egU</Value>
     </Setting>
+    <Setting Name="ProximityStopMaxDistance" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">100000</Value>
+    </Setting>
+    <Setting Name="BusStopMaxResults" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">100000</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

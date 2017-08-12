@@ -155,6 +155,48 @@ namespace BusTrackerWeb.Controllers
         }
 
         /// <summary>
+        /// Get a list of PTV departures for a specific route and stop.
+        /// </summary>
+        /// <param name="routeId">PTV Route Id.</param>
+        /// <param name="stop">PTV Stop.</param>
+        /// <returns>A DirectionModel object.</returns>
+        public async Task<List<DepartureModel>> GetDeparturesAsync(int routeId, StopModel stop)
+        {
+            List<DepartureModel> departures = new List<DepartureModel>();
+
+            // Get all bus type routes.
+            string getDeparturesRequest = string.Format("/v3/departures/route_type/2/stop/{0}/route/{1}", stop.StopId, routeId);
+            PtvApiDeparturesResponse departuresResponse =
+                await GetPtvApiResponse<PtvApiDeparturesResponse>(getDeparturesRequest);
+
+            // If the response is healthy try to convert the API response to a direction.
+            if (departuresResponse.Status.Health == 1)
+            {
+                foreach (PtvApiDeparture apiDeparture in departuresResponse.Departures)
+                {
+                    try
+                    {
+                        departures.Add(new DepartureModel
+                        {
+                            RouteId = apiDeparture.route_id,
+                            RunId = apiDeparture.run_id,
+                            Stop = stop,
+                            DirectionId = apiDeparture.direction_id,
+                            ScheduledDeparture = DateTime.Parse(apiDeparture.scheduled_departure_utc, null, DateTimeStyles.AssumeLocal)
+                        });
+                    }
+                    catch (Exception e)
+                    {
+                        Trace.TraceError("GetDeparturesAsync Exception: {0}", e.Message);
+                    }
+                }
+            }
+
+            return departures;
+        }
+
+
+        /// <summary>
         /// Get a list of PTV directions for a specific route.
         /// </summary>
         /// <param name="directionId">PTV Direction Id.</param>
@@ -273,14 +315,15 @@ namespace BusTrackerWeb.Controllers
         /// </summary>
         /// <param name="latitude">The location latitude.</param>
         /// <param name="longitude">The location longitude.</param>
+        /// <param name="maxStops">The maximum nuber of stops to return.</param>
         /// <param name="maxDistance">The proximity radius in meters.</param>
         /// <returns>Stop Model collection.</returns>
-        public async Task<List<StopModel>> GetStopsByDistanceAsync(decimal latitude, decimal longitude, int maxDistance)
+        public async Task<List<StopModel>> GetStopsByDistanceAsync(decimal latitude, decimal longitude, int maxStops, int maxDistance)
         {
             // Get all bus type routes.
             string getStopsRequest = 
-                string.Format("/v3/stops/location/{0},{1}?route_types=2&max_distance={2}", latitude,
-                longitude, maxDistance);
+                string.Format("/v3/stops/location/{0},{1}?route_types=2&max_results={2}&max_distance={3}", latitude,
+                longitude, maxStops, maxDistance);
 
             PtvApiStopsByDistanceResponse stopsResponse =
                 await GetPtvApiResponse<PtvApiStopsByDistanceResponse>(getStopsRequest);
@@ -298,7 +341,8 @@ namespace BusTrackerWeb.Controllers
                             StopId = apiStop.stop_id,
                             StopName = apiStop.stop_name,
                             StopLatitude = apiStop.stop_latitude,
-                            StopLongitude = apiStop.stop_longitude
+                            StopLongitude = apiStop.stop_longitude,
+                            StopDistance = apiStop.stop_distance
                         });
                     }
                     catch (Exception e)

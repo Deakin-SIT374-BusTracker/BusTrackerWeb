@@ -115,9 +115,10 @@ namespace BusTrackerWeb.Controllers.Tests
             decimal latitude = -38.145M;
             decimal longitude = 144.354M;
             int maxDistance = 150;
+            int maxStops = 30;
 
             List<StopModel> stops = 
-                await apiControl.GetStopsByDistanceAsync(latitude, longitude, maxDistance);
+                await apiControl.GetStopsByDistanceAsync(latitude, longitude, maxStops, maxDistance);
 
             Assert.IsTrue(stops.Count == 2);
         }

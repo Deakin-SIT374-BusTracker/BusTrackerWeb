@@ -17,6 +17,8 @@ namespace BusTrackerWeb
 
         public static DirectionsApiClientController MapsApiControl;
 
+        public static GeoCodeApiClientController GeocodeApiControl;
+
         public static List<BusModel> TrackedBuses;
 
         public static List<RunModel> RunsCache;
@@ -34,7 +36,10 @@ namespace BusTrackerWeb
 
             // Setup a single app Google Directions API Client i.e. to prevent http port exhaustion.
             MapsApiControl = new Controllers.DirectionsApiClientController();
-            
+
+            // Setup a single app Google Geolocation API Client i.e. to prevent http port exhaustion.
+            GeocodeApiControl = new Controllers.GeoCodeApiClientController();
+
             // Setup a static collection of tracked buses.
             TrackedBuses = new List<BusModel>();
 

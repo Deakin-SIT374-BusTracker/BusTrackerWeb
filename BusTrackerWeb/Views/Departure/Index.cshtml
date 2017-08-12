@@ -1,0 +1,44 @@
+﻿@{ 
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="page-header">
+    <h1><img style="max-width:50px; margin-top: -4px; margin-right: 10px; float:left;" src="~/Content/Images/bushop-logo.png">When would you like to leave?</h1>
+</div>
+
+<div class="departure-prompt">Are you departing from your current location?</div>
+
+<div class="departure-address" id="user-location"></div>
+
+<div id="departure-runs">
+</div>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            getLocation();
+        });
+
+        function getLocation(locationDiv) {
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    $.get("/Departure/GetAddress", { latitude: position.coords.latitude, longitude: position.coords.longitude }, function (response) {
+                        $("#user-location").html(response);
+                    });
+
+                    getDepartures(position.coords.latitude, position.coords.longitude);
+                });
+            } else {
+                console.log("Browser doesn't support geolocation!");
+            }
+        };
+
+        function getDepartures(geolatitude, geolongitude) {
+            $.get("/Departure/GetDepartures", { routeId: @ViewBag.RouteId, directionId: @ViewBag.DirectionId, latitude: geolatitude, longitude: geolongitude }, function (response) {
+                $("#departure-runs").html(response);
+            });
+        };
+
+    </script> 
+}
+
