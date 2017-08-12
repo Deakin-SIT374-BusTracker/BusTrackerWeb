@@ -29,5 +29,10 @@ namespace BusTrackerWeb.Models
         /// The stop GPS longitude.
         /// </summary>
         public decimal StopLongitude { get; set; }
+
+        /// <summary>
+        /// The sto pdistace from the current geolocation.
+        /// </summary>
+        public decimal StopDistance { get; set; }
     }
 }

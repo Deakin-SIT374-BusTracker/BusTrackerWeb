@@ -298,7 +298,8 @@ namespace BusTrackerWeb.Controllers
                             StopId = apiStop.stop_id,
                             StopName = apiStop.stop_name,
                             StopLatitude = apiStop.stop_latitude,
-                            StopLongitude = apiStop.stop_longitude
+                            StopLongitude = apiStop.stop_longitude,
+                            StopDistance = apiStop.stop_distance
                         });
                     }
                     catch (Exception e)

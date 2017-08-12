@@ -521,14 +521,6 @@
             </summary>
             <returns>Journeys View.</returns>
         </member>
-        <member name="M:BusTrackerWeb.Controllers.DepartureController.SelectRun(System.Int32)">
-            <summary>
-            Get the next departures for the selected route and diraction.
-            </summary>
-            <param name="routeId">Selected Route Id.</param>
-            <param name="directionId">Selected Direction Id.</param>
-            <returns></returns>
-        </member>
         <member name="T:BusTrackerWeb.Controllers.GeoCodeApiClientController">
             <summary>
             Controls all Google GeoCode API requests.
@@ -961,6 +953,11 @@
         <member name="P:BusTrackerWeb.Models.StopModel.StopLongitude">
             <summary>
             The stop GPS longitude.
+            </summary>
+        </member>
+        <member name="P:BusTrackerWeb.Models.StopModel.StopDistance">
+            <summary>
+            The sto pdistace from the current geolocation.
             </summary>
         </member>
         <member name="T:BusTrackerWeb.Models.RunModel">

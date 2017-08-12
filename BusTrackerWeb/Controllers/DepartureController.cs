@@ -36,8 +36,29 @@ namespace BusTrackerWeb.Controllers
             return PartialView("~/Views/Departure/_DeparureAddress.cshtml");
         }
 
-        public ActionResult GetDepartures(int routeId, int directionId, double latitude, double longitude)
+        public async Task<ActionResult> GetDepartures(int routeId, int directionId, double latitude, double longitude)
         {
+            // Get a list of bus stops in proximity to user location.
+            List<StopModel> proximiytStops = await WebApiApplication.PtvApiControl.GetStopsByDistanceAsync(Convert.ToDecimal(latitude), Convert.ToDecimal(longitude), Properties.Settings.Default.ProximityStopMaxDistance);
+
+            // Get a list of bus stops for the current route.
+            List<StopModel> routeStops = await WebApiApplication.PtvApiControl.GetRouteStopsAsync(new RouteModel { RouteId = routeId });
+
+            // Find a common set of stops.
+            List<StopModel> commonStops = new List<StopModel>();
+            int[] routeStopIdSet = routeStops.Select(s => s.StopId).ToArray();
+            foreach(StopModel stop in proximiytStops)
+            {
+                if (routeStopIdSet.Contains(stop.StopId))
+                {
+                    commonStops.Add(stop);
+                }
+            }
+
+            // Find the closest stop from the common set of stops.
+            StopModel departureStop = commonStops.OrderBy(s => s.StopDistance).First();
+
+            // Get the route departures from the closest stop.
 
             return PartialView("~/Views/Departure/_DepartureRuns.cshtml");
         }
