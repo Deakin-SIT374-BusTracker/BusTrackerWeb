@@ -10,6 +10,8 @@
 
 <div class="journeys-title">Are you departing from your current location?</div>
 
+<div id="user-location"></div>
+
 <div id="runResults">
     <table id="journeyTable" class="table table-striped search-table">
         <tr>
@@ -32,4 +34,22 @@
         }
     </table>
 </div>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            getLocation();
+        });
+
+        function getLocation(locationDiv) {
+            if ("geolocation" in navigator) { 
+                    navigator.geolocation.getCurrentPosition(function (position) {
+                        $("#user-location").html("Found your location <br />Lat : " + position.coords.latitude + " </br>Lang :" + position.coords.longitude);
+                });
+            } else {
+                console.log("Browser doesn't support geolocation!");
+            }
+        }
+    </script> 
+}
 
