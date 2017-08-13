@@ -36,14 +36,51 @@
 
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqZFelSFhnk3JDbFVx7qovf8IIG1ZViVs"></script>
 <script type="text/javascript">
-    function initialize() {
-        var latlng = new google.maps.LatLng(40.716948, -74.003563);
+    function initGoogleMap() {
+        // Initialise marker coordinates.
+        var markerLatArray = @Html.Raw(Json.Encode(@ViewBag.LatPath));
+        var markerLngArray = @Html.Raw(Json.Encode(@ViewBag.LngPath));
+
+        // Find the map center marker.
+        var centerIndex = Math.round(markerLatArray.length / 2)
+        var centerLocation = new google.maps.LatLng(markerLatArray[centerIndex], markerLngArray[centerIndex]);
+
+        // set map options.
         var options = {
-            zoom: 14, center: latlng,
+            zoom: 14,
+            center: centerLocation,
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
+
+        // Update map with options.
         var map = new google.maps.Map(document.getElementById("map_canvas"), options);
+
+        // Add map markers and set bounds.
+        var bounds = new google.maps.LatLngBounds();
+
+        for (var i = 0; i < markerLatArray.length; i++) {
+            var newlocation = new google.maps.LatLng(markerLatArray[i], markerLngArray[i]);
+            var newMarker = new google.maps.Marker({ position: newlocation, map: map, title: 'Marker 1' });
+            bounds.extend(newMarker.getPosition());
+        }
+        
+        map.fitBounds(bounds);
+
+        // Add road polyline.
+        //var drivePlanCoordinates = [latlng1, latlng2, latlng3];
+
+        //var drivePath = new google.maps.Polyline({
+        //    path: drivePlanCoordinates,
+        //    geodesic: true,
+        //    strokeColor: '#FF0000',
+        //    strokeOpacity: 1.0,
+        //    strokeWeight: 2
+        //});
+
+        //drivePath.setMap(map);
+
     }
 
-    initialize();
+    initGoogleMap();
+
 </script>

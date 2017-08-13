@@ -292,6 +292,7 @@
     <Content Include="Views\Search\_SearchRoutes.cshtml" />
     <Content Include="Views\Departure\_DepartureRuns.cshtml" />
     <Content Include="Views\Departure\_DepartureAddress.cshtml" />
+    <Content Include="Views\Journey\TestMap.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

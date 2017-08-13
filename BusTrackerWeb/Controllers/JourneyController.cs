@@ -27,7 +27,25 @@ namespace BusTrackerWeb.Controllers
 
             StoppingPatternModel pattern = await WebApiApplication.PtvApiControl.GetStoppingPatternAsync(departureRun);
 
+            // Set map coordinates.
+            DepartureModel[] departureArray = pattern.Departures.ToArray();
+
+            ViewBag.LatPath = new double[departureArray.Count()];
+            ViewBag.LngPath = new double[departureArray.Count()];
+
+            for(int i = 0; i < departureArray.Count(); i++)
+            {
+                ViewBag.LatPath[i] = (double)departureArray[i].Stop.StopLatitude;
+                ViewBag.LngPath[i] = (double)departureArray[i].Stop.StopLongitude;
+            }
+
             return View("~/Views/Journey/Index.cshtml", pattern.Departures);
         }
+
+        public ActionResult TestMap()
+        {
+            return View("~/Views/Journey/TestMap.cshtml");
+        }
+
     }
 }

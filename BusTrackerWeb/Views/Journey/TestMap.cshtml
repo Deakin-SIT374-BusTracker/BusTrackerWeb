@@ -1,0 +1,53 @@
+﻿
+@{
+    ViewBag.Title = "TestMap";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>TestMap</h2>
+
+<div id="map_canvas" style="min-height:40em; width:100%"></div>
+
+@section scripts {
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqZFelSFhnk3JDbFVx7qovf8IIG1ZViVs"></script>
+
+    <script type="text/javascript">
+        function initGoogleMap() {
+            // Initialise map coordinates.
+            var latlng1 = new google.maps.LatLng(-37.8136, 144.9631);
+            var latlng2 = new google.maps.LatLng(-37.8136, 144.9731);
+            var latlng3 = new google.maps.LatLng(-37.8336, 144.9831);
+
+            // set map options.
+            var options = {
+                zoom: 14,
+                center: latlng2,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+
+            // Update map with options.
+            var map = new google.maps.Map(document.getElementById("map_canvas"), options);
+
+            // Add map markers.
+            var marker1 = new google.maps.Marker({ position: latlng1, map: map, title: 'Marker 1' });
+            var marker2 = new google.maps.Marker({ position: latlng2, map: map, title: 'Marker 2' });
+            var marker3 = new google.maps.Marker({ position: latlng3, map: map, title: 'Marker 3' });
+
+            // Add polyline.
+            var flightPlanCoordinates = [latlng1, latlng2, latlng3];
+
+            var flightPath = new google.maps.Polyline({
+                path: flightPlanCoordinates,
+                geodesic: true,
+                strokeColor: '#FF0000',
+                strokeOpacity: 1.0,
+                strokeWeight: 2
+            });
+
+            flightPath.setMap(map);
+        }
+
+        initGoogleMap();
+    </script>
+
+}
