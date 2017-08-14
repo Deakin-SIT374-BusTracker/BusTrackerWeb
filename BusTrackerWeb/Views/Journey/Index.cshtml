@@ -38,12 +38,15 @@
 <script type="text/javascript">
     function initGoogleMap() {
         // Initialise marker coordinates.
-        var markerLatArray = @Html.Raw(Json.Encode(@ViewBag.LatPath));
-        var markerLngArray = @Html.Raw(Json.Encode(@ViewBag.LngPath));
+        var stopsLatitudeArray = @Html.Raw(Json.Encode(@ViewBag.StopsLatitudeArray));
+        var stopsLongitudeArray = @Html.Raw(Json.Encode(@ViewBag.StopsLongitudeArray));
+        var pathLatitudeArray = @Html.Raw(Json.Encode(@ViewBag.PathLatitudeArray));
+        var pathLongitudeArray = @Html.Raw(Json.Encode(@ViewBag.PathLongitudeArray));
+
 
         // Find the map center marker.
-        var centerIndex = Math.round(markerLatArray.length / 2)
-        var centerLocation = new google.maps.LatLng(markerLatArray[centerIndex], markerLngArray[centerIndex]);
+        var centerIndex = Math.round(stopsLatitudeArray.length / 2)
+        var centerLocation = new google.maps.LatLng(stopsLatitudeArray[centerIndex], stopsLongitudeArray[centerIndex]);
 
         // set map options.
         var options = {
@@ -58,26 +61,30 @@
         // Add map markers and set bounds.
         var bounds = new google.maps.LatLngBounds();
 
-        for (var i = 0; i < markerLatArray.length; i++) {
-            var newlocation = new google.maps.LatLng(markerLatArray[i], markerLngArray[i]);
+        for (var i = 0; i < stopsLatitudeArray.length; i++) {
+            var newlocation = new google.maps.LatLng(stopsLatitudeArray[i], stopsLongitudeArray[i]);
             var newMarker = new google.maps.Marker({ position: newlocation, map: map, title: 'Marker 1' });
             bounds.extend(newMarker.getPosition());
         }
-        
+
         map.fitBounds(bounds);
 
-        // Add road polyline.
-        //var drivePlanCoordinates = [latlng1, latlng2, latlng3];
+        // Build and array of waypoints and add road polyline.
+        var drivePlanCoordinates = [];
+        for (var i = 0; i < pathLatitudeArray.length; i++) {
+            var newWaypoint = new google.maps.LatLng(pathLatitudeArray[i], pathLongitudeArray[i]);
+            drivePlanCoordinates[i] = newWaypoint;
+        }
 
-        //var drivePath = new google.maps.Polyline({
-        //    path: drivePlanCoordinates,
-        //    geodesic: true,
-        //    strokeColor: '#FF0000',
-        //    strokeOpacity: 1.0,
-        //    strokeWeight: 2
-        //});
+        var drivePath = new google.maps.Polyline({
+            path: drivePlanCoordinates,
+            geodesic: true,
+            strokeColor: '#FF0000',
+            strokeOpacity: 1.0,
+            strokeWeight: 2
+        });
 
-        //drivePath.setMap(map);
+        drivePath.setMap(map);
 
     }
 

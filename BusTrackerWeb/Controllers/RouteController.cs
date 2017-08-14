@@ -165,7 +165,7 @@ namespace BusTrackerWeb.Controllers
 
                 // Query Google Directions API for ETA.
 
-                List<Leg> routeLegs = WebApiApplication.MapsApiControl.GetDirections(routePoints.ToArray());
+                List<Leg> routeLegs = WebApiApplication.DirectionsApiControl.GetDirections(routePoints.ToArray());
 
                 // Update each stop on the run with ETA.
 
