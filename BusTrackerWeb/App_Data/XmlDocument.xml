@@ -521,6 +521,16 @@
             </summary>
             <returns>Journeys View.</returns>
         </member>
+        <member name="T:BusTrackerWeb.Controllers.SnappedApiClientController">
+            <summary>
+            Controls all Google Maps Snap to Road API requests.
+            </summary>
+        </member>
+        <member name="M:BusTrackerWeb.Controllers.SnappedApiClientController.#ctor">
+            <summary>
+            Initialise the client controller.
+            </summary>
+        </member>
         <member name="T:BusTrackerWeb.Controllers.GeoCodeApiClientController">
             <summary>
             Controls all Google GeoCode API requests.

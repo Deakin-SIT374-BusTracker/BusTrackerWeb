@@ -159,6 +159,7 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\BusController.cs" />
     <Compile Include="Controllers\DepartureController.cs" />
+    <Compile Include="Controllers\SnappedApiClientController.cs" />
     <Compile Include="Controllers\GeoCodeApiClientController.cs" />
     <Compile Include="Controllers\DistanceApiClientController.cs" />
     <Compile Include="Controllers\JourneyController.cs" />
@@ -173,6 +174,7 @@
     <Compile Include="Models\BusModel.cs" />
     <Compile Include="Models\DepartureModel.cs" />
     <Compile Include="Models\DirectionModel.cs" />
+    <Compile Include="Models\GoogleApi\SnappedResponse.cs" />
     <Compile Include="Models\GoogleApi\DirectionsResponse.cs" />
     <Compile Include="Models\GoogleApi\DistanceResponse.cs" />
     <Compile Include="Models\GoogleApi\GeoCodeResponse.cs" />
