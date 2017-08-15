@@ -47,19 +47,11 @@ namespace BusTrackerWeb.Controllers
                 stopCoordinates.Add(new GeoCoordinate((double)departure.Stop.StopLatitude, (double)departure.Stop.StopLongitude));
             }
 
-            // Get the snapped points between stops.
-            List<SnappedPoints> snappedPoints = WebApiApplication.SnappedApiControl.GetSnappedPoints(stopCoordinates.ToArray());
+            // Get directions between stops.
+            Route runRoute = WebApiApplication.DirectionsApiControl.GetDirections(stopCoordinates.ToArray());
+            string encodedPolyLine = runRoute.overview_polyline.points;
+            ViewBag.EncodePolyline = encodedPolyLine.Replace(@"\",@"\\");
 
-            // Pass the snapped points to the view as a road path.
-            ViewBag.PathLatitudeArray = new double[snappedPoints.Count()];
-            ViewBag.PathLongitudeArray = new double[snappedPoints.Count()];
-
-            for (int i = 0; i < snappedPoints.Count(); i++)
-            {
-                ViewBag.PathLatitudeArray[i] = snappedPoints[i].location.latitude;
-                ViewBag.PathLongitudeArray[i] = snappedPoints[i].location.longitude;
-            }
-            
             return View("~/Views/Journey/Index.cshtml", pattern.Departures);
         }
 

@@ -38,9 +38,9 @@ namespace BusTrackerWeb.Controllers
         }
 
 
-        public List<Leg> GetDirections(GeoCoordinate[] routePoints)
+        public Route GetDirections(GeoCoordinate[] routePoints)
         {
-            List<Leg> routeLegs = new List<Leg>();
+            Route route = new Route();
 
             try
             {
@@ -69,7 +69,7 @@ namespace BusTrackerWeb.Controllers
                         object objResponse = jsonSerializer.ReadObject(response.GetResponseStream());
                         DirectionsResponse jsonResponse = objResponse as DirectionsResponse;
 
-                        routeLegs.AddRange(jsonResponse.routes.First().legs);
+                        route = jsonResponse.routes.First();
                     }
                 }
             }
@@ -77,7 +77,7 @@ namespace BusTrackerWeb.Controllers
             {
             }
 
-            return routeLegs;
+            return route;
         }
 
         public string BuildDirectionsQuery(GeoCoordinate[] routePoints)

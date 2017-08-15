@@ -34,15 +34,12 @@
 
 
 
-<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqZFelSFhnk3JDbFVx7qovf8IIG1ZViVs"></script>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqZFelSFhnk3JDbFVx7qovf8IIG1ZViVs&libraries=geometry"></script>
 <script type="text/javascript">
     function initGoogleMap() {
         // Initialise marker coordinates.
         var stopsLatitudeArray = @Html.Raw(Json.Encode(@ViewBag.StopsLatitudeArray));
         var stopsLongitudeArray = @Html.Raw(Json.Encode(@ViewBag.StopsLongitudeArray));
-        var pathLatitudeArray = @Html.Raw(Json.Encode(@ViewBag.PathLatitudeArray));
-        var pathLongitudeArray = @Html.Raw(Json.Encode(@ViewBag.PathLongitudeArray));
-
 
         // Find the map center marker.
         var centerIndex = Math.round(stopsLatitudeArray.length / 2)
@@ -69,15 +66,12 @@
 
         map.fitBounds(bounds);
 
-        // Build and array of waypoints and add road polyline.
-        var drivePlanCoordinates = [];
-        for (var i = 0; i < pathLatitudeArray.length; i++) {
-            var newWaypoint = new google.maps.LatLng(pathLatitudeArray[i], pathLongitudeArray[i]);
-            drivePlanCoordinates[i] = newWaypoint;
-        }
+        // Render the polyline returned by the Google Directions API.
+        var encodedPolyline = '@ViewBag.EncodePolyline';
+        var decodedPolyline = google.maps.geometry.encoding.decodePath(encodedPolyline);
 
         var drivePath = new google.maps.Polyline({
-            path: drivePlanCoordinates,
+            path: decodedPolyline,
             geodesic: true,
             strokeColor: '#FF0000',
             strokeOpacity: 1.0,
@@ -85,7 +79,6 @@
         });
 
         drivePath.setMap(map);
-
     }
 
     initGoogleMap();
