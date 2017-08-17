@@ -40,6 +40,8 @@
         // Initialise marker coordinates.
         var stopsLatitudeArray = @Html.Raw(Json.Encode(@ViewBag.StopsLatitudeArray));
         var stopsLongitudeArray = @Html.Raw(Json.Encode(@ViewBag.StopsLongitudeArray));
+        var encodedPolyline = @Html.Raw(Json.Encode(@ViewBag.EncodePolylines));
+
 
         // Find the map center marker.
         var centerIndex = Math.round(stopsLatitudeArray.length / 2)
@@ -67,18 +69,20 @@
         map.fitBounds(bounds);
 
         // Render the polyline returned by the Google Directions API.
-        var encodedPolyline = '@ViewBag.EncodePolyline';
-        var decodedPolyline = google.maps.geometry.encoding.decodePath(encodedPolyline);
 
-        var drivePath = new google.maps.Polyline({
-            path: decodedPolyline,
-            geodesic: true,
-            strokeColor: '#FF0000',
-            strokeOpacity: 1.0,
-            strokeWeight: 2
-        });
+        for (var i = 0; i < encodedPolyline.length; i++) {
+            var decodedPolyline = google.maps.geometry.encoding.decodePath(encodedPolyline[i]);
 
-        drivePath.setMap(map);
+            var drivePath = new google.maps.Polyline({
+                path: decodedPolyline,
+                geodesic: true,
+                strokeColor: '#FF0000',
+                strokeOpacity: 1.0,
+                strokeWeight: 2
+            });
+
+            drivePath.setMap(map);
+        }
     }
 
     initGoogleMap();

@@ -65,7 +65,7 @@ namespace BusTrackerWeb.Controllers
             departures = departures.Where(d => d.DirectionId == directionId).ToList();
 
             // Filter for future runs only.
-            departures = departures.Where(d => d.ScheduledDeparture >= DateTime.Now).ToList();
+            //departures = departures.Where(d => d.ScheduledDeparture >= DateTime.Now).ToList();
 
             return PartialView("~/Views/Departure/_DepartureRuns.cshtml", departures);
         }

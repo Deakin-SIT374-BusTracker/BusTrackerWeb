@@ -463,6 +463,8 @@ namespace BusTrackerWeb.Controllers
                 }
             }
 
+            stoppingPattern.Departures = stoppingPattern.Departures.OrderBy(d => d.ScheduledDeparture).ToList();
+
             return stoppingPattern;
         }
         

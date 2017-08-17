@@ -89,9 +89,12 @@ namespace BusTrackerWeb.Controllers.Tests
 
             // Stops 36
             routePoints.Add(new GeoCoordinate(-38.1985359, 144.30014));
-            
 
-            List<Leg> legs = controller.GetDirections(routePoints.ToArray()).legs.ToList();
+
+            List<Route> routes = controller.GetDirections(routePoints.ToArray());
+
+            List<Leg> legs = new List<Leg>();
+            routes.ForEach(r => legs.AddRange(r.legs));
 
             Assert.IsTrue(legs.Count() == 35);
 
