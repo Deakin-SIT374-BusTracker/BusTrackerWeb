@@ -23,7 +23,7 @@ namespace BusTrackerWeb.Controllers
     public class DirectionsApiClientController
     {
         const string MAPS_API_BASE_URL = "https://maps.googleapis.com/maps/api/directions/json?";
-        const int MAPS_MAX_WAYPOINTS = 23;
+        const int MAPS_MAX_WAYPOINTS = 22;
 
         HttpClient Client { get; set; }
 
@@ -50,7 +50,20 @@ namespace BusTrackerWeb.Controllers
                 
                 for(int i = 0; i < requestsMax; i++)
                 {
-                    GeoCoordinate[] requestPoints = routePoints.Skip((i * MAPS_MAX_WAYPOINTS)-1).Take(MAPS_MAX_WAYPOINTS).ToArray();
+                    // For the first route.
+                    GeoCoordinate[] requestPoints;
+                    if (i == 0)
+                    {
+                        // Take the maximum number of waypoints.
+                        requestPoints = routePoints.Take(MAPS_MAX_WAYPOINTS).ToArray();
+                    }
+                    else
+                    {
+                        // Take the last waypoint of the previous set and the maximum number of waypoints.
+                        // This is required to maintain route continuity between requests.
+                        requestPoints = routePoints.Skip((i * MAPS_MAX_WAYPOINTS) - 1).Take(MAPS_MAX_WAYPOINTS + 1).ToArray();
+                    }
+
 
                     string requestQuery = BuildDirectionsQuery(requestPoints);
 
