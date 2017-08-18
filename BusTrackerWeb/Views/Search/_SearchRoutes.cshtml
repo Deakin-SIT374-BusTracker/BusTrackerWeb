@@ -1,5 +1,6 @@
 ﻿@model  IEnumerable<BusTrackerWeb.Models.SearchRouteModel>
 
+@* Render the model dataset in a table. *@
 <table id="routeTable" class="table table-striped search-table">
     <tr>
         <th>Route</th>
@@ -7,6 +8,7 @@
         <th>Link</th>
     </tr>
 
+    @* Render each route direction as a row, grouped by the route name. *@
     @foreach (var searchRoute in Model)
     {
         for (var i = 0; i < searchRoute.Directions.Count(); i++)

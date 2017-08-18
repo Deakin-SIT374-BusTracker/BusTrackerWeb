@@ -2,30 +2,48 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@* Render departures header. *@
 <div class="page-header">
     <h1><img style="max-width:50px; margin-top: -4px; margin-right: 10px; float:left;" src="~/Content/Images/bushop-logo.png">When would you like to leave?</h1>
 </div>
 
-<div class="departure-prompt">Are you departing from your current location?</div>
 
+@* Render users' current address. *@
+<div class="departure-prompt">Are you departing from your current location?</div>
 <div class="departure-address" id="user-location"></div>
 
-<div id="departure-runs">
-</div>
+
+@* Render departure results here. *@
+<div id="departure-runs"></div>
 
 @section scripts {
     <script>
+        /*
+        Function: document.Ready()
+        Jquery function called after document has been rendered.
+        */
         $(document).ready(function () {
             getLocation();
         });
 
+
+        /*
+        Function: getLocation()
+        Get the users' current location and post the coordinates to Departures
+        Controller which will return the location address retreived from the
+        Google API.
+        Once the user location is obtained get departures for the closest stop.
+        */
         function getLocation(locationDiv) {
+            // Check for browser geolocation support.
             if ("geolocation" in navigator) {
                 navigator.geolocation.getCurrentPosition(function (position) {
+                    // Pass the user coordinates to the Departures Controller and display the user address.
                     $.get("/Departure/GetAddress", { latitude: position.coords.latitude, longitude: position.coords.longitude }, function (response) {
                         $("#user-location").html(response);
                     });
 
+                    // Get all departures for the closest stop on route.
                     getDepartures(position.coords.latitude, position.coords.longitude);
                 });
             } else {
@@ -33,12 +51,16 @@
             }
         };
 
+
+        /*
+        Function: getDepartures()
+        Post route parameters and user geolocation to retreive a departures
+        in a partial view.
+        */
         function getDepartures(geolatitude, geolongitude) {
             $.get("/Departure/GetDepartures", { routeId: @ViewBag.RouteId, directionId: @ViewBag.DirectionId, latitude: geolatitude, longitude: geolongitude }, function (response) {
                 $("#departure-runs").html(response);
             });
         };
-
     </script> 
 }
-

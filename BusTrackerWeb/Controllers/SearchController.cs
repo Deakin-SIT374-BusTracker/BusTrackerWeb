@@ -1,4 +1,5 @@
-﻿using BusTrackerWeb.Models;
+﻿
+using BusTrackerWeb.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,10 +10,13 @@ using System.Web.Mvc;
 
 namespace BusTrackerWeb.Controllers
 {
+    /// <summary>
+    /// This controller handles all Search View functions.
+    /// </summary>
     public class SearchController : Controller
     {
         /// <summary>
-        /// Open the Search View.
+        /// Open the Search Index View.
         /// </summary>
         /// <returns>Search View.</returns>
         public ActionResult Index()
@@ -23,13 +27,15 @@ namespace BusTrackerWeb.Controllers
         }
 
         /// <summary>
-        /// Return all PTV routes as hints for the Search Typeahead.
+        /// Return all PTV routes as JSON formatted hints for the Search 
+        /// Typeahead.
         /// </summary>
         /// <param name="q">Route name filter.</param>
         /// <returns></returns>
         public async Task<JsonResult> SearchHints(string q)
         {
-            List<RouteModel> routes = await WebApiApplication.PtvApiControl.GetRoutesAsync();
+            List<RouteModel> routes = 
+                await WebApiApplication.PtvApiControl.GetRoutesAsync();
 
             string[] hints = routes.Select(r => r.RouteName).ToArray();
 
@@ -50,19 +56,20 @@ namespace BusTrackerWeb.Controllers
             String EncodedString = writer.ToString();
 
             // Get all routes matching the destination.
-            List<RouteModel> routes = await WebApiApplication.PtvApiControl.GetRoutesByNameAsync(EncodedString);
+            List<RouteModel> routes = await WebApiApplication.PtvApiControl
+                .GetRoutesByNameAsync(EncodedString);
 
             // For each route get the associated directions and build a new 
             // collection.
             List<SearchRouteModel> searchRoutes = new List<SearchRouteModel>();
             foreach (RouteModel route in routes)
             {
-                List<DirectionModel> directions = await WebApiApplication.PtvApiControl.GetRouteDirectionsAsync(route);
+                List<DirectionModel> directions = await WebApiApplication
+                    .PtvApiControl.GetRouteDirectionsAsync(route);
                 searchRoutes.Add(new SearchRouteModel(route, directions));
             }
 
             return PartialView("~/Views/Search/_SearchRoutes.cshtml", searchRoutes);
         }
-
     }
 }

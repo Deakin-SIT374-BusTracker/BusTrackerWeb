@@ -33,82 +33,80 @@
 </div>
 
 
+@section scripts {
+    @* Include Google Map Javascript Package *@
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqZFelSFhnk3JDbFVx7qovf8IIG1ZViVs&libraries=geometry"></script>
 
-<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqZFelSFhnk3JDbFVx7qovf8IIG1ZViVs&libraries=geometry"></script>
-<script type="text/javascript">
-    function initGoogleMap() {
-        // Initialise marker coordinates.
-        var stopsLatitudeArray = @Html.Raw(Json.Encode(@ViewBag.StopsLatitudeArray));
-        var stopsLongitudeArray = @Html.Raw(Json.Encode(@ViewBag.StopsLongitudeArray));
-        var encodedPolyline = @Html.Raw(Json.Encode(@ViewBag.EncodePolylines));
-        var departures = @Html.Raw(Json.Encode(@ViewBag.Departures));
+    <script type="text/javascript">
+         /*
+        Function: document.Ready()
+        Render a Google Map and render the bus route markers and polyline.
+        */
+        function initGoogleMap() {
+            // Find the map center coordinates.
+            var departures = @Html.Raw(Json.Encode(@ViewBag.Departures));
+            var centerIndex = Math.round(departures.length / 2)
+            var centerLocation = new google.maps.LatLng(departures[centerIndex].Stop.StopLatitude, departures[centerIndex].Stop.StopLatitude);
 
-        // Find the map center marker.
-        var centerIndex = Math.round(stopsLatitudeArray.length / 2)
-        var centerLocation = new google.maps.LatLng(stopsLatitudeArray[centerIndex], stopsLongitudeArray[centerIndex]);
+            // Set map options.
+            var options = {
+                zoom: 14,
+                center: centerLocation,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
 
-        // set map options.
-        var options = {
-            zoom: 14,
-            center: centerLocation,
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-        };
+            // Update map with options.
+            var map = new google.maps.Map(document.getElementById("map_canvas"), options);
 
-        // Update map with options.
-        var map = new google.maps.Map(document.getElementById("map_canvas"), options);
+            // Add map markers and set bounds.
+            var bounds = new google.maps.LatLngBounds();
+
+            // Initialise an Info Window object.
+            var infowindow = null;
+            infowindow = new google.maps.InfoWindow({ content: "holding..." });
+
+            // Iterate through each departures and create a new map marker with info
+            // window.
+            for (var i = 0; i < departures.length; i++) {
+                // Create Marker.
+                var newlocation = new google.maps.LatLng(departures[i].Stop.StopLatitude, departures[i].Stop.StopLongitude);
+                var newMarker = new google.maps.Marker({
+                    position: newlocation,
+                    map: map,
+                    title: departures[i].Stop.StopName,
+                    html: '<h4>' + departures[i].Stop.StopName + '</h4><p>' + new Date(parseInt(departures[i].ScheduledDeparture.replace('/Date(', ''))) + '</p>',
+                });
+
+                // Add Info Window to marker.
+                google.maps.event.addListener(newMarker, 'click', function () {
+                    infowindow.setContent(this.html);
+                    infowindow.open(map, this);
+                });
+
+                // Ajusted bounds of map based on new marker.
+                bounds.extend(newMarker.getPosition());
+            }
+
+            map.fitBounds(bounds);
 
 
-        // Create array of info windows for marker attachment.
-        var infowindow = [];
+            // Render the collection of polylines returned by the Google Directions 
+            // API.
+            var encodedPolyline = @Html.Raw(Json.Encode(@ViewBag.EncodePolylines));
+            for (var i = 0; i < encodedPolyline.length; i++) {
+                var decodedPolyline = google.maps.geometry.encoding.decodePath(encodedPolyline[i]);
+                var drivePath = new google.maps.Polyline({
+                    path: decodedPolyline,
+                    geodesic: true,
+                    strokeColor: '#FF0000',
+                    strokeOpacity: 1.0,
+                    strokeWeight: 2
+                });
 
-        // Add map markers and set bounds.
-        var bounds = new google.maps.LatLngBounds();
-
-        var infowindow = null;
-        infowindow = new google.maps.InfoWindow({
-            content: "holding..."
-        });
-
-        for (var i = 0; i < departures.length; i++) {
-            // Create Marker.
-            var newlocation = new google.maps.LatLng(departures[i].Stop.StopLatitude, departures[i].Stop.StopLongitude);
-            var newMarker = new google.maps.Marker({
-                position: newlocation,
-                map: map,
-                title: departures[i].Stop.StopName,
-                html: '<h4>' + departures[i].Stop.StopName + '</h4><p>' + new Date(parseInt(departures[i].ScheduledDeparture.replace('/Date(', ''))) + '</p>',
-            });
-
-            // Add Info Window.
-            google.maps.event.addListener(newMarker, 'click', function () {
-                // where I have added .html to the marker object.
-                infowindow.setContent(this.html);
-                infowindow.open(map, this);
-            });
-
-            // Extend bounds of map based on new marker.
-            bounds.extend(newMarker.getPosition());
+                drivePath.setMap(map);
+            }
         }
 
-        map.fitBounds(bounds);
-
-        // Render the polyline returned by the Google Directions API.
-
-        for (var i = 0; i < encodedPolyline.length; i++) {
-            var decodedPolyline = google.maps.geometry.encoding.decodePath(encodedPolyline[i]);
-
-            var drivePath = new google.maps.Polyline({
-                path: decodedPolyline,
-                geodesic: true,
-                strokeColor: '#FF0000',
-                strokeOpacity: 1.0,
-                strokeWeight: 2
-            });
-
-            drivePath.setMap(map);
-        }
-    }
-
-    initGoogleMap();
-
-</script>
+        initGoogleMap();
+    </script>
+}

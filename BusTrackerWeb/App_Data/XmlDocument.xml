@@ -517,9 +517,30 @@
         </member>
         <member name="M:BusTrackerWeb.Controllers.DepartureController.Index(System.Int32,System.Int32)">
             <summary>
-            Open the Departures View.
+            Open the Departure Index View.
             </summary>
-            <returns>Journeys View.</returns>
+            <param name="routeId">The selected route.</param>
+            <param name="directionId">The selected departure.</param>
+            <returns>Departures Index View.</returns>
+        </member>
+        <member name="M:BusTrackerWeb.Controllers.DepartureController.GetAddress(System.Double,System.Double)">
+            <summary>
+            Retreives a Goole API address based on the coordinate paramters.
+            </summary>
+            <param name="latitude">The address latitude coordinate.</param>
+            <param name="longitude">The address longitude coordinate.</param>
+            <returns>Departures DepartureAddress Partial View.</returns>
+        </member>
+        <member name="M:BusTrackerWeb.Controllers.DepartureController.GetDepartures(System.Int32,System.Int32,System.Double,System.Double)">
+            <summary>
+            For the given route and direction find the closest bus stop, then 
+            get all the future departures for the stop.
+            </summary>
+            <param name="routeId">The selected route.</param>
+            <param name="directionId">The selected route direction.</param>
+            <param name="latitude">The users' current latitude.</param>
+            <param name="longitude">The users' current longitude.</param>
+            <returns>Departures DepartureRuns Partial View.</returns>
         </member>
         <member name="T:BusTrackerWeb.Controllers.SnappedApiClientController">
             <summary>
@@ -553,12 +574,12 @@
         </member>
         <member name="T:BusTrackerWeb.Controllers.JourneyController">
             <summary>
-            Controls all Bus Tracker Journey View actions.
+            This controller handles all Journey View functions.
             </summary>
         </member>
         <member name="M:BusTrackerWeb.Controllers.JourneyController.Index(System.Int32,System.Int32)">
             <summary>
-            Open the Your Journey View.
+            Open the Journey Index View.
             </summary>
             <returns>Your Journey View.</returns>
         </member>
@@ -714,15 +735,21 @@
             <param name="directionId">PTV Direction Id.</param>
             <returns>A RunModel object.</returns>
         </member>
+        <member name="T:BusTrackerWeb.Controllers.SearchController">
+            <summary>
+            This controller handles all Search View functions.
+            </summary>
+        </member>
         <member name="M:BusTrackerWeb.Controllers.SearchController.Index">
             <summary>
-            Open the Search View.
+            Open the Search Index View.
             </summary>
             <returns>Search View.</returns>
         </member>
         <member name="M:BusTrackerWeb.Controllers.SearchController.SearchHints(System.String)">
             <summary>
-            Return all PTV routes as hints for the Search Typeahead.
+            Return all PTV routes as JSON formatted hints for the Search 
+            Typeahead.
             </summary>
             <param name="q">Route name filter.</param>
             <returns></returns>
