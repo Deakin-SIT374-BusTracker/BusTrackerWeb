@@ -41,7 +41,7 @@
         var stopsLatitudeArray = @Html.Raw(Json.Encode(@ViewBag.StopsLatitudeArray));
         var stopsLongitudeArray = @Html.Raw(Json.Encode(@ViewBag.StopsLongitudeArray));
         var encodedPolyline = @Html.Raw(Json.Encode(@ViewBag.EncodePolylines));
-
+        var departures = @Html.Raw(Json.Encode(@ViewBag.Departures));
 
         // Find the map center marker.
         var centerIndex = Math.round(stopsLatitudeArray.length / 2)
@@ -57,12 +57,36 @@
         // Update map with options.
         var map = new google.maps.Map(document.getElementById("map_canvas"), options);
 
+
+        // Create array of info windows for marker attachment.
+        var infowindow = [];
+
         // Add map markers and set bounds.
         var bounds = new google.maps.LatLngBounds();
 
-        for (var i = 0; i < stopsLatitudeArray.length; i++) {
-            var newlocation = new google.maps.LatLng(stopsLatitudeArray[i], stopsLongitudeArray[i]);
-            var newMarker = new google.maps.Marker({ position: newlocation, map: map, title: 'Marker 1' });
+        var infowindow = null;
+        infowindow = new google.maps.InfoWindow({
+            content: "holding..."
+        });
+
+        for (var i = 0; i < departures.length; i++) {
+            // Create Marker.
+            var newlocation = new google.maps.LatLng(departures[i].Stop.StopLatitude, departures[i].Stop.StopLongitude);
+            var newMarker = new google.maps.Marker({
+                position: newlocation,
+                map: map,
+                title: departures[i].Stop.StopName,
+                html: '<h4>' + departures[i].Stop.StopName + '</h4><p>' + new Date(parseInt(departures[i].ScheduledDeparture.replace('/Date(', ''))) + '</p>',
+            });
+
+            // Add Info Window.
+            google.maps.event.addListener(newMarker, 'click', function () {
+                // where I have added .html to the marker object.
+                infowindow.setContent(this.html);
+                infowindow.open(map, this);
+            });
+
+            // Extend bounds of map based on new marker.
             bounds.extend(newMarker.getPosition());
         }
 

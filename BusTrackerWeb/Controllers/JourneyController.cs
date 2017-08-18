@@ -34,7 +34,9 @@ namespace BusTrackerWeb.Controllers
             ViewBag.StopsLatitudeArray = new double[departureArray.Count()];
             ViewBag.StopsLongitudeArray = new double[departureArray.Count()];
 
-            for(int i = 0; i < departureArray.Count(); i++)
+            ViewBag.Departures = pattern.Departures;
+
+            for (int i = 0; i < departureArray.Count(); i++)
             {
                 ViewBag.StopsLatitudeArray[i] = (double)departureArray[i].Stop.StopLatitude;
                 ViewBag.StopsLongitudeArray[i] = (double)departureArray[i].Stop.StopLongitude;
