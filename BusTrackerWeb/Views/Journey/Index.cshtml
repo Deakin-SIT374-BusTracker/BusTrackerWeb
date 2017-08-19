@@ -38,6 +38,15 @@
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqZFelSFhnk3JDbFVx7qovf8IIG1ZViVs&libraries=geometry"></script>
 
     <script type="text/javascript">
+        /*
+        Function: document.Ready()
+        Jquery function called after document has been rendered.
+        */
+        $(document).ready(function () {
+            setInterval(simulateLocation, 10000);
+        });
+
+
          /*
         Function: document.Ready()
         Render a Google Map and render the bus route markers and polyline.
@@ -90,7 +99,7 @@
             map.fitBounds(bounds);
 
 
-            // Render the collection of polylines returned by the Google Directions 
+            // Render the collection of polylines returned by the Google Directions
             // API.
             var encodedPolyline = @Html.Raw(Json.Encode(@ViewBag.EncodePolylines));
             for (var i = 0; i < encodedPolyline.length; i++) {
@@ -108,5 +117,9 @@
         }
 
         initGoogleMap();
+
+        function simulateLocation() {
+            $.get("/Journey/SimulateLocation", { runId: @ViewBag.RunId, routeId: @ViewBag.RouteId }, function (response) { });
+        }
     </script>
 }
