@@ -107,6 +107,9 @@ namespace BusTrackerWeb.Controllers
             // Select current step.
             Step currentStep = steps[(int)stepIndex];
 
+            // Get simulated coordinates.
+            GeoCoordinate simulatedLocation = new GeoCoordinate(currentStep.end_location.lat, currentStep.end_location.lng);
+
         }
     }
 }
