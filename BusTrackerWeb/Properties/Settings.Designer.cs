@@ -85,5 +85,14 @@ namespace BusTrackerWeb.Properties {
                 return ((int)(this["BusStopMaxResults"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool SimulateRuns {
+            get {
+                return ((bool)(this["SimulateRuns"]));
+            }
+        }
     }
 }
