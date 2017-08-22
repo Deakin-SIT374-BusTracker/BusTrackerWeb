@@ -43,7 +43,7 @@
         Jquery function called after document has been rendered.
         */
         $(document).ready(function () {
-            setInterval(simulateLocation, 10000);
+            setInterval(simulateLocation, 1000);
         });
 
 
@@ -69,6 +69,19 @@
 
             // Add map markers and set bounds.
             var bounds = new google.maps.LatLngBounds();
+
+
+
+
+            // Trial
+            var buslocation = new google.maps.LatLng(departures[0].Stop.StopLatitude, departures[0].Stop.StopLongitude);
+            var busMarker = new google.maps.Marker({
+                position: buslocation,
+                map: map,
+                icon: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
+            });
+
+
 
             // Initialise an Info Window object.
             var infowindow = null;
@@ -96,6 +109,9 @@
                 bounds.extend(newMarker.getPosition());
             }
 
+
+            moveMarker(map, busMarker);
+
             map.fitBounds(bounds);
 
 
@@ -116,10 +132,26 @@
             }
         }
 
+
+        function moveMarker(map, marker) {
+
+            //delayed so you can see it move
+            setInterval(function () {
+                $.get("/api/Bus/GetBusOnRouteLocation", { routeId: @ViewBag.RouteId }, function (response) {
+                    marker.setPosition(new google.maps.LatLng(response[0].BusLatitude, response[0].BusLongitude));
+                    marker.setTitle(response[0].BusRegoNumber);
+                    console.log('Bus Lat: ' + response[0].BusLatitude + '   Bus Lng: ' + response[0].BusLongitude);
+                });
+            }, 1000);
+        };
+
+
         initGoogleMap();
+
 
         function simulateLocation() {
             $.get("/Journey/SimulateLocation", { runId: @ViewBag.RunId, routeId: @ViewBag.RouteId }, function (response) { });
         }
+
     </script>
 }

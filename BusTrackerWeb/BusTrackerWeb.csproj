@@ -216,6 +216,7 @@
     <Content Include="BusTrackerWeb.PublishSettings" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Images\bus.svg" />
     <Content Include="Content\map-icons.css" />
     <Content Include="Content\map-icons.min.css" />
     <Content Include="Content\passenger.css" />
@@ -249,7 +250,6 @@
     <Content Include="Fonts\map-icons.eot" />
     <Content Include="Fonts\map-icons.ttf" />
     <Content Include="Fonts\map-icons.woff" />
-    <Content Include="Data\countries.json" />
     <None Include="Properties\PublishProfiles\BusTrackerWeb - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\BusTrackerWeb - Web Deploy.pubxml" />
     <None Include="Properties\Settings.settings">

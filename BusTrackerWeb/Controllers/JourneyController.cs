@@ -47,6 +47,11 @@ namespace BusTrackerWeb.Controllers
             
             ViewBag.EncodePolylines = polyLines.ToArray();
 
+            // Get any buses on route.
+            BusController busControl = new BusController();
+            List<BusModel> busesOnRoute = busControl.GetBusOnRouteLocation(routeId);
+            ViewBag.BusesOnRoute = busesOnRoute;
+
             // If route simulation enabled, pass route legs.
             List<Leg> routeLegs = new List<Leg>();
             runRoutes.ForEach(r => routeLegs.AddRange(r.legs));
@@ -104,12 +109,24 @@ namespace BusTrackerWeb.Controllers
             // Select current step index based on progess.
             double stepIndex = steps.Count() * progressRatio;
 
-            // Select current step.
-            Step currentStep = steps[(int)stepIndex];
+            if (stepIndex >= 0)
+            {
+                // Select current step.
+                Step currentStep = steps[(int)stepIndex];
 
-            // Get simulated coordinates.
-            GeoCoordinate simulatedLocation = new GeoCoordinate(currentStep.end_location.lat, currentStep.end_location.lng);
+                // Create bus with simulated coordinates.
+                BusModel bus = new BusModel
+                {
+                    RouteId = routeId,
+                    BusLatitude = Convert.ToDecimal(currentStep.end_location.lat),
+                    BusLongitude = Convert.ToDecimal(currentStep.end_location.lng),
+                    BusRegoNumber = "SIM001"
+                };
 
+                // Update the bus location.
+                BusController busControl = new BusController();
+                await busControl.PutBusOnRouteLocation(bus);
+            }
         }
     }
 }
