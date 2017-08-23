@@ -498,7 +498,7 @@
         </member>
         <member name="T:BusTrackerWeb.Controllers.BusController">
             <summary>
-            Controls all Bus Hop API Bus action requests.
+            Controls all Bus Tracker API Bus action requests.
             </summary>
         </member>
         <member name="M:BusTrackerWeb.Controllers.BusController.PutBusOnRouteLocation(BusTrackerWeb.Models.BusModel)">
@@ -606,7 +606,7 @@
         </member>
         <member name="T:BusTrackerWeb.Controllers.PtvApiClientController">
             <summary>
-            Controls all Bus Hop PTV API requests.
+            Controls all Bus Tracker PTV API requests.
             </summary>
         </member>
         <member name="M:BusTrackerWeb.Controllers.PtvApiClientController.#ctor">
@@ -698,7 +698,7 @@
         </member>
         <member name="T:BusTrackerWeb.Controllers.RouteController">
             <summary>
-            Controls all Bus Hop API Route action requests.
+            Controls all Bus Tracker API Route action requests.
             </summary>
         </member>
         <member name="M:BusTrackerWeb.Controllers.RouteController.GetRoutes">
@@ -764,7 +764,7 @@
         </member>
         <member name="T:BusTrackerWeb.Models.BusModel">
             <summary>
-            Bus Hop Bus Model.
+            Bus Tracker Bus Model.
             </summary>
         </member>
         <member name="P:BusTrackerWeb.Models.BusModel.BusRegoNumber">
@@ -794,7 +794,7 @@
         </member>
         <member name="T:BusTrackerWeb.Models.DepartureModel">
             <summary>
-            Bus Hop Departure Model.
+            Bus Tracker Departure Model.
             </summary>
         </member>
         <member name="P:BusTrackerWeb.Models.DepartureModel.Stop">
@@ -839,7 +839,7 @@
         </member>
         <member name="T:BusTrackerWeb.Models.DirectionModel">
             <summary>
-            Bus Hop Direction Model.
+            Bus Tracker Direction Model.
             </summary>
         </member>
         <member name="P:BusTrackerWeb.Models.DirectionModel.DirectionId">
@@ -872,7 +872,7 @@
         </member>
         <member name="T:BusTrackerWeb.Models.DisruptionModel">
             <summary>
-            Bus Hop Disruption Model, Refer:
+            Bus Tracker Disruption Model, Refer:
             </summary>
         </member>
         <member name="P:BusTrackerWeb.Models.DisruptionModel.DisruptionId">
@@ -945,7 +945,7 @@
         </member>
         <member name="T:BusTrackerWeb.Models.StoppingPatternModel">
             <summary>
-            Bus Hop Stopping Pattern Model.
+            Bus Tracker Stopping Pattern Model.
             </summary>
         </member>
         <member name="P:BusTrackerWeb.Models.StoppingPatternModel.Departures">
@@ -978,7 +978,7 @@
         </member>
         <member name="T:BusTrackerWeb.Models.StopModel">
             <summary>
-            Bus Hop Bus Stop Model.
+            Bus Tracker Bus Stop Model.
             </summary>
         </member>
         <member name="P:BusTrackerWeb.Models.StopModel.StopId">
@@ -1008,7 +1008,7 @@
         </member>
         <member name="T:BusTrackerWeb.Models.RunModel">
             <summary>
-            Bus Hop Run Model
+            Bus Tracker Run Model
             </summary>
         </member>
         <member name="P:BusTrackerWeb.Models.RunModel.RunId">
@@ -1126,7 +1126,7 @@
         </member>
         <member name="T:BusTrackerWeb.Models.RouteModel">
             <summary>
-            Bus Hop Route Model.
+            Bus Tracker Route Model.
             </summary>
         </member>
         <member name="P:BusTrackerWeb.Models.RouteModel.RouteId">
