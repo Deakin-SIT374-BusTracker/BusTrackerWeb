@@ -138,9 +138,11 @@
             //delayed so you can see it move
             setInterval(function () {
                 $.get("/api/Bus/GetBusOnRouteLocation", { routeId: @ViewBag.RouteId }, function (response) {
-                    marker.setPosition(new google.maps.LatLng(response[0].BusLatitude, response[0].BusLongitude));
-                    marker.setTitle(response[0].BusRegoNumber);
-                    console.log('Bus Lat: ' + response[0].BusLatitude + '   Bus Lng: ' + response[0].BusLongitude);
+                    if (response.length > 0) {
+                        marker.setPosition(new google.maps.LatLng(response[0].BusLatitude, response[0].BusLongitude));
+                        marker.setTitle(response[0].BusRegoNumber);
+                        console.log('Bus Lat: ' + response[0].BusLatitude + '   Bus Lng: ' + response[0].BusLongitude);
+                    }
                 });
             }, 1000);
         };
