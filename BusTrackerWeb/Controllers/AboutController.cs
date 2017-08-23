@@ -7,7 +7,7 @@ using System.Web.Mvc;
 namespace BusTrackerWeb.Controllers
 {
     /// <summary>
-    /// Controls all Bus Tracker About View actions.
+    /// Controls all Bus Hop About View actions.
     /// </summary>
     public class AboutController : Controller
     {
