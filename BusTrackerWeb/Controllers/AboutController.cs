@@ -17,7 +17,7 @@ namespace BusTrackerWeb.Controllers
         /// <returns>Index View.</returns>
         public ActionResult Index()
         {
-            ViewBag.Title = "BusHop > About";
+            ViewBag.Title = "Bus Hop > About";
 
             return View();
         }
