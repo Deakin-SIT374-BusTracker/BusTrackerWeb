@@ -43,7 +43,7 @@
         Jquery function called after document has been rendered.
         */
         $(document).ready(function () {
-            setInterval(simulateLocation, 1000);
+            setInterval(simulateLocation, 10000);
         });
 
 
@@ -144,7 +144,7 @@
                         console.log('Bus Lat: ' + response[0].BusLatitude + '   Bus Lng: ' + response[0].BusLongitude);
                     }
                 });
-            }, 1000);
+            }, 10000);
         };
 
 
