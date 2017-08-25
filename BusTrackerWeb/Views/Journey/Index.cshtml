@@ -61,7 +61,8 @@
             var options = {
                 zoom: 14,
                 center: centerLocation,
-                mapTypeId: google.maps.MapTypeId.ROADMAP
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                icon: '/Content/Images/stop.png'
             };
 
             // Update map with options.
@@ -78,7 +79,7 @@
             var busMarker = new google.maps.Marker({
                 position: buslocation,
                 map: map,
-                icon: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
+                icon: '/Content/Images/bus.png'
             });
 
 
@@ -86,6 +87,12 @@
             // Initialise an Info Window object.
             var infowindow = null;
             infowindow = new google.maps.InfoWindow({ content: "holding..." });
+
+            // Initialise bus stop markers.
+            var stopIcon = {
+                url: '/Content/Images/stop.png', // url
+                scaledSize: new google.maps.Size(25, 25), // scaled size
+            };
 
             // Iterate through each departures and create a new map marker with info
             // window.
@@ -96,6 +103,7 @@
                     position: newlocation,
                     map: map,
                     title: departures[i].Stop.StopName,
+                    icon: stopIcon,
                     html: '<h4>' + departures[i].Stop.StopName + '</h4><p>' + new Date(parseInt(departures[i].ScheduledDeparture.replace('/Date(', ''))) + '</p>',
                 });
 
@@ -141,7 +149,7 @@
                     if (response.length > 0) {
                         marker.setPosition(new google.maps.LatLng(response[0].BusLatitude, response[0].BusLongitude));
                         marker.setTitle(response[0].BusRegoNumber);
-                        console.log('Bus Lat: ' + response[0].BusLatitude + '   Bus Lng: ' + response[0].BusLongitude);
+                        console.log('Actual Bus Latitude: ' + response[0].BusLatitude + '   Bus Longitude: ' + response[0].BusLongitude);
                     }
                 });
             }, 10000);
@@ -152,7 +160,9 @@
 
 
         function simulateLocation() {
-            $.get("/Journey/SimulateLocation", { runId: @ViewBag.RunId, routeId: @ViewBag.RouteId }, function (response) { });
+            $.get("/Journey/SimulateLocation", { runId: @ViewBag.RunId, routeId: @ViewBag.RouteId }, function (response) {
+                console.log('Simulated Bus Latitude: ' + response.BusLatitude + '   Bus Longitude: ' + response.BusLongitude);
+            });
         }
 
     </script>
