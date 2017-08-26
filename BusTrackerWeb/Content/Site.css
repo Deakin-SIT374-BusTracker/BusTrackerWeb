@@ -69,3 +69,7 @@ textarea {
 .journey-table {
     text-align: left
 }
+
+span.twitter-typeahead {
+    width: 500px
+}
