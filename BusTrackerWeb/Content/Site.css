@@ -17,7 +17,7 @@ textarea {
 }
 
 .page-header {
-    text-align: left;
+    text-align: center;
 }
 
 .search-title {
@@ -46,19 +46,26 @@ textarea {
     text-align: left
 }
 
-departure-prompt {
-    font-size: x-large;
+.departure-prompt {
+    font-size: small;
 }
 
-departure-address {
+.departure-address {
     font-size: large;
+    text-align: center;
+}
+
+.journey-header {
     text-align: left;
 }
-
 
 .journeys-title {
     font-family: Calibri;
     font-size: xx-large;
     text-align: left;
     margin-top: 1em
+}
+
+.journey-table {
+    text-align: left
 }

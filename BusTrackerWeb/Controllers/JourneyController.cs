@@ -5,9 +5,13 @@ using System.Collections.Generic;
 using System.Device.Location;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Runtime.Serialization.Json;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Runtime.Serialization;
+using Newtonsoft.Json;
 
 namespace BusTrackerWeb.Controllers
 {
@@ -60,9 +64,34 @@ namespace BusTrackerWeb.Controllers
                 ViewBag.RouteLegs = routeLegs;
             }
 
-            return View("~/Views/Journey/Index.cshtml", pattern.Departures);
+            DepartureViewModel view = new DepartureViewModel(pattern.Departures);
+
+            return View("~/Views/Journey/Index.cshtml", view);
         }
 
+
+        [HttpPost]
+        public ActionResult GetStops(JourneyStopModel[] stops)
+        {
+            List<JourneyStopModel> journeyStops = new List<JourneyStopModel>();
+
+            foreach (JourneyStopModel jStop in stops)
+            {
+                double departureMintues = (jStop.DepartureTime - DateTime.Now).TotalMinutes;
+                departureMintues = Math.Round(departureMintues, 0);
+                departureMintues = departureMintues < 0 ? 0 : departureMintues;
+
+                journeyStops.Add(
+                    new JourneyStopModel
+                    {
+                        StopName = jStop.StopName,
+                        DepartureTime = jStop.DepartureTime,
+                        DepartureMinutes = departureMintues
+                    });
+            }
+
+            return PartialView("~/Views/Journey/_JourneyStops.cshtml", journeyStops);
+        }
 
         public async Task<JsonResult> SimulateLocation(int runId, int routeId)
         {

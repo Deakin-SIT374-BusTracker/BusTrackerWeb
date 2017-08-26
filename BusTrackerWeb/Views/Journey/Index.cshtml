@@ -1,30 +1,18 @@
-﻿@model  IEnumerable<BusTrackerWeb.Models.DepartureModel>
+﻿@model  BusTrackerWeb.Models.DepartureViewModel
 
 @{ 
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="page-header">
+<div class="journey-header">
     <h1><img style="max-width:50px; margin-top: -4px; margin-right: 10px; float:left;" src="~/Content/Images/bushop-logo.png">Your Journey</h1>
 </div>
 
-<div>
+<div style="margin-top:1.5em">
     <div class="row" style="width: 100%">
         <div class="col-md-6">
-            <table id="scheduleTable" class="table table-striped">
-                <tr>
-                    <th>Bus Stop:</th>
-                    <th>Departure Time:</th>
-                </tr>
-                
-                @foreach (var departure in Model)
-                {
-                    <tr>
-                        <td>@Html.DisplayFor(modelItem => departure.Stop.StopName)</td>
-                        <td>@Html.DisplayFor(modelItem => departure.ScheduledDeparture)</td>
-                    </tr>
-                }
-            </table>
+            @* Render departure results here. *@
+            <div id="departure-stops"></div>
         </div>
         <div class="col-md-6">
             <div id="map_canvas" style="min-height:40em; width:100%"></div>
@@ -43,12 +31,64 @@
         Jquery function called after document has been rendered.
         */
         $(document).ready(function () {
-            setInterval(simulateLocation, 10000);
+            postJourneyStops();
+            setInterval(postJourneyStops, 60000);
+
+            //Call temporary simulation script for demo purposes.
+            simulateLocation();
+            setInterval(simulateLocation, 5000);
         });
 
 
+        /*
+        Function: postJourneyStops()
+        Post a collection of stops to the controller and intialise a callback
+        to render the response as a partial view.
+
+        This function is called to periodically update the departure times.
+        */
+        function postJourneyStops() {
+            // Get a collection of departures from the Controller.
+            var departures = @Html.Raw(Json.Encode(@ViewBag.Departures));
+
+            // Build a new array of stops from the departure collection.
+            var stops = []
+            for (var i = 0; i < departures.length; i++) {
+                var sName = departures[i].Stop.StopName;
+                var sDepartureTime = new Date(parseInt(departures[i].ScheduledDeparture.substr(6)));;
+                stops[i] = { stopName: sName, departureTime: sDepartureTime }
+            }
+
+            // Post the stops to the controller and initialise a callback to 
+            // render the response as a partial view.
+            $.ajax({
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'text',
+                type: 'POST',
+                url: '/Journey/GetStops',
+                data: JSON.stringify(stops),
+                success: function (response) {
+                    postStopsCallback(response)
+                },
+                error: function (textStatus, errorThrown) {
+                    console.log('Error on GetStops Post');
+                }
+            });
+        };
+
+
+        /*
+        Function: postJourneyStops()
+        This call back function updates the stops table with the latest departure
+        times.
+        */
+        function postStopsCallback(response) {
+            $("#departure-stops").html(response);
+        }
+
+
          /*
-        Function: document.Ready()
+        Function: initGoogleMap()
         Render a Google Map and render the bus route markers and polyline.
         */
         function initGoogleMap() {
@@ -65,30 +105,10 @@
                 icon: '/Content/Images/stop.png'
             };
 
-            // Update map with options.
+            // Initialise map objects.
             var map = new google.maps.Map(document.getElementById("map_canvas"), options);
-
-            // Add map markers and set bounds.
             var bounds = new google.maps.LatLngBounds();
-
-
-
-
-            // Trial
-            var buslocation = new google.maps.LatLng(departures[0].Stop.StopLatitude, departures[0].Stop.StopLongitude);
-            var busMarker = new google.maps.Marker({
-                position: buslocation,
-                map: map,
-                icon: '/Content/Images/bus.png'
-            });
-
-
-
-            // Initialise an Info Window object.
-            var infowindow = null;
-            infowindow = new google.maps.InfoWindow({ content: "holding..." });
-
-            // Initialise bus stop markers.
+            var infowindow = new google.maps.InfoWindow({ content: "holding..." });
             var stopIcon = {
                 url: '/Content/Images/stop.png', // url
                 scaledSize: new google.maps.Size(25, 25), // scaled size
@@ -117,12 +137,20 @@
                 bounds.extend(newMarker.getPosition());
             }
 
+            // Initialise the bus starting position.
+            var buslocation = new google.maps.LatLng(departures[0].Stop.StopLatitude, departures[0].Stop.StopLongitude);
+            var busMarker = new google.maps.Marker({
+                position: buslocation,
+                map: map,
+                icon: '/Content/Images/bus.png'
+            });
 
+            // Asyncronoulsy move the bus marker along the route.
             moveMarker(map, busMarker);
-
+            
+            // Extend the map margins to fit all stops.
             map.fitBounds(bounds);
-
-
+            
             // Render the collection of polylines returned by the Google Directions
             // API.
             var encodedPolyline = @Html.Raw(Json.Encode(@ViewBag.EncodePolylines));
@@ -140,25 +168,38 @@
             }
         }
 
+        initGoogleMap();
 
+
+        /*
+        Function: moveMarker()
+        Periodically get the current bus on route location and move the bus map
+        marker.  Also re-center the map to the new bus location.
+        */
         function moveMarker(map, marker) {
 
             //delayed so you can see it move
             setInterval(function () {
                 $.get("/api/Bus/GetBusOnRouteLocation", { routeId: @ViewBag.RouteId }, function (response) {
                     if (response.length > 0) {
-                        marker.setPosition(new google.maps.LatLng(response[0].BusLatitude, response[0].BusLongitude));
+                        var markerPosition = new google.maps.LatLng(response[0].BusLatitude, response[0].BusLongitude);
+                        marker.setPosition(markerPosition);
                         marker.setTitle(response[0].BusRegoNumber);
+
+                        map.setZoom(15);
+                        map.setCenter(markerPosition);
+
                         console.log('Actual Bus Latitude: ' + response[0].BusLatitude + '   Bus Longitude: ' + response[0].BusLongitude);
                     }
                 });
             }, 10000);
         };
 
-
-        initGoogleMap();
-
-
+        
+        /*
+        Function: simulateLocation()
+        Periodically call the controller to trigger a bus simulator update.
+        */
         function simulateLocation() {
             $.get("/Journey/SimulateLocation", { runId: @ViewBag.RunId, routeId: @ViewBag.RouteId }, function (response) {
                 console.log('Simulated Bus Latitude: ' + response.BusLatitude + '   Bus Longitude: ' + response.BusLongitude);

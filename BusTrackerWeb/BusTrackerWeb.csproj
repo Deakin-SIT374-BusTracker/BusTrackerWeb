@@ -173,11 +173,13 @@
     </Compile>
     <Compile Include="Models\BusModel.cs" />
     <Compile Include="Models\DepartureModel.cs" />
+    <Compile Include="Models\DepartureViewModel.cs" />
     <Compile Include="Models\DirectionModel.cs" />
     <Compile Include="Models\GoogleApi\SnappedResponse.cs" />
     <Compile Include="Models\GoogleApi\DirectionsResponse.cs" />
     <Compile Include="Models\GoogleApi\DistanceResponse.cs" />
     <Compile Include="Models\GoogleApi\GeoCodeResponse.cs" />
+    <Compile Include="Models\JourneyStopModel.cs" />
     <Compile Include="Models\PtvApi\PtvApiDirection.cs" />
     <Compile Include="Models\PtvApi\PtvApiDeparturesResponse.cs" />
     <Compile Include="Models\PtvApi\PtvApiDirectionsResponse.cs" />
@@ -295,6 +297,7 @@
     <Content Include="Views\Search\_SearchRoutes.cshtml" />
     <Content Include="Views\Departure\_DepartureRuns.cshtml" />
     <Content Include="Views\Departure\_DepartureAddress.cshtml" />
+    <Content Include="Views\Journey\_JourneyStops.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

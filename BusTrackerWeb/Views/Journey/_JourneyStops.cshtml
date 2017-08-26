@@ -1,0 +1,22 @@
+﻿@model  IEnumerable<BusTrackerWeb.Models.JourneyStopModel>
+
+<table id="scheduleTable" class="table table-striped journey-table">
+    <tr>
+        <th>Bus Stop:</th>
+        <th>Departs In:</th>
+    </tr>
+
+    @foreach (var stop in Model)
+    {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => stop.StopName)</td>
+            <td>@Html.DisplayFor(modelItem => stop.DepartureMinutes) Mins</td>
+        </tr>
+    }
+</table>
+
+
+
+
+
+
