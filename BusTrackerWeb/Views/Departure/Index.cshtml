@@ -13,34 +13,47 @@
 
 
 @* Render users' current address. *@
-<div style="margin-top:1.5em">
+<div id="geo-address" style="margin-top:1.5em">
     <div class="departure-address" id="user-location"></div>
     <br />
-    <div class="departure-prompt">Change your location</div>
+    <a class="departure-prompt" onclick="showManualAddress()">Change your location</a>
+</div>
+
+@* Manual Auto Address - Hidden by default *@
+<div id="manual-address" hidden="hidden">
+    <div class="form-group">
+        <div id="address-hints">
+            <input id="autocomplete" placeholder="Enter your address" type="text" class="form-control departure-input" />
+        </div>
+    </div>
+    <a class="departure-prompt" onclick="showGeoAddress()">Find my location</a>
 </div>
 
 @* Render departure results here. *@
 <div id="departure-runs"></div>
 
 @section scripts {
+    @* Include Google Map Javascript Package *@
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqZFelSFhnk3JDbFVx7qovf8IIG1ZViVs&libraries=places"></script>
+
     <script>
         /*
         Function: document.Ready()
         Jquery function called after document has been rendered.
         */
         $(document).ready(function () {
-            getLocation();
+            getGeoLocation();
         });
 
 
         /*
-        Function: getLocation()
+        Function: getGeoLocation()
         Get the users' current location and post the coordinates to Departures
         Controller which will return the location address retreived from the
         Google API.
         Once the user location is obtained get departures for the closest stop.
         */
-        function getLocation(locationDiv) {
+        function getGeoLocation() {
             // Check for browser geolocation support.
             if ("geolocation" in navigator) {
                 navigator.geolocation.getCurrentPosition(function (position) {
@@ -68,5 +81,64 @@
                 $("#departure-runs").html(response);
             });
         };
+
+
+        /*
+        Function: showManualAddress()
+        Hide the Reverse Geolocation address and show the Google Auto Address
+        Input box.
+        */
+        function showManualAddress()
+        {
+            $('#geo-address').hide();
+            $('#manual-address').show();
+            $('#autocomplete').val("");
+        }
+
+
+        /*
+        Function: showGeoAddress()
+        Hide the Google Auto Address and show the Reverse Geolocation address.
+        */
+        function showGeoAddress() {
+            $('#geo-address').show();
+            $('#manual-address').hide();
+            getGeoLocation();
+        }
+
+        /*
+        Function: initAutocomplete()
+        Initialise the Google Auto Address Input Box.
+        */
+        function initAutocomplete() {
+            console.log("Init Autocompete.");
+            // Create the autocomplete object, restricting the search to 
+            // geographical location types.
+            autocomplete = new google.maps.places.Autocomplete((document.getElementById('autocomplete')),{types: ['geocode']});
+
+            // When the user selects an address from the dropdown, populate the 
+            // address fields in the form.
+            autocomplete.addListener('place_changed', getAutoAddressLocation);
+        }
+
+        initAutocomplete();
+
+        /*
+        Function: getAutoAddressLocation()
+        When a new Auto Address is selected, pass the geo coordinates to the
+        controller and get departures for the closest stop.
+        */
+        function getAutoAddressLocation() {
+            console.log("Get Auto Addres Location.");
+
+            // Get the place details from the autocomplete object.
+            var place = autocomplete.getPlace();
+            var addressLatitude = place.geometry.location.lat;
+            var addressLongitude = place.geometry.location.lng;
+
+            // Get all departures for the closest stop on route.
+            getDepartures(addressLatitude, addressLongitude);
+        }
+
     </script> 
 }
