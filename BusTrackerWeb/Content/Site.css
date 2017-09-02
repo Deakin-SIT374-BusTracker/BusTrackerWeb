@@ -77,6 +77,13 @@ textarea {
     text-align: left
 }
 
+.journey-controls {
+    margin: 0 auto;
+    text-align: left;
+    font-size: large;
+    margin-top:2em
+}
+
 span.twitter-typeahead {
     width: 500px
 }

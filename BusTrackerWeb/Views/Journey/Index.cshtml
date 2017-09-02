@@ -8,7 +8,35 @@
     <h1><img style="max-width:50px; margin-top: -4px; margin-right: 10px; float:left;" src="~/Content/Images/bushop-logo.png">Your Journey</h1>
 </div>
 
-<div style="margin-top:1.5em">
+<form class="form-inline journey-controls">
+    <div class="form-group">
+        <label>I'm a Bus Hop </label>
+        <div class="btn-group dropdown">
+            <button id="user-button" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Passenger <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a href="#">Passenger</a></li>
+                <li><a href="#">Driver</a></li>
+                <li><a href="#">Demonstrator</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="form-group">
+        <label> and I'm about to </label>
+        <button type="button" class="btn btn-default" onclick="boardBus()">Jump On</button>
+        <label> or </label>
+        <button type="button" class="btn btn-default" onclick="alightBus()">Jump Off</button>
+        <label> my bus. </label>
+    </div>
+</form>
+
+<form class="form-inline journey-controls">
+    <label>Your currently </label>
+    <button id="status-button" class="btn btn-primary" type="button">Waiting</button>
+</form>
+
+<div style="margin-top:3em">
     <div class="row" style="width: 100%">
         <div class="col-md-6">
             @* Render departure results here. *@
@@ -25,7 +53,7 @@
     @* Include Google Map Javascript Package *@
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqZFelSFhnk3JDbFVx7qovf8IIG1ZViVs&libraries=geometry"></script>
 
-    <script type="text/javascript">
+        <script type="text/javascript">
         /*
         Function: document.Ready()
         Jquery function called after document has been rendered.
@@ -34,9 +62,7 @@
             postJourneyStops();
             setInterval(postJourneyStops, 60000);
 
-            //Call temporary simulation script for demo purposes.
-            simulateLocation();
-            setInterval(simulateLocation, 5000);
+            initUserDropDown();
         });
 
 
@@ -59,7 +85,7 @@
                 stops[i] = { stopName: sName, departureTime: sDepartureTime }
             }
 
-            // Post the stops to the controller and initialise a callback to 
+            // Post the stops to the controller and initialise a callback to
             // render the response as a partial view.
             $.ajax({
                 contentType: 'application/json; charset=utf-8',
@@ -87,7 +113,7 @@
         }
 
 
-         /*
+            /*
         Function: initGoogleMap()
         Render a Google Map and render the bus route markers and polyline.
         */
@@ -147,10 +173,10 @@
 
             // Asyncronoulsy move the bus marker along the route.
             moveMarker(map, busMarker);
-            
+
             // Extend the map margins to fit all stops.
             map.fitBounds(bounds);
-            
+
             // Render the collection of polylines returned by the Google Directions
             // API.
             var encodedPolyline = @Html.Raw(Json.Encode(@ViewBag.EncodePolylines));
@@ -195,7 +221,7 @@
             }, 10000);
         };
 
-        
+
         /*
         Function: simulateLocation()
         Periodically call the controller to trigger a bus simulator update.
@@ -205,6 +231,39 @@
                 console.log('Simulated Bus Latitude: ' + response.BusLatitude + '   Bus Longitude: ' + response.BusLongitude);
             });
         }
+
+
+        function initUserDropDown() {
+            $(".dropdown-menu li a").click(function () {
+                $(this).parents(".dropdown").find('.btn').html($(this).text() + ' <span class="caret"></span>');
+                $(this).parents(".dropdown").find('.btn').val($(this).data('value'));
+            });
+        }
+
+        function boardBus() {
+            $("#status-button").html("On the Bus");
+            $("#status-button").removeClass("btn btn-primary");
+            $("#status-button").removeClass("btn btn-danger");
+            $("#status-button").addClass("btn btn-success");
+
+            var userType = $('#user-button')[0].innerText;
+
+            if (userType.text = "Demonstrator") {
+                simulateLocation();
+                setInterval(simulateLocation, 5000);
+            }
+
+        }
+
+
+        function alightBus() {
+            $("#status-button").html("Off the Bus");
+            $("#status-button").removeClass("btn btn-primary");
+            $("#status-button").removeClass("btn btn-success");
+            $("#status-button").addClass("btn btn-danger");
+
+        }
+
 
     </script>
 }
