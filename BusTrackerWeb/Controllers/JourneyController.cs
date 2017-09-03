@@ -181,5 +181,30 @@ namespace BusTrackerWeb.Controllers
 
             return Json(simulatedBus, JsonRequestBehavior.AllowGet);
         }
+
+        public async Task<JsonResult> PutBusOnRoute(int runId, int routeId, double busLatitude, double busLongitude)
+        {
+            BusModel trackedBus = new BusModel();
+            
+            try
+            {
+                // Create bus with simulated coordinates.
+                trackedBus = new BusModel
+                {
+                    RouteId = routeId,
+                    BusLatitude = Convert.ToDecimal(busLatitude),
+                    BusLongitude = Convert.ToDecimal(busLongitude),
+                    BusRegoNumber = "SIM001"
+                };
+
+                // Update the bus location.
+                BusController busControl = new BusController();
+                await busControl.PutBusOnRouteLocation(trackedBus);
+            }
+            catch (Exception e)
+            { }
+
+            return Json(trackedBus, JsonRequestBehavior.AllowGet);
+        }
     }
 }
