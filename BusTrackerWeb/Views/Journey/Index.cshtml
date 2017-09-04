@@ -37,7 +37,7 @@
         <div class="col-md-6">
             <div id="map_canvas" style="min-height:40em; width:100%"></div>
             <div class="journey-simulator">
-                <button type="button" id="simulate-button" class="btn btn-default">Start Simulation</button>
+                <button type="button" id="simulate-button" class="btn btn-default">Enable Simulation</button>
             </div>
         </div>
     </div>
@@ -54,6 +54,8 @@
         var simulationEnabled = false;
         var simulatorInterval = null;
         var userIsDriver = false;
+        var userLocation = null;
+        var busLocation = null;
 
         /*
         Function: document.Ready()
@@ -166,7 +168,7 @@
             }
 
             // Initialise the bus starting position.
-            var buslocation = new google.maps.LatLng(departures[0].Stop.StopLatitude, departures[0].Stop.StopLongitude);
+            busLocation = new google.maps.LatLng(departures[0].Stop.StopLatitude, departures[0].Stop.StopLongitude);
             var busMarker = new google.maps.Marker({
                 position: buslocation,
                 map: map,
@@ -174,7 +176,7 @@
             });
 
             // Asyncronoulsy move the bus marker along the route.
-            moveMarker(map, busMarker);
+            moveBusMarker(map, busMarker);
 
             // Extend the map margins to fit all stops.
             map.fitBounds(bounds);
@@ -204,7 +206,7 @@
         Periodically get the current bus on route location and move the bus map
         marker.  Also re-center the map to the new bus location.
         */
-        function moveMarker(map, marker) {
+        function moveBusMarker(map, marker) {
 
             //delayed so you can see it move
             setInterval(function () {
@@ -262,43 +264,62 @@
                 simulationEnabled = !simulationEnabled;
 
                 if (simulationEnabled) {
-                    $("#simulate-button").html("Stop Simulation");
+                    $("#simulate-button").html("Disable Simulation");
                 }
                 else {
-                    $("#simulate-button").html("Start Simulation");
+                    $("#simulate-button").html("Enable Simulation");
                 }
             });
         }
 
         function startAction() {
-            if (simulationEnabled)
-            {
-                // Simulate the bus location.
-                simulateBusLocation();
-                simulatorInterval = setInterval(simulateBusLocation, 5000);
-
-                // TODO: Get the simulated passenger location.
-
-                // TODO: Display the passenger simulted location.
-
+            // Start actions depending on user type.
+            if (userIsDriver) {
+                // Bus driver mode selected, simulate location or geolocate.
+                if (simulationEnabled)
+                {
+                    // Simulate the bus location.
+                    simulateBusLocation();
+                    simulatorInterval = setInterval(simulateBusLocation, 5000);
+                }
+                else
+                {
+                    // Get bus geolocation and upload to Bus Hop server.
+                    if ("geolocation" in navigator) {
+                        navigator.geolocation.getCurrentPosition(function (position) {
+                            $.get("/Journey/PutBusOnRoute", { runId: @ViewBag.RunId, routeId: @ViewBag.RouteId, busLatitude: position.coords.latitude, busLongitude: position.coords.longitude }, function (response) {
+                                $("#user-location").html(response);
+                            });
+                        });
+                    }
+                    else {
+                        console.log("Unable to track bus, browser doesn't support geolocation.");
+                    }
+                }
             }
             else
             {
-                // Get gelocation.
-                if ("geolocation" in navigator) {
-                    navigator.geolocation.getCurrentPosition(function (position) {
-
-                        // TODO: If driver, upload geolocation to Bus Hop Server.
-                        $.get("/Journey/PutBusOnRoute", { runId: @ViewBag.RunId, routeId: @ViewBag.RouteId, busLatitude: position.coords.latitude, busLongitude: position.coords.longitude }, function (response) {
-                            $("#user-location").html(response);
-                        });
-                        
-                        // TODO: Else, Display passenger geolocation.
-
-                    });
+                // Passenger Mode selected, simulate location or geolocate.
+                if (simulationEnabled)
+                {
+                    // Simulate the passengers location.
+                    // simulatePassengerLocation();
+                        // Passenger starts at the designated pickup stop.
+                        // When boarded they share the bus location.
+                        // When alighted they are at the last bus location.
+                    // simulatorInterval = setInterval(simulatePassengerLocation, 5000);
                 }
-                else {
-                    console.log("Browser doesn't support geolocation!");
+                else
+                {
+                    // Get pssenger geolocation and update the map marker.
+                    if ("geolocation" in navigator) {
+                        navigator.geolocation.getCurrentPosition(function (position) {
+                            // Update marker here.
+                        });
+                    }
+                    else {
+                        console.log("Unable to track passenger, browser doesn't support geolocation.");
+                    }
                 }
             }
         }
@@ -307,7 +328,7 @@
         function stopAction() {
             if (simulationEnabled) {
                 // Stop simulating the bus location.
-                clear(simulatorInterval);
+                clearInterval(simulatorInterval);
 
                 // TODO: Stop simulating the passenger location.
             }
