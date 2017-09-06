@@ -52,10 +52,14 @@
 
         //Globals
         var simulationEnabled = false;
-        var simulatorInterval = null;
+        var busSimulatorInterval = null;
+        var userSimulatorInterval = null;
         var userIsDriver = false;
         var userLocation = null;
         var busLocation = null;
+
+        var departures = @Html.Raw(Json.Encode(@ViewBag.Departures));
+
 
         /*
         Function: document.Ready()
@@ -123,7 +127,6 @@
         */
         function initGoogleMap() {
             // Find the map center coordinates.
-            var departures = @Html.Raw(Json.Encode(@ViewBag.Departures));
             var centerIndex = Math.round(departures.length / 2)
             var centerLocation = new google.maps.LatLng(departures[centerIndex].Stop.StopLatitude, departures[centerIndex].Stop.StopLatitude);
 
@@ -167,16 +170,30 @@
                 bounds.extend(newMarker.getPosition());
             }
 
-            // Initialise the bus starting position.
-            busLocation = new google.maps.LatLng(departures[0].Stop.StopLatitude, departures[0].Stop.StopLongitude);
+            // Asyncronoulsy move the bus marker along the route.
+            var busPosition = new google.maps.LatLng(departures[0].Stop.StopLatitude, departures[0].Stop.StopLongitude);
             var busMarker = new google.maps.Marker({
-                position: buslocation,
+                position: busPosition,
                 map: map,
                 icon: '/Content/Images/bus.png'
             });
 
-            // Asyncronoulsy move the bus marker along the route.
             moveBusMarker(map, busMarker);
+
+            // Asyncronoulsy move the user marker along the route.
+            var userPosition = new google.maps.LatLng(departures[0].Stop.StopLatitude, departures[0].Stop.StopLongitude);
+            var userIcon = {
+                url: '/Content/Images/user-pin.png',
+                scaledSize: new google.maps.Size(40, 40),
+            };
+
+            var userMarker = new google.maps.Marker({
+                position: userPosition,
+                map: map,
+                icon: userIcon
+            });
+
+            moveUserMarker(map, userMarker);
 
             // Extend the map margins to fit all stops.
             map.fitBounds(bounds);
@@ -207,8 +224,6 @@
         marker.  Also re-center the map to the new bus location.
         */
         function moveBusMarker(map, marker) {
-
-            //delayed so you can see it move
             setInterval(function () {
                 $.get("/api/Bus/GetBusOnRouteLocation", { routeId: @ViewBag.RouteId }, function (response) {
                     if (response.length > 0) {
@@ -226,6 +241,35 @@
         };
 
 
+        function moveUserMarker(map, marker) {
+            // Initialise user starting position.
+            var userLatitude = departures[0].Stop.StopLatitude;
+            var userLongitude = departures[0].Stop.StopLongitude;
+
+            // Periodically update user position.
+            setInterval(function () {
+                // Get bus geolocation and upload to Bus Hop server.
+                if ("geolocation" in navigator) {
+                    navigator.geolocation.getCurrentPosition(function (position) {
+                        userLatitude = position.coords.latitude;
+                        userLongitude = position.coords.longitude;
+                    });
+                }
+                else {
+                    console.log("Unable to track bus, browser doesn't support geolocation.");
+                }
+
+                if (!simulationEnabled) {
+                    userLocation = new google.maps.LatLng(userLatitude, userLongitude);
+                }
+
+                marker.setPosition(userLocation);
+
+                console.log('User Latitude: ' + userLatitude + '   User Longitude: ' + userLongitude);
+            }, 10000);
+        };
+
+
         /*
         Function: simulateLocation()
         Periodically call the controller to trigger a bus simulator update.
@@ -236,6 +280,11 @@
             });
         }
 
+
+        function simulateUserLocation() {
+            userLocation = busLocation;
+        }
+        
 
         function initUserDropDown() {
             $(".dropdown-menu li a").click(function () {
@@ -280,21 +329,7 @@
                 {
                     // Simulate the bus location.
                     simulateBusLocation();
-                    simulatorInterval = setInterval(simulateBusLocation, 5000);
-                }
-                else
-                {
-                    // Get bus geolocation and upload to Bus Hop server.
-                    if ("geolocation" in navigator) {
-                        navigator.geolocation.getCurrentPosition(function (position) {
-                            $.get("/Journey/PutBusOnRoute", { runId: @ViewBag.RunId, routeId: @ViewBag.RouteId, busLatitude: position.coords.latitude, busLongitude: position.coords.longitude }, function (response) {
-                                $("#user-location").html(response);
-                            });
-                        });
-                    }
-                    else {
-                        console.log("Unable to track bus, browser doesn't support geolocation.");
-                    }
+                    busSimulatorInterval = setInterval(busSimulatorInterval, 5000);
                 }
             }
             else
@@ -302,24 +337,9 @@
                 // Passenger Mode selected, simulate location or geolocate.
                 if (simulationEnabled)
                 {
-                    // Simulate the passengers location.
-                    // simulatePassengerLocation();
-                        // Passenger starts at the designated pickup stop.
-                        // When boarded they share the bus location.
-                        // When alighted they are at the last bus location.
-                    // simulatorInterval = setInterval(simulatePassengerLocation, 5000);
-                }
-                else
-                {
-                    // Get pssenger geolocation and update the map marker.
-                    if ("geolocation" in navigator) {
-                        navigator.geolocation.getCurrentPosition(function (position) {
-                            // Update marker here.
-                        });
-                    }
-                    else {
-                        console.log("Unable to track passenger, browser doesn't support geolocation.");
-                    }
+                    // Simulate the user location.
+                    simulateUserLocation();
+                    userSimulatorInterval = setInterval(userSimulatorInterval, 5000);
                 }
             }
         }
@@ -328,12 +348,12 @@
         function stopAction() {
             if (simulationEnabled) {
                 // Stop simulating the bus location.
-                clearInterval(simulatorInterval);
+                clearInterval(busSimulatorInterval);
 
-                // TODO: Stop simulating the passenger location.
+                // Stop simulating the passenger location.
+                clearInterval(userSimulatorInterval);
             }
         }
-
 
     </script>
 }

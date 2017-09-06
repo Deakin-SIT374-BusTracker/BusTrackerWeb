@@ -220,6 +220,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Images\bus.png" />
     <Content Include="Content\Images\stop.png" />
+    <Content Include="Content\Images\user-pin.png" />
     <Content Include="Content\map-icons.css" />
     <Content Include="Content\map-icons.min.css" />
     <Content Include="Content\passenger.css" />
