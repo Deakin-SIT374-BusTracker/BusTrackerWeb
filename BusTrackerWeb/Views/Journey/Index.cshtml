@@ -54,6 +54,7 @@
         var simulationEnabled = false;
         var busSimulatorInterval = null;
         var userSimulatorInterval = null;
+        var putBusInterval = null;
         var userIsDriver = false;
         var passengerOnBoard = false;
         var busLocation = null;
@@ -237,20 +238,21 @@
             moveBusMarker(map, busMarker);
 
             // Asyncronoulsy move the user marker along the route.
-            var userPosition = new google.maps.LatLng(departures[0].Stop.StopLatitude, departures[0].Stop.StopLongitude);
-            var userIcon = {
-                url: '/Content/Images/user-pin.png',
-                scaledSize: new google.maps.Size(40, 40),
-            };
+            if (!userIsDriver) {
+                var userPosition = new google.maps.LatLng(departures[0].Stop.StopLatitude, departures[0].Stop.StopLongitude);
+                var userIcon = {
+                    url: '/Content/Images/user-pin.png',
+                    scaledSize: new google.maps.Size(40, 40),
+                };
 
-            var userMarker = new google.maps.Marker({
-                position: userPosition,
-                map: map,
-                icon: userIcon
-            });
+                var userMarker = new google.maps.Marker({
+                    position: userPosition,
+                    map: map,
+                    icon: userIcon
+                });
 
-            moveUserMarker(map, userMarker);
-
+                moveUserMarker(map, userMarker);
+            }
         }
 
         initGoogleMap();
@@ -265,38 +267,42 @@
             setInterval(function () {
                 $.get("/api/Bus/GetBusOnRouteLocation", { routeId: @ViewBag.RouteId }, function (response) {
                     if (response.length > 0) {
-                        var markerPosition = new google.maps.LatLng(response[0].BusLatitude, response[0].BusLongitude);
-                        marker.setPosition(markerPosition);
+                        busLocation = new google.maps.LatLng(response[0].BusLatitude, response[0].BusLongitude);
+                        marker.setPosition(busLocation);
                         marker.setTitle(response[0].BusRegoNumber);
 
-                        map.setZoom(15);
-                        map.setCenter(markerPosition);
+                        if (userIsDriver) {
+                            map.setZoom(15);
+                            map.setCenter(busLocation);
+                        }
 
                         console.log('Actual Bus Latitude: ' + response[0].BusLatitude + '   Bus Longitude: ' + response[0].BusLongitude);
                     }
                 });
-            }, 10000);
+            }, 2000);
         }
-
-
-
+        
 
         function moveUserMarker(map, marker) {
             setInterval(function () {
-
                 marker.setPosition(userLocation);
 
+                if (!userIsDriver) {
+                    map.setZoom(15);
+                    map.setCenter(userLocation);
+                }
+
                 console.log('User Latitude: ' + marker.getPosition().lat() + '   User Longitude: ' + marker.getPosition().lng());
-            }, 10000);
+            }, 2000);
         }
-        
+
 
         function toggleSimulatorMode() {
             if (simulationEnabled) {
                 // Bus driver simulation mode selected, simulate location.
                 simulateBusLocation();
-                busSimulatorInterval = setInterval(simulateBusLocation, 5000);
-                userSimulatorInterval = setInterval(simulateUserLocation, 5000);
+                busSimulatorInterval = setInterval(simulateBusLocation, 2000);
+                userSimulatorInterval = setInterval(simulateUserLocation, 2000);
             }
             else {
                 // Stop simulating the bus location.
@@ -312,10 +318,24 @@
         Periodically call the controller to trigger a bus simulator update.
         */
         function simulateBusLocation() {
-            $.get("/Journey/SimulateLocation", { runId: @ViewBag.RunId, routeId: @ViewBag.RouteId }, function (response) {
+            $.get("/Journey/SimulateBusLocation", { runId: @ViewBag.RunId, routeId: @ViewBag.RouteId }, function (response) {
                 console.log('Simulated Bus Latitude: ' + response.BusLatitude + '   Bus Longitude: ' + response.BusLongitude);
             });
         }
+
+
+        function putBusLocation() {
+            if("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    $.get("/Journey/PutBusLocation", { routeId: @ViewBag.RouteId, latitude: position.coords.latitude, longitude: position.coords.longitude }, function (response) {
+                        console.log('Actual Bus Latitude: ' + position.coords.latitude + '   Actual Longitude: ' + position.coords.longitude);
+                    });
+                });
+            }
+            else {
+                console.log("Unable to track bus, browser doesn't support geolocation.");
+            }
+        };
 
         function simulateUserLocation() {
             if (passengerOnBoard) {
@@ -328,12 +348,20 @@
             if (!userIsDriver) {
                 passengerOnBoard = true;
             }
+            else
+            {
+                putBusInterval = setInterval(putBusLocation, 2000);
+            }
         }
 
 
         function stopUserAction() {
             if (!userIsDriver) {
                 passengerOnBoard = false;
+            }
+            else 
+            {
+                clearInterval(putBusInterval);
             }
         }
 
