@@ -79,15 +79,17 @@ namespace BusTrackerWeb.Controllers
             {
                 double departureMintues = (jStop.DepartureTime - DateTime.Now).TotalMinutes;
                 departureMintues = Math.Round(departureMintues, 0);
-                departureMintues = departureMintues < 0 ? 0 : departureMintues;
 
-                journeyStops.Add(
-                    new JourneyStopModel
-                    {
-                        StopName = jStop.StopName,
-                        DepartureTime = jStop.DepartureTime,
-                        DepartureMinutes = departureMintues
-                    });
+                if (departureMintues >= 0)
+                {
+                    journeyStops.Add(
+                        new JourneyStopModel
+                        {
+                            StopName = jStop.StopName,
+                            DepartureTime = jStop.DepartureTime,
+                            DepartureMinutes = departureMintues
+                        });
+                }
             }
 
             return PartialView("~/Views/Journey/_JourneyStops.cshtml", journeyStops);

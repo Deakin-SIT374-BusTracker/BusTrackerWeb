@@ -11,10 +11,57 @@
 <div style="margin-top:2em">
     <div class="row" style="width: 100%">
         <div class="col-md-6">
-            @* Show Journey Control Buttons *@
-            <form class="form-inline journey-control-form">
-                <div class="form-group">
-                    <label>I'm a </label>
+            @* Journey Control Panel *@
+            <div class="panel panel-default">
+                <div class="panel-heading" style="text-align:left">
+                    <h3 class="panel-title">Journey Control</h3>
+                </div>
+                <form class="form-inline journey-control-form">
+                    <div class="form-group">
+                        <button id="start-button" type="button" class="btn btn-success btn-lg" onclick="startUserAction()">Boarded the Bus</button>
+                        <button id="finish-button" type="button" class="btn btn-danger btn-lg" onclick="stopUserAction()">Alighted the Bus</button>
+                    </div>
+                </form>
+            </div>
+
+            @* Render departure dashboard.*@
+            <div class="panel panel-default">
+                <div class="panel-heading" style="text-align:left">
+                    <h3 class="panel-title">Journey Dashboard</h3>
+                </div>
+
+                <table id="scheduleTable" class="table table-borderless journey-table" style="border:none">
+                    <tr>
+                        <td><span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>&nbsp;&nbsp;Your Stop:</td>
+                        <td>Melbourne Airport T3 Skybus/Arrival Dr</td>
+                    </tr>
+                    <tr>
+                        <td><span class="glyphicon glyphicon-time" aria-hidden="true"></span>&nbsp;&nbsp;Start Walking In: </td>
+                        <td>5 Mins</td>
+                    </tr>
+                    <tr>
+                        <td><span class="glyphicon glyphicon-time" aria-hidden="true"></span>&nbsp;&nbsp;Bus Departs In: </td>
+                        <td>10 Mins</td>
+                    </tr>
+                </table>
+
+            </div>
+            
+
+            @* Render departure results here.*@
+            <div id="departure-stops"></div>
+
+        </div>
+        <div class="col-md-6">
+            <div id="map_canvas" style="min-height:40em; width:100%"></div>
+            <br />
+
+            <div class="panel panel-default">
+                <div class="panel-heading" style="text-align:left">
+                    <h3 class="panel-title">Simulation Control</h3>
+                </div>
+                <div class="journey-simulator">
+                    <label>Simulator Mode: </label>
                     <div class="btn-group dropdown">
                         <button id="user-dropdown" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Passenger <span class="caret"></span>
@@ -24,20 +71,8 @@
                             <li><a href="#">Driver</a></li>
                         </ul>
                     </div>
-                    <label> and I've </label>
-                    <button id="start-button" type="button" class="btn btn-success" onclick="startUserAction()">Boarded the Bus</button>
-                    <button id="finish-button" type="button" class="btn btn-danger" onclick="stopUserAction()">Alighted the Bus</button>
+                    <button type="button" id="simulate-button" class="btn btn-default" onclick="toggleSimulatorMode()">Enable Simulation</button>
                 </div>
-            </form>
-            
-
-            @* Render departure results here.*@
-            <div id="departure-stops"></div>
-        </div>
-        <div class="col-md-6">
-            <div id="map_canvas" style="min-height:40em; width:100%"></div>
-            <div class="journey-simulator">
-                <button type="button" id="simulate-button" class="btn btn-default" onclick="toggleSimulatorMode()">Enable Simulation</button>
             </div>
         </div>
     </div>

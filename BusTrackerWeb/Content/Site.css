@@ -9,6 +9,15 @@
     padding-right: 15px;
 }
 
+.table-borderless > tbody > tr > td,
+.table-borderless > tbody > tr > th,
+.table-borderless > tfoot > tr > td,
+.table-borderless > tfoot > tr > th,
+.table-borderless > thead > tr > td,
+.table-borderless > thead > tr > th {
+    border: none;
+}
+
 /* Set width on the form input elements since they're 100% wide by default */
 input,
 select,
@@ -78,16 +87,13 @@ textarea {
 }
 
 .journey-control-form {
-    margin: 0 auto;
-    text-align: left;
     font-size: large;
-    margin-top: 2em;
-    margin-bottom: 2em
+    margin: 1em
 }
 
 .journey-simulator {
     margin: 0 auto;
-    margin-top: 1em;
+    margin: 1em;
     text-align: left
 }
 

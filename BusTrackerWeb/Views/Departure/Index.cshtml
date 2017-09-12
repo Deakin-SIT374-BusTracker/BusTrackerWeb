@@ -30,13 +30,13 @@
 </div>
 
 @* Render departure results here. *@
-<div id="departure-runs"></div>
+        <div id="departure-runs"></div>
 
-@section scripts {
-    @* Include Google Map Javascript Package *@
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqZFelSFhnk3JDbFVx7qovf8IIG1ZViVs&libraries=places"></script>
+    @section scripts {
+        @* Include Google Map Javascript Package *@
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqZFelSFhnk3JDbFVx7qovf8IIG1ZViVs&libraries=places"></script>
 
-    <script>
+        <script>
         /*
         Function: document.Ready()
         Jquery function called after document has been rendered.
@@ -112,11 +112,11 @@
         */
         function initAutocomplete() {
             console.log("Init Autocompete.");
-            // Create the autocomplete object, restricting the search to 
+            // Create the autocomplete object, restricting the search to
             // geographical location types.
             autocomplete = new google.maps.places.Autocomplete((document.getElementById('autocomplete')),{types: ['geocode']});
 
-            // When the user selects an address from the dropdown, populate the 
+            // When the user selects an address from the dropdown, populate the
             // address fields in the form.
             autocomplete.addListener('place_changed', getAutoAddressLocation);
         }
@@ -140,5 +140,5 @@
             getDepartures(addressLatitude, addressLongitude);
         }
 
-    </script> 
-}
+        </script>
+    }
