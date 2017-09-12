@@ -79,21 +79,23 @@ namespace BusTrackerWeb.Controllers
             {
                 double departureMintues = (jStop.DepartureTime - DateTime.Now).TotalMinutes;
                 departureMintues = Math.Round(departureMintues, 0);
-                departureMintues = departureMintues < 0 ? 0 : departureMintues;
 
-                journeyStops.Add(
-                    new JourneyStopModel
-                    {
-                        StopName = jStop.StopName,
-                        DepartureTime = jStop.DepartureTime,
-                        DepartureMinutes = departureMintues
-                    });
+                if (departureMintues >= 0)
+                {
+                    journeyStops.Add(
+                        new JourneyStopModel
+                        {
+                            StopName = jStop.StopName,
+                            DepartureTime = jStop.DepartureTime,
+                            DepartureMinutes = departureMintues
+                        });
+                }
             }
 
             return PartialView("~/Views/Journey/_JourneyStops.cshtml", journeyStops);
         }
 
-        public async Task<JsonResult> SimulateLocation(int runId, int routeId)
+        public async Task<JsonResult> SimulateBusLocation(int runId, int routeId)
         {
             BusModel simulatedBus = new BusModel();
 
@@ -143,7 +145,7 @@ namespace BusTrackerWeb.Controllers
                 // Select current step index based on progess.
                 double stepIndex = steps.Count() * progressRatio;
 
-                if (stepIndex >= 0)
+                if (stepIndex > 0)
                 {
                     // Select current step.
                     Step currentStep = steps[(int)stepIndex];
@@ -166,8 +168,8 @@ namespace BusTrackerWeb.Controllers
                     simulatedBus = new BusModel
                     {
                         RouteId = routeId,
-                        BusLatitude = Convert.ToDecimal(currentStep.end_location.lat),
-                        BusLongitude = Convert.ToDecimal(currentStep.end_location.lng),
+                        BusLatitude = Convert.ToDecimal(pattern.Departures[0].Stop.StopLatitude),
+                        BusLongitude = Convert.ToDecimal(pattern.Departures[0].Stop.StopLongitude),
                         BusRegoNumber = "SIM001"
                     };
                 }
@@ -180,6 +182,40 @@ namespace BusTrackerWeb.Controllers
             { }
 
             return Json(simulatedBus, JsonRequestBehavior.AllowGet);
+        }
+
+        public async Task<JsonResult> PutBusLocation(int routeId, double latitude, double longitude)
+        {
+            BusModel bus = new BusModel { RouteId = routeId, BusLatitude = Convert.ToDecimal(latitude), BusLongitude = Convert.ToDecimal(longitude) };
+            BusController busControl = new BusController();
+            await busControl.PutBusOnRouteLocation(bus);
+
+            return Json(bus, JsonRequestBehavior.AllowGet);
+        }
+
+        public async Task<JsonResult> PutBusOnRoute(int runId, int routeId, double busLatitude, double busLongitude)
+        {
+            BusModel trackedBus = new BusModel();
+            
+            try
+            {
+                // Create bus with simulated coordinates.
+                trackedBus = new BusModel
+                {
+                    RouteId = routeId,
+                    BusLatitude = Convert.ToDecimal(busLatitude),
+                    BusLongitude = Convert.ToDecimal(busLongitude),
+                    BusRegoNumber = "SIM001"
+                };
+
+                // Update the bus location.
+                BusController busControl = new BusController();
+                await busControl.PutBusOnRouteLocation(trackedBus);
+            }
+            catch (Exception e)
+            { }
+
+            return Json(trackedBus, JsonRequestBehavior.AllowGet);
         }
     }
 }

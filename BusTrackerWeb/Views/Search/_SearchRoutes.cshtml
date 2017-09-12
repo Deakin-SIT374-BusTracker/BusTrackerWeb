@@ -1,34 +1,36 @@
 ﻿@model  IEnumerable<BusTrackerWeb.Models.SearchRouteModel>
 
 @* Render the model dataset in a table. *@
-<table id="routeTable" class="table table-striped search-table">
-    <tr>
-        <th>Route</th>
-        <th>Direction</th>
-        <th>Link</th>
-    </tr>
+<div class="panel panel-default search-table">
+    <table id="routeTable" class="table table-striped">
+        <tr>
+            <th>Route</th>
+            <th>Direction</th>
+            <th>Link</th>
+        </tr>
 
-    @* Render each route direction as a row, grouped by the route name. *@
-    @foreach (var searchRoute in Model)
-    {
-        for (var i = 0; i < searchRoute.Directions.Count(); i++)
+        @* Render each route direction as a row, grouped by the route name. *@
+        @foreach (var searchRoute in Model)
         {
-            if (i == 0)
+            for (var i = 0; i < searchRoute.Directions.Count(); i++)
             {
-                <tr>
-                    <td>@Html.DisplayFor(modelItem => searchRoute.Route.RouteName)</td>
-                    <td>@Html.DisplayFor(modelItem => searchRoute.Directions[i].DirectionName)</td>
-                    <td>@Html.ActionLink("Select", "Index", "Departure", new { routeId = searchRoute.Route.RouteId, directionId = searchRoute.Directions[i].DirectionId }, new { @class = "btn btn-default" })</td>
-                </tr>
-            }
-            else
-            {
-                <tr>
-                    <td></td>
-                    <td>@Html.DisplayFor(modelItem => searchRoute.Directions[i].DirectionName)</td>
-                    <td>@Html.ActionLink("Select", "Index", "Departure", new { routeId = searchRoute.Route.RouteId, directionId = searchRoute.Directions[i].DirectionId }, new { @class = "btn btn-default" })</td>
-                </tr>
+                if (i == 0)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => searchRoute.Route.RouteName)</td>
+                        <td>@Html.DisplayFor(modelItem => searchRoute.Directions[i].DirectionName)</td>
+                        <td>@Html.ActionLink("Select", "Index", "Departure", new { routeId = searchRoute.Route.RouteId, directionId = searchRoute.Directions[i].DirectionId }, new { @class = "btn btn-default" })</td>
+                    </tr>
+                }
+                else
+                {
+                    <tr>
+                        <td></td>
+                        <td>@Html.DisplayFor(modelItem => searchRoute.Directions[i].DirectionName)</td>
+                        <td>@Html.ActionLink("Select", "Index", "Departure", new { routeId = searchRoute.Route.RouteId, directionId = searchRoute.Directions[i].DirectionId }, new { @class = "btn btn-default" })</td>
+                    </tr>
+                }
             }
         }
-    }
-</table>
+    </table>
+</div>

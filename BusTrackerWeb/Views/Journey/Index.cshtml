@@ -8,14 +8,72 @@
     <h1><img style="max-width:50px; margin-top: -4px; margin-right: 10px; float:left;" src="~/Content/Images/bushop-logo.png">Your Journey</h1>
 </div>
 
-<div style="margin-top:1.5em">
+<div style="margin-top:2em">
     <div class="row" style="width: 100%">
         <div class="col-md-6">
-            @* Render departure results here. *@
+            @* Journey Control Panel *@
+            <div class="panel panel-default">
+                <div class="panel-heading" style="text-align:left">
+                    <h3 class="panel-title">Journey Control</h3>
+                </div>
+                <form class="form-inline journey-control-form">
+                    <div class="form-group">
+                        <button id="start-button" type="button" class="btn btn-success btn-lg" onclick="startUserAction()">Boarded the Bus</button>
+                        <button id="finish-button" type="button" class="btn btn-danger btn-lg" onclick="stopUserAction()">Alighted the Bus</button>
+                    </div>
+                </form>
+            </div>
+
+            @* Render departure dashboard.*@
+            <div class="panel panel-default">
+                <div class="panel-heading" style="text-align:left">
+                    <h3 class="panel-title">Journey Dashboard</h3>
+                </div>
+
+                <table id="scheduleTable" class="table table-borderless journey-table" style="border:none">
+                    <tr>
+                        <td><span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>&nbsp;&nbsp;Your Stop:</td>
+                        <td>Melbourne Airport T3 Skybus/Arrival Dr</td>
+                    </tr>
+                    <tr>
+                        <td><span class="glyphicon glyphicon-time" aria-hidden="true"></span>&nbsp;&nbsp;Start Walking In: </td>
+                        <td>5 Mins</td>
+                    </tr>
+                    <tr>
+                        <td><span class="glyphicon glyphicon-time" aria-hidden="true"></span>&nbsp;&nbsp;Bus Departs In: </td>
+                        <td>10 Mins</td>
+                    </tr>
+                </table>
+
+            </div>
+            
+
+            @* Render departure results here.*@
             <div id="departure-stops"></div>
+
         </div>
         <div class="col-md-6">
             <div id="map_canvas" style="min-height:40em; width:100%"></div>
+            <br />
+
+            <div class="panel panel-default">
+                <div class="panel-heading" style="text-align:left">
+                    <h3 class="panel-title">Simulation Control</h3>
+                </div>
+                <div class="journey-simulator">
+                    <label>Simulator Mode: </label>
+                    <div class="btn-group dropdown">
+                        <button id="user-dropdown" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Passenger <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Passenger</a></li>
+                            <li><a href="#">Driver</a></li>
+                        </ul>
+                    </div>
+                    <button type="button" id="simulate-button" class="btn btn-default" onclick="toggleSimulatorMode()">Enable Simulation</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -26,6 +84,19 @@
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqZFelSFhnk3JDbFVx7qovf8IIG1ZViVs&libraries=geometry"></script>
 
     <script type="text/javascript">
+
+        //Globals
+        var simulationEnabled = false;
+        var busSimulatorInterval = null;
+        var userSimulatorInterval = null;
+        var putBusInterval = null;
+        var userIsDriver = false;
+        var passengerOnBoard = false;
+        var busLocation = null;
+
+        var departures = @Html.Raw(Json.Encode(@ViewBag.Departures));
+        var userLocation = new google.maps.LatLng(departures[0].Stop.StopLatitude, departures[0].Stop.StopLongitude);
+
         /*
         Function: document.Ready()
         Jquery function called after document has been rendered.
@@ -34,10 +105,44 @@
             postJourneyStops();
             setInterval(postJourneyStops, 60000);
 
-            //Call temporary simulation script for demo purposes.
-            simulateLocation();
-            setInterval(simulateLocation, 5000);
+            initUserDropDown();
+            initSimulatorButton();
         });
+
+        function initUserDropDown() {
+            $(".dropdown-menu li a").click(function () {
+                $(this).parents(".dropdown").find('.btn').html($(this).text() + ' <span class="caret"></span>');
+                $(this).parents(".dropdown").find('.btn').val($(this).data('value'));
+
+                var userType = $('#user-dropdown')[0].innerText;
+
+                if (userType == "Passenger ") {
+                    userIsDriver = false;
+                    $("#start-button").html("Boarded the Bus");
+                    $("#finish-button").html("Alighted the Bus");
+                }
+                else {
+                    userIsDriver = true;
+                    $("#start-button").html("Started the Route");
+                    $("#finish-button").html("Finished the Route");
+                }
+            });
+        }
+
+        function initSimulatorButton() {
+            $("#simulate-button").click(function () {
+                simulationEnabled = !simulationEnabled;
+
+                toggleSimulatorMode();
+
+                if (simulationEnabled) {
+                    $("#simulate-button").html("Disable Simulation");
+                }
+                else {
+                    $("#simulate-button").html("Enable Simulation");
+                }
+            });
+        }
 
 
         /*
@@ -59,7 +164,7 @@
                 stops[i] = { stopName: sName, departureTime: sDepartureTime }
             }
 
-            // Post the stops to the controller and initialise a callback to 
+            // Post the stops to the controller and initialise a callback to
             // render the response as a partial view.
             $.ajax({
                 contentType: 'application/json; charset=utf-8',
@@ -74,11 +179,11 @@
                     console.log('Error on GetStops Post');
                 }
             });
-        };
+        }
 
 
         /*
-        Function: postJourneyStops()
+        Function: postStopsCallback()
         This call back function updates the stops table with the latest departure
         times.
         */
@@ -87,13 +192,12 @@
         }
 
 
-         /*
+            /*
         Function: initGoogleMap()
         Render a Google Map and render the bus route markers and polyline.
         */
         function initGoogleMap() {
             // Find the map center coordinates.
-            var departures = @Html.Raw(Json.Encode(@ViewBag.Departures));
             var centerIndex = Math.round(departures.length / 2)
             var centerLocation = new google.maps.LatLng(departures[centerIndex].Stop.StopLatitude, departures[centerIndex].Stop.StopLatitude);
 
@@ -110,8 +214,8 @@
             var bounds = new google.maps.LatLngBounds();
             var infowindow = new google.maps.InfoWindow({ content: "holding..." });
             var stopIcon = {
-                url: '/Content/Images/stop.png', // url
-                scaledSize: new google.maps.Size(25, 25), // scaled size
+                url: '/Content/Images/stop.png',
+                scaledSize: new google.maps.Size(25, 25),
             };
 
             // Iterate through each departures and create a new map marker with info
@@ -137,20 +241,10 @@
                 bounds.extend(newMarker.getPosition());
             }
 
-            // Initialise the bus starting position.
-            var buslocation = new google.maps.LatLng(departures[0].Stop.StopLatitude, departures[0].Stop.StopLongitude);
-            var busMarker = new google.maps.Marker({
-                position: buslocation,
-                map: map,
-                icon: '/Content/Images/bus.png'
-            });
-
-            // Asyncronoulsy move the bus marker along the route.
-            moveMarker(map, busMarker);
-            
             // Extend the map margins to fit all stops.
             map.fitBounds(bounds);
-            
+
+
             // Render the collection of polylines returned by the Google Directions
             // API.
             var encodedPolyline = @Html.Raw(Json.Encode(@ViewBag.EncodePolylines));
@@ -166,6 +260,34 @@
 
                 drivePath.setMap(map);
             }
+
+
+            // Asyncronoulsy move the bus marker along the route.
+            var busPosition = new google.maps.LatLng(departures[0].Stop.StopLatitude, departures[0].Stop.StopLongitude);
+            var busMarker = new google.maps.Marker({
+                position: busPosition,
+                map: map,
+                icon: '/Content/Images/bus.png'
+            });
+
+            moveBusMarker(map, busMarker);
+
+            // Asyncronoulsy move the user marker along the route.
+            if (!userIsDriver) {
+                var userPosition = new google.maps.LatLng(departures[0].Stop.StopLatitude, departures[0].Stop.StopLongitude);
+                var userIcon = {
+                    url: '/Content/Images/user-pin.png',
+                    scaledSize: new google.maps.Size(40, 40),
+                };
+
+                var userMarker = new google.maps.Marker({
+                    position: userPosition,
+                    map: map,
+                    icon: userIcon
+                });
+
+                moveUserMarker(map, userMarker);
+            }
         }
 
         initGoogleMap();
@@ -176,34 +298,106 @@
         Periodically get the current bus on route location and move the bus map
         marker.  Also re-center the map to the new bus location.
         */
-        function moveMarker(map, marker) {
-
-            //delayed so you can see it move
+        function moveBusMarker(map, marker) {
             setInterval(function () {
                 $.get("/api/Bus/GetBusOnRouteLocation", { routeId: @ViewBag.RouteId }, function (response) {
                     if (response.length > 0) {
-                        var markerPosition = new google.maps.LatLng(response[0].BusLatitude, response[0].BusLongitude);
-                        marker.setPosition(markerPosition);
+                        busLocation = new google.maps.LatLng(response[0].BusLatitude, response[0].BusLongitude);
+                        marker.setPosition(busLocation);
                         marker.setTitle(response[0].BusRegoNumber);
 
-                        map.setZoom(15);
-                        map.setCenter(markerPosition);
+                        if (userIsDriver) {
+                            map.setZoom(15);
+                            map.setCenter(busLocation);
+                        }
 
                         console.log('Actual Bus Latitude: ' + response[0].BusLatitude + '   Bus Longitude: ' + response[0].BusLongitude);
                     }
                 });
-            }, 10000);
-        };
-
+            }, 2000);
+        }
         
+
+        function moveUserMarker(map, marker) {
+            setInterval(function () {
+                marker.setPosition(userLocation);
+
+                if (!userIsDriver) {
+                    map.setZoom(15);
+                    map.setCenter(userLocation);
+                }
+
+                console.log('User Latitude: ' + marker.getPosition().lat() + '   User Longitude: ' + marker.getPosition().lng());
+            }, 2000);
+        }
+
+
+        function toggleSimulatorMode() {
+            if (simulationEnabled) {
+                // Bus driver simulation mode selected, simulate location.
+                simulateBusLocation();
+                busSimulatorInterval = setInterval(simulateBusLocation, 2000);
+                userSimulatorInterval = setInterval(simulateUserLocation, 2000);
+            }
+            else {
+                // Stop simulating the bus location.
+                clearInterval(busSimulatorInterval);
+
+                // Stop simulating the passenger location.
+                clearInterval(userSimulatorInterval);
+            }
+        }
+
         /*
         Function: simulateLocation()
         Periodically call the controller to trigger a bus simulator update.
         */
-        function simulateLocation() {
-            $.get("/Journey/SimulateLocation", { runId: @ViewBag.RunId, routeId: @ViewBag.RouteId }, function (response) {
+        function simulateBusLocation() {
+            $.get("/Journey/SimulateBusLocation", { runId: @ViewBag.RunId, routeId: @ViewBag.RouteId }, function (response) {
                 console.log('Simulated Bus Latitude: ' + response.BusLatitude + '   Bus Longitude: ' + response.BusLongitude);
             });
+        }
+
+
+        function putBusLocation() {
+            if("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    $.get("/Journey/PutBusLocation", { routeId: @ViewBag.RouteId, latitude: position.coords.latitude, longitude: position.coords.longitude }, function (response) {
+                        console.log('Actual Bus Latitude: ' + position.coords.latitude + '   Actual Longitude: ' + position.coords.longitude);
+                    });
+                });
+            }
+            else {
+                console.log("Unable to track bus, browser doesn't support geolocation.");
+            }
+        };
+
+        function simulateUserLocation() {
+            if (passengerOnBoard) {
+                userLocation = busLocation;
+            }
+        }
+
+
+        function startUserAction() {
+            if (!userIsDriver) {
+                passengerOnBoard = true;
+            }
+            else
+            {
+                putBusInterval = setInterval(putBusLocation, 2000);
+            }
+        }
+
+
+        function stopUserAction() {
+            if (!userIsDriver) {
+                passengerOnBoard = false;
+            }
+            else 
+            {
+                clearInterval(putBusInterval);
+            }
         }
 
     </script>

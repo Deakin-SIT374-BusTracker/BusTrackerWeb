@@ -26,42 +26,41 @@
 @* Render search results here. *@
 <div class="search-table" id="searchResults"></div>
 
+    @section scripts {
+        @* Include Twitter Typeahead Javascript Package *@
+        <script type="text/javascript" src="~/Scripts/typeahead.js"></script>
 
-@section scripts {
-    @* Include Twitter Typeahead Javascript Package *@
-    <script type="text/javascript" src="~/Scripts/typeahead.js"></script>
+        <script>
+            /*
+            Function: document.Ready()
+            Jquery function called after document has been rendered.
+            */
+            $(document).ready(function () {
+                var countries = new Bloodhound({
+                    datumTokenizer: Bloodhound.tokenizers.whitespace,
+                    queryTokenizer: Bloodhound.tokenizers.whitespace,
+                    prefetch: {
+                        url: '/Search/SearchHints?q=%QUERY&nocache=' + (new Date()).getTime(),
+                        wildcard: '%QUERY'
+                    }
+                });
 
-    <script>
-        /*
-        Function: document.Ready()
-        Jquery function called after document has been rendered.
-        */
-        $(document).ready(function () {
-            var countries = new Bloodhound({
-                datumTokenizer: Bloodhound.tokenizers.whitespace,
-                queryTokenizer: Bloodhound.tokenizers.whitespace,
-                prefetch: {
-                    url: '/Search/SearchHints?q=%QUERY&nocache=' + (new Date()).getTime(),
-                    wildcard: '%QUERY'
-                }
+                $('#search-hints .typeahead').typeahead(null, {
+                    name: 'hints',
+                    source: countries
+                });
             });
+        </script>
 
-            $('#search-hints .typeahead').typeahead(null, {
-                name: 'hints',
-                source: countries
+        <script>
+            /*
+            Function: searchButton.click()
+            Use Jquery to get the search results and display in a partial view.
+            */
+            $('#searchButton').click(function () {
+                $.get("/Search/SearchRoutes", { destination: $("#search-input").val() }, function (response) {
+                    $("#searchResults").html(response);
+                });
             });
-        });
-    </script>
-
-    <script>
-        /*
-        Function: searchButton.click()
-        Use Jquery to get the search results and display in a partial view.
-        */
-        $('#searchButton').click(function () {
-            $.get("/Search/SearchRoutes", { destination: $("#search-input").val() }, function (response) {
-                $("#searchResults").html(response);
-            });
-        });
-    </script>
-}
+        </script>
+    }
