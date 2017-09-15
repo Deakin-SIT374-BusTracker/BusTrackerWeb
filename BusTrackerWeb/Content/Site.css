@@ -83,7 +83,13 @@ textarea {
 }
 
 .journey-table {
-    text-align: left
+    text-align: left;
+}
+
+.journey-table-scroll {
+    width: 100%;
+    overflow: auto;
+    max-height: 330px
 }
 
 .journey-control-form {

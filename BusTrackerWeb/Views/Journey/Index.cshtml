@@ -223,12 +223,18 @@
             for (var i = 0; i < departures.length; i++) {
                 // Create Marker.
                 var newlocation = new google.maps.LatLng(departures[i].Stop.StopLatitude, departures[i].Stop.StopLongitude);
+
+                // Format departure date.
+                var departureTime = new Date(parseInt(departures[i].ScheduledDeparture.replace('/Date(', '')));
+                var datestring = ("0" + departureTime.getDate()).slice(-2) + "-" + ("0" + (departureTime.getMonth() + 1)).slice(-2) + "-" +
+                    departureTime.getFullYear() + " " + ("0" + departureTime.getHours()).slice(-2) + ":" + ("0" + departureTime.getMinutes()).slice(-2);
+
                 var newMarker = new google.maps.Marker({
                     position: newlocation,
                     map: map,
                     title: departures[i].Stop.StopName,
                     icon: stopIcon,
-                    html: '<h4>' + departures[i].Stop.StopName + '</h4><p>' + new Date(parseInt(departures[i].ScheduledDeparture.replace('/Date(', ''))) + '</p>',
+                    html: '<h4>' + departures[i].Stop.StopName + '</h4><p>' + datestring + '</p>',
                 });
 
                 // Add Info Window to marker.
