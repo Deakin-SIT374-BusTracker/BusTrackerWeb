@@ -577,7 +577,7 @@
             This controller handles all Journey View functions.
             </summary>
         </member>
-        <member name="M:BusTrackerWeb.Controllers.JourneyController.Index(System.Int32,System.Int32)">
+        <member name="M:BusTrackerWeb.Controllers.JourneyController.Index(System.Int32,System.Int32,System.Int32)">
             <summary>
             Open the Journey Index View.
             </summary>

@@ -24,11 +24,12 @@ namespace BusTrackerWeb.Controllers
         /// Open the Journey Index View.
         /// </summary>
         /// <returns>Your Journey View.</returns>
-        public async Task<ActionResult> Index(int runId, int routeId)
+        public async Task<ActionResult> Index(int runId, int routeId, int stopId)
         {
             ViewBag.Title = "BusHop > Your Journey";
             ViewBag.RunId = runId;
             ViewBag.RouteId = routeId;
+            ViewBag.StopId = stopId;
 
             // Get the stopping pattern for the selected run.
             RouteModel departureRoute = new RouteModel { RouteId = routeId };
@@ -85,6 +86,7 @@ namespace BusTrackerWeb.Controllers
                     journeyStops.Add(
                         new JourneyStopModel
                         {
+                            StopId = jStop.StopId,
                             StopName = jStop.StopName,
                             DepartureTime = jStop.DepartureTime,
                             DepartureMinutes = departureMintues
@@ -94,6 +96,17 @@ namespace BusTrackerWeb.Controllers
 
             return PartialView("~/Views/Journey/_JourneyStops.cshtml", journeyStops);
         }
+
+
+        [HttpPost]
+        public ActionResult GetDashboard(JourneyStopModel[] stops, int stopId)
+        {
+            JourneyDashboardModel dashboardModel = new JourneyDashboardModel();
+            dashboardModel.UserStop = stops.First(s => s.StopId == stopId);
+            
+            return PartialView("~/Views/Journey/_JourneyDashboard.cshtml", dashboardModel);
+        }
+
 
         public async Task<JsonResult> SimulateBusLocation(int runId, int routeId)
         {

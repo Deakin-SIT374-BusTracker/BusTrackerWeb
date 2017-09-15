@@ -7,6 +7,8 @@ namespace BusTrackerWeb.Models
 {
     public class JourneyStopModel
     {
+        public int StopId { get; set; }
+
         public string StopName { get; set; }
 
         public DateTime DepartureTime { get; set; }
