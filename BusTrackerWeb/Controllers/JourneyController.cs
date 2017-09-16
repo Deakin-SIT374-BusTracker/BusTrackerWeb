@@ -103,7 +103,10 @@ namespace BusTrackerWeb.Controllers
         {
             JourneyDashboardModel dashboardModel = new JourneyDashboardModel();
             dashboardModel.UserStop = stops.First(s => s.StopId == stopId);
-            
+
+            double departureMintues = (dashboardModel.UserStop.DepartureTime - DateTime.Now).TotalMinutes;
+            dashboardModel.BusDepartureMinutes = Math.Round(departureMintues, 0);
+
             return PartialView("~/Views/Journey/_JourneyDashboard.cshtml", dashboardModel);
         }
 
