@@ -14,5 +14,9 @@ namespace BusTrackerWeb.Models
         public DateTime DepartureTime { get; set; }
 
         public double DepartureMinutes { get; set; }
+
+        public double StopLatitude { get; set; }
+
+        public double StopLongitude { get; set; }
     }
 }

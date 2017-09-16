@@ -9,6 +9,8 @@ namespace BusTrackerWeb.Models
     {
         public JourneyStopModel UserStop { get; set; }
 
-        public double BusDepartureMinutes { get; set; }
+        public string BusDepartureMinutes { get; set; }
+
+        public string WalkingDepartureMinutes { get; set; }
     }
 }

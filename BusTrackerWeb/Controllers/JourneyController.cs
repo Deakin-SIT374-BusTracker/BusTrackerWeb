@@ -99,13 +99,57 @@ namespace BusTrackerWeb.Controllers
 
 
         [HttpPost]
-        public ActionResult GetDashboard(JourneyStopModel[] stops, int stopId)
+        public ActionResult GetDashboard(JourneyStopModel[] stops, int stopId, double userLatitude, double userLongitude)
         {
+            // Get the users selected pickup stop.
             JourneyDashboardModel dashboardModel = new JourneyDashboardModel();
             dashboardModel.UserStop = stops.First(s => s.StopId == stopId);
 
+            // Calculate the time until stop departure.
             double departureMintues = (dashboardModel.UserStop.DepartureTime - DateTime.Now).TotalMinutes;
-            dashboardModel.BusDepartureMinutes = Math.Round(departureMintues, 0);
+            departureMintues = Math.Round(departureMintues, 0);
+
+            // Get the time required to walk from the user location to the bus stop.
+            GeoCoordinate[] waypoints = {
+            new GeoCoordinate(userLatitude, userLongitude),
+            new GeoCoordinate(dashboardModel.UserStop.StopLatitude, dashboardModel.UserStop.StopLongitude)
+            };
+
+            List<Route> walkingRoutes = WebApiApplication.DirectionsApiControl.GetDirections(waypoints);
+
+            double walkingDuration = 0.0;
+            
+            foreach(Route route in walkingRoutes)
+            {
+                walkingDuration += route.legs.Sum(rl => rl.duration.value);
+            }
+
+            // Calculate walking departure time, aim to get there 1 minute early.
+            double walkMinutes = (departureMintues - 1) - walkingDuration;
+
+            // Calculate Walking status
+            if(walkMinutes > 0)
+            {
+                dashboardModel.WalkingDepartureMinutes = string.Format("{0} Mins", walkMinutes);
+            }
+            else if (walkMinutes <= 0)
+            {
+                dashboardModel.WalkingDepartureMinutes = "Now";
+            }
+
+            // Calculate Bus Departing status.
+            if(departureMintues > 0.0)
+            {
+                dashboardModel.BusDepartureMinutes = string.Format("{0:0} Mins", departureMintues);
+            }
+            else if(departureMintues == 0.0)
+            {
+                dashboardModel.BusDepartureMinutes = "Now";
+            }
+            else
+            {
+                dashboardModel.BusDepartureMinutes = "Departed";
+            }
 
             return PartialView("~/Views/Journey/_JourneyDashboard.cshtml", dashboardModel);
         }

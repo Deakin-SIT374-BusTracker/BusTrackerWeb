@@ -184,8 +184,14 @@
                 var stopId = departures[i].Stop.StopId;
                 var sName = departures[i].Stop.StopName;
                 var sDepartureTime = new Date(parseInt(departures[i].ScheduledDeparture.substr(6)));;
-                journeyStops[i] = { stopId: stopId, stopName: sName, departureTime: sDepartureTime }
+                var sLatitude = departures[i].Stop.StopLatitude;
+                var sLongitude = departures[i].Stop.StopLongitude;
+                journeyStops[i] = { stopId: stopId, stopName: sName, departureTime: sDepartureTime, StopLatitude: sLatitude, StopLongitude: sLongitude }
             }
+
+            // Get the users current location.
+            var userLatitude = userLocation.lat();
+            var userLogitude = userLocation.lng();
 
             // Post the stops to the controller and initialise a callback to
             // render the response as a partial view.
@@ -194,7 +200,7 @@
                 dataType: 'text',
                 type: 'POST',
                 url: '/Journey/GetDashboard',
-                data: JSON.stringify({ 'stops': journeyStops, 'stopId': @ViewBag.StopId }),
+                data: JSON.stringify({ 'stops': journeyStops, 'stopId': @ViewBag.StopId, 'userLatitude': userLatitude, 'userLongitude': userLogitude}),
                 success: function (response) {
                     postDashboardCallback(response)
                 },
