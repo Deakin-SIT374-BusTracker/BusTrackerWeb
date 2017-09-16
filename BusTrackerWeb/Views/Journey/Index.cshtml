@@ -27,8 +27,8 @@
                 <div class="panel-heading" style="text-align:left">
                     <h3 class="panel-title">Test Panel</h3>
                 </div>
-                <div class="journey-simulator">
-                    <div class="row">
+                <div class="journey-testing">
+                    <div class="row journey-testing-row">
                         <div class="col-md-4">
                             <label>Operating Mode: </label>
                         </div>
@@ -38,30 +38,74 @@
                                     Passenger <span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu">
-                                    <li><a href="#">Passenger</a></li>
-                                    <li><a href="#">Bus Driver</a></li>
+                                    <li><a href="#" id="user-dropdown-passenger-action">Passenger</a></li>
+                                    <li><a href="#" id="user-dropdown-bus-action">Bus Driver</a></li>
                                 </ul>
                             </div>
                         </div>
                     </div>
-                    <div class="row"> 
+
+                    <div class="row journey-testing-row">
                         <div class="col-md-4">
-                            <label>Bus Simulation: </label>
-                        </div>
-                        <div class="col-md-8">
-                            <button type="button" id="bus-sim-button" class="btn btn-default" onclick="toggleBusSimulator()">Enable Simulator</button>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <label>Passenger Simulation: </label>
+                            <label>Passenger Location: </label>
                         </div>
                         <div class="col-md-8">
                             <form class="form-inline">
                                 <div class="form-group">
-                                    <button type="button" id="passenger-sim-button" class="btn btn-default" onclick="togglePassengerSimulator()">Enable Simulator</button>
-                                    <button id="start-button" type="button" class="btn btn-success" onclick="startUserAction()">Jump On</button>
-                                    <button id="finish-button" type="button" class="btn btn-danger" onclick="stopUserAction()">Jump Off</button>
+                                    <div class="btn-group dropdown">
+                                        <button id="passenger-location-dropdown" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            GPS <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="#" id="passenger-location-dropdown-gps-action">GPS</a></li>
+                                            <li><a href="#" id="passenger-location-dropdown-simulate-action">Simulate</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="row journey-testing-row">
+                        <div class="col-md-4">
+                            <label>Bus Location: </label>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="btn-group dropdown">
+                                <button id="bus-location-dropdown" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    GPS <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#" id="bus-location-dropdown-gps-action">GPS</a></li>
+                                    <li><a href="#" id="bus-location-dropdown-simulate-action">Simulate</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="passenger-tracking-row" class="row journey-testing-row">
+                        <div class="col-md-4">
+                            <label>Passenger Tracking: </label>
+                        </div>
+                        <div class="col-md-8">
+                            <form class="form-inline">
+                                <div class="form-group">
+                                    <button id="passenger-start-button" type="button" class="btn btn-success" onclick="startPassengerAction()">Jump On</button>
+                                    <button id="passenger-finish-button" type="button" class="btn btn-danger" onclick="stopPassengerAction()">Jump Off</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div id="bus-tracking-row" class="row journey-testing-row" hidden="hidden">
+                        <div class="col-md-4">
+                            <label>Bus Tracking: </label>
+                        </div>
+                        <div class="col-md-8">
+                            <form class="form-inline">
+                                <div class="form-group">
+                                    <button id="bus-start-button" type="button" class="btn btn-success" onclick="startBusAction()">Start Run</button>
+                                    <button id="bus-finish-button" type="button" class="btn btn-danger" onclick="stopBusAction()">End Run</button>
                                 </div>
                             </form>
                         </div>
@@ -80,13 +124,14 @@
     <script type="text/javascript">
 
         //Globals
+        var userIsDriver = false;
         var busSimulationEnabled = false;
         var passengerSimulationEnabled = false;
+        var passengerOnBoard = false;
+
         var busSimulatorInterval = null;
         var userSimulatorInterval = null;
         var putBusInterval = null;
-        var userIsDriver = false;
-        var passengerOnBoard = false;
         var busLocation = null;
 
         var departures = @Html.Raw(Json.Encode(@ViewBag.Departures));
@@ -104,57 +149,58 @@
             setInterval(postJourneyStops, 60000);
 
             initUserDropDown();
-            initBusSimButton();
-            initPassengerSimButton();
+            initPassengerDropDown();
+            initBusDropDown();
         });
 
         function initUserDropDown() {
-            $(".dropdown-menu li a").click(function () {
-                $(this).parents(".dropdown").find('.btn').html($(this).text() + ' <span class="caret"></span>');
-                $(this).parents(".dropdown").find('.btn').val($(this).data('value'));
+            $("#user-dropdown-passenger-action").click(function (e) {
+                $('#user-dropdown').html('Passenger <span class="caret"></span>');
 
-                var userType = $('#user-dropdown')[0].innerText;
+                userIsDriver = false;
+                $("#bus-tracking-row").hide();
+                $("#passenger-tracking-row").show();
+            });
 
-                if (userType == "Passenger ") {
-                    userIsDriver = false;
-                    $("#start-button").html("Boarded the Bus");
-                    $("#finish-button").html("Alighted the Bus");
-                }
-                else {
-                    userIsDriver = true;
-                    $("#start-button").html("Started the Route");
-                    $("#finish-button").html("Finished the Route");
-                }
+            $("#user-dropdown-bus-action").click(function (e) {
+                $('#user-dropdown').html('Bus Driver <span class="caret"></span>');
+
+                userIsDriver = true;
+                $("#bus-tracking-row").show();
+                $("#passenger-tracking-row").hide();
             });
         }
 
-        function initBusSimButton() {
-            $("#bus-sim-button").click(function () {
-                busSimulationEnabled = !busSimulationEnabled;
+        function initPassengerDropDown() {
+            $("#passenger-location-dropdown-gps-action").click(function (e) {
+                $('#passenger-location-dropdown').html('GPS <span class="caret"></span>');
 
-                toggleBusSimulator();
+                passengerSimulationEnabled = false;
+                clearInterval(userSimulatorInterval);
+            });
 
-                if (busSimulationEnabled) {
-                    $("#bus-sim-button").html("Disable Simulator");
-                }
-                else {
-                    $("#bus-sim-button").html("Enable Simulator");
-                }
+            $("#passenger-location-dropdown-simulate-action").click(function (e) {
+                $('#passenger-location-dropdown').html('Simulate <span class="caret"></span>');
+
+                passengerSimulationEnabled = true;
+                userSimulatorInterval = setInterval(simulateUserLocation, 2000);
             });
         }
 
-        function initPassengerSimButton() {
-            $("#passenger-sim-button").click(function () {
-                passengerSimulationEnabled = !passengerSimulationEnabled;
+        function initBusDropDown() {
+            $("#bus-location-dropdown-gps-action").click(function (e) {
+                $('#bus-location-dropdown').html('GPS <span class="caret"></span>');
 
-                togglePassengerSimulator();
+                busSimulationEnabled = false;
+                clearInterval(busSimulatorInterval);
+            });
 
-                if (passengerSimulationEnabled) {
-                    $("#passenger-sim-button").html("Disable Simulator");
-                }
-                else {
-                    $("#passenger-sim-button").html("Enable Simulator");
-                }
+            $("#bus-location-dropdown-simulate-action").click(function (e) {
+                $('#bus-location-dropdown').html('Simulate <span class="caret"></span>');
+
+                busSimulationEnabled = true;
+                simulateBusLocation();
+                busSimulatorInterval = setInterval(simulateBusLocation, 2000);
             });
         }
 
@@ -365,7 +411,7 @@
         */
         function moveBusMarker(map, marker) {
             setInterval(function () {
-                $.get("/api/Bus/GetBusOnRouteLocation", { routeId: @ViewBag.RouteId }, function (response) {
+                $.get("/api/Bus/GetBusOnRouteLocation", { routeId: @ViewBag.RouteId, busRego: 'SIM001' }, function (response) {
                     if (response.length > 0) {
                         busLocation = new google.maps.LatLng(response[0].BusLatitude, response[0].BusLongitude);
                         marker.setPosition(busLocation);
@@ -376,7 +422,7 @@
                             map.setCenter(busLocation);
                         }
 
-                        console.log('Actual Bus Latitude: ' + response[0].BusLatitude + '   Bus Longitude: ' + response[0].BusLongitude);
+                        console.log('GET Bus Latitude: ' + response[0].BusLatitude + '   Bus Longitude: ' + response[0].BusLongitude);
                     }
                 });
             }, 2000);
@@ -393,9 +439,9 @@
                         });
                     } else {
                         Console.log("Geolocation is not supported by this browser.");
-                    }                    
+                    }
                 }
-                
+
                 marker.setPosition(userLocation);
 
                 if (!userIsDriver) {
@@ -407,28 +453,6 @@
             }, 2000);
         }
 
-
-        function toggleBusSimulator() {
-            if (busSimulationEnabled) {
-                // Bus driver simulation mode selected, simulate location.
-                simulateBusLocation();
-                busSimulatorInterval = setInterval(simulateBusLocation, 2000);
-            }
-            else {
-                // Stop simulating the bus location.
-                clearInterval(busSimulatorInterval);
-            }
-        }
-
-        function togglePassengerSimulator() {
-            if (passengerSimulationEnabled) {
-                userSimulatorInterval = setInterval(simulateUserLocation, 2000);
-            }
-            else {
-                // Stop simulating the passenger location.
-                clearInterval(userSimulatorInterval);
-            }
-        }
 
 
         /*
@@ -442,11 +466,40 @@
         }
 
 
+        function simulateUserLocation() {
+            if (passengerOnBoard) {
+                userLocation = busLocation;
+            }
+        }
+        
+        function startPassengerAction() {
+            passengerOnBoard = true;
+        }
+
+        function stopPassengerAction() {
+            passengerOnBoard = false;
+        }
+
+    
+        function startBusAction() {
+            if (busSimulationEnabled == false) {
+                putBusInterval = setInterval(putBusLocation, 2000);
+            }
+        }
+
+        function stopBusAction() {
+            if (busSimulationEnabled == false) {
+                clearInterval(putBusInterval);
+            }
+        }
+
+
+
         function putBusLocation() {
             if("geolocation" in navigator) {
                 navigator.geolocation.getCurrentPosition(function (position) {
                     $.get("/Journey/PutBusLocation", { routeId: @ViewBag.RouteId, latitude: position.coords.latitude, longitude: position.coords.longitude }, function (response) {
-                        console.log('Actual Bus Latitude: ' + position.coords.latitude + '   Actual Longitude: ' + position.coords.longitude);
+                        console.log('PUT Bus Latitude: ' + position.coords.latitude + '   Actual Longitude: ' + position.coords.longitude);
                     });
                 });
             }
@@ -455,33 +508,6 @@
             }
         };
 
-        function simulateUserLocation() {
-            if (passengerOnBoard) {
-                userLocation = busLocation;
-            }
-        }
-
-
-        function startUserAction() {
-            if (!userIsDriver) {
-                passengerOnBoard = true;
-            }
-            else
-            {
-                putBusInterval = setInterval(putBusLocation, 2000);
-            }
-        }
-
-
-        function stopUserAction() {
-            if (!userIsDriver) {
-                passengerOnBoard = false;
-            }
-            else
-            {
-                clearInterval(putBusInterval);
-            }
-        }
 
     </script>
 }

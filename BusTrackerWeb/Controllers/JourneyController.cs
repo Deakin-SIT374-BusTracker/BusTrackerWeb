@@ -246,7 +246,12 @@ namespace BusTrackerWeb.Controllers
 
         public async Task<JsonResult> PutBusLocation(int routeId, double latitude, double longitude)
         {
-            BusModel bus = new BusModel { RouteId = routeId, BusLatitude = Convert.ToDecimal(latitude), BusLongitude = Convert.ToDecimal(longitude) };
+            BusModel bus = new BusModel {
+                RouteId = routeId,
+                BusLatitude = Convert.ToDecimal(latitude),
+                BusLongitude = Convert.ToDecimal(longitude),
+                BusRegoNumber = "SIM001"
+            };
             BusController busControl = new BusController();
             await busControl.PutBusOnRouteLocation(bus);
 

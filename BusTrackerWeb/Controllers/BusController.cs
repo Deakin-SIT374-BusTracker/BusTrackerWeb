@@ -105,8 +105,7 @@ namespace BusTrackerWeb.Controllers
 
             try
             {
-                busesOnRoute = WebApiApplication.TrackedBuses.Where(b => b.RouteId == routeId).
-                    ToList();
+                busesOnRoute = WebApiApplication.TrackedBuses.Where(b => b.RouteId == routeId).ToList();
             }
             catch (Exception e)
             {
