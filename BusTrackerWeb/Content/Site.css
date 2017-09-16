@@ -103,6 +103,11 @@ textarea {
     text-align: left
 }
 
+.journey-simulator-row {
+    margin-bottom: 0.5em;
+}
+
+
 span.twitter-typeahead {
     width: 500px
 }

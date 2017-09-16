@@ -121,7 +121,7 @@ namespace BusTrackerWeb.Controllers
             
             foreach(Route route in walkingRoutes)
             {
-                walkingDuration += route.legs.Sum(rl => rl.duration.value);
+                walkingDuration += route.legs.Sum(rl => rl.duration.value / 60);
             }
 
             // Calculate walking departure time, aim to get there 1 minute early.

@@ -11,19 +11,6 @@
 <div style="margin-top:2em">
     <div class="row" style="width: 100%">
         <div class="col-md-6">
-            @* Journey Control Panel *@
-            <div class="panel panel-default">
-                <div class="panel-heading" style="text-align:left">
-                    <h3 class="panel-title">Journey Control</h3>
-                </div>
-                <form class="form-inline journey-control-form">
-                    <div class="form-group">
-                        <button id="start-button" type="button" class="btn btn-success btn-lg" onclick="startUserAction()">Jump On</button>
-                        <button id="finish-button" type="button" class="btn btn-danger btn-lg" onclick="stopUserAction()">Jump Off</button>
-                    </div>
-                </form>
-            </div>
-
             @* Render departure dashboard.*@
             <div id="departure-dashboard"></div>
             
@@ -38,20 +25,47 @@
 
             <div class="panel panel-default">
                 <div class="panel-heading" style="text-align:left">
-                    <h3 class="panel-title">Simulation Control</h3>
+                    <h3 class="panel-title">Test Panel</h3>
                 </div>
                 <div class="journey-simulator">
-                    <label>Simulator Mode: </label>
-                    <div class="btn-group dropdown">
-                        <button id="user-dropdown" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Passenger <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">Passenger</a></li>
-                            <li><a href="#">Driver</a></li>
-                        </ul>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label>Operating Mode: </label>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="btn-group dropdown">
+                                <button id="user-dropdown" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Passenger <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#">Passenger</a></li>
+                                    <li><a href="#">Bus Driver</a></li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
-                    <button type="button" id="simulate-button" class="btn btn-default" onclick="toggleSimulatorMode()">Enable Simulation</button>
+                    <div class="row"> 
+                        <div class="col-md-4">
+                            <label>Bus Simulation: </label>
+                        </div>
+                        <div class="col-md-8">
+                            <button type="button" id="bus-sim-button" class="btn btn-default" onclick="toggleBusSimulator()">Enable Simulator</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label>Passenger Simulation: </label>
+                        </div>
+                        <div class="col-md-8">
+                            <form class="form-inline">
+                                <div class="form-group">
+                                    <button type="button" id="passenger-sim-button" class="btn btn-default" onclick="togglePassengerSimulator()">Enable Simulator</button>
+                                    <button id="start-button" type="button" class="btn btn-success" onclick="startUserAction()">Jump On</button>
+                                    <button id="finish-button" type="button" class="btn btn-danger" onclick="stopUserAction()">Jump Off</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -66,7 +80,8 @@
     <script type="text/javascript">
 
         //Globals
-        var simulationEnabled = false;
+        var busSimulationEnabled = false;
+        var passengerSimulationEnabled = false;
         var busSimulatorInterval = null;
         var userSimulatorInterval = null;
         var putBusInterval = null;
@@ -89,7 +104,8 @@
             setInterval(postJourneyStops, 60000);
 
             initUserDropDown();
-            initSimulatorButton();
+            initBusSimButton();
+            initPassengerSimButton();
         });
 
         function initUserDropDown() {
@@ -112,17 +128,32 @@
             });
         }
 
-        function initSimulatorButton() {
-            $("#simulate-button").click(function () {
-                simulationEnabled = !simulationEnabled;
+        function initBusSimButton() {
+            $("#bus-sim-button").click(function () {
+                busSimulationEnabled = !busSimulationEnabled;
 
-                toggleSimulatorMode();
+                toggleBusSimulator();
 
-                if (simulationEnabled) {
-                    $("#simulate-button").html("Disable Simulation");
+                if (busSimulationEnabled) {
+                    $("#bus-sim-button").html("Disable Simulator");
                 }
                 else {
-                    $("#simulate-button").html("Enable Simulation");
+                    $("#bus-sim-button").html("Enable Simulator");
+                }
+            });
+        }
+
+        function initPassengerSimButton() {
+            $("#passenger-sim-button").click(function () {
+                passengerSimulationEnabled = !passengerSimulationEnabled;
+
+                togglePassengerSimulator();
+
+                if (passengerSimulationEnabled) {
+                    $("#passenger-sim-button").html("Disable Simulator");
+                }
+                else {
+                    $("#passenger-sim-button").html("Enable Simulator");
                 }
             });
         }
@@ -354,6 +385,17 @@
 
         function moveUserMarker(map, marker) {
             setInterval(function () {
+                // If simulation is not enabled get the current user geolocation.
+                if (!passengerSimulationEnabled) {
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(function (position) {
+                            userLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                        });
+                    } else {
+                        Console.log("Geolocation is not supported by this browser.");
+                    }                    
+                }
+                
                 marker.setPosition(userLocation);
 
                 if (!userIsDriver) {
@@ -366,21 +408,28 @@
         }
 
 
-        function toggleSimulatorMode() {
-            if (simulationEnabled) {
+        function toggleBusSimulator() {
+            if (busSimulationEnabled) {
                 // Bus driver simulation mode selected, simulate location.
                 simulateBusLocation();
                 busSimulatorInterval = setInterval(simulateBusLocation, 2000);
-                userSimulatorInterval = setInterval(simulateUserLocation, 2000);
             }
             else {
                 // Stop simulating the bus location.
                 clearInterval(busSimulatorInterval);
+            }
+        }
 
+        function togglePassengerSimulator() {
+            if (passengerSimulationEnabled) {
+                userSimulatorInterval = setInterval(simulateUserLocation, 2000);
+            }
+            else {
                 // Stop simulating the passenger location.
                 clearInterval(userSimulatorInterval);
             }
         }
+
 
         /*
         Function: simulateLocation()
