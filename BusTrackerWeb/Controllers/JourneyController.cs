@@ -24,11 +24,12 @@ namespace BusTrackerWeb.Controllers
         /// Open the Journey Index View.
         /// </summary>
         /// <returns>Your Journey View.</returns>
-        public async Task<ActionResult> Index(int runId, int routeId)
+        public async Task<ActionResult> Index(int runId, int routeId, int stopId)
         {
             ViewBag.Title = "BusHop > Your Journey";
             ViewBag.RunId = runId;
             ViewBag.RouteId = routeId;
+            ViewBag.StopId = stopId;
 
             // Get the stopping pattern for the selected run.
             RouteModel departureRoute = new RouteModel { RouteId = routeId };
@@ -85,6 +86,7 @@ namespace BusTrackerWeb.Controllers
                     journeyStops.Add(
                         new JourneyStopModel
                         {
+                            StopId = jStop.StopId,
                             StopName = jStop.StopName,
                             DepartureTime = jStop.DepartureTime,
                             DepartureMinutes = departureMintues
@@ -94,6 +96,64 @@ namespace BusTrackerWeb.Controllers
 
             return PartialView("~/Views/Journey/_JourneyStops.cshtml", journeyStops);
         }
+
+
+        [HttpPost]
+        public ActionResult GetDashboard(JourneyStopModel[] stops, int stopId, double userLatitude, double userLongitude)
+        {
+            // Get the users selected pickup stop.
+            JourneyDashboardModel dashboardModel = new JourneyDashboardModel();
+            dashboardModel.UserStop = stops.First(s => s.StopId == stopId);
+
+            // Calculate the time until stop departure.
+            double departureMintues = (dashboardModel.UserStop.DepartureTime - DateTime.Now).TotalMinutes;
+            departureMintues = Math.Round(departureMintues, 0);
+
+            // Get the time required to walk from the user location to the bus stop.
+            GeoCoordinate[] waypoints = {
+            new GeoCoordinate(userLatitude, userLongitude),
+            new GeoCoordinate(dashboardModel.UserStop.StopLatitude, dashboardModel.UserStop.StopLongitude)
+            };
+
+            List<Route> walkingRoutes = WebApiApplication.DirectionsApiControl.GetDirections(waypoints, true);
+
+            double walkingDuration = 0.0;
+            
+            foreach(Route route in walkingRoutes)
+            {
+                walkingDuration += route.legs.Sum(rl => rl.duration.value / 60);
+            }
+
+            // Calculate walking departure time, aim to get there 1 minute early.
+            double walkMinutes = (departureMintues - 1) - walkingDuration;
+
+            // Calculate Walking status
+            if(walkMinutes > 0)
+            {
+                dashboardModel.WalkingDepartureMinutes = string.Format("{0} Mins", walkMinutes);
+            }
+            else if (walkMinutes <= 0)
+            {
+                dashboardModel.WalkingDepartureMinutes = "Now";
+            }
+
+            // Calculate Bus Departing status.
+            if(departureMintues > 0.0)
+            {
+                dashboardModel.BusDepartureMinutes = string.Format("{0:0} Mins", departureMintues);
+            }
+            else if(departureMintues == 0.0)
+            {
+                dashboardModel.BusDepartureMinutes = "Now";
+            }
+            else
+            {
+                dashboardModel.BusDepartureMinutes = "Departed";
+            }
+
+            return PartialView("~/Views/Journey/_JourneyDashboard.cshtml", dashboardModel);
+        }
+
 
         public async Task<JsonResult> SimulateBusLocation(int runId, int routeId)
         {
@@ -186,7 +246,12 @@ namespace BusTrackerWeb.Controllers
 
         public async Task<JsonResult> PutBusLocation(int routeId, double latitude, double longitude)
         {
-            BusModel bus = new BusModel { RouteId = routeId, BusLatitude = Convert.ToDecimal(latitude), BusLongitude = Convert.ToDecimal(longitude) };
+            BusModel bus = new BusModel {
+                RouteId = routeId,
+                BusLatitude = Convert.ToDecimal(latitude),
+                BusLongitude = Convert.ToDecimal(longitude),
+                BusRegoNumber = "SIM001"
+            };
             BusController busControl = new BusController();
             await busControl.PutBusOnRouteLocation(bus);
 

@@ -83,7 +83,13 @@ textarea {
 }
 
 .journey-table {
-    text-align: left
+    text-align: left;
+}
+
+.journey-table-scroll {
+    width: 100%;
+    overflow: auto;
+    max-height: 330px
 }
 
 .journey-control-form {
@@ -91,11 +97,16 @@ textarea {
     margin: 1em
 }
 
-.journey-simulator {
+.journey-testing {
     margin: 0 auto;
     margin: 1em;
     text-align: left
 }
+
+.journey-testing-row {
+    margin-bottom: 0.5em;
+}
+
 
 span.twitter-typeahead {
     width: 500px
