@@ -38,7 +38,7 @@ namespace BusTrackerWeb.Controllers
         }
 
 
-        public List<Route> GetDirections(GeoCoordinate[] routePoints, bool walking = false)
+        public List<Route> GetDirections(GeoCoordinate[] routePoints, bool isWalking = false)
         {
             List<Route> routes = new List<Route>();
 
@@ -65,7 +65,7 @@ namespace BusTrackerWeb.Controllers
                     }
 
 
-                    string requestQuery = BuildDirectionsQuery(requestPoints);
+                    string requestQuery = BuildDirectionsQuery(requestPoints, isWalking);
 
                     HttpWebRequest request = WebRequest.Create(requestQuery) as HttpWebRequest;
 
@@ -93,7 +93,7 @@ namespace BusTrackerWeb.Controllers
             return routes;
         }
 
-        public string BuildDirectionsQuery(GeoCoordinate[] routePoints, bool walking = false)
+        public string BuildDirectionsQuery(GeoCoordinate[] routePoints, bool isWalking = false)
         {
             string origin = string.Empty;
             string destination = string.Empty;
@@ -135,7 +135,7 @@ namespace BusTrackerWeb.Controllers
             string apiKey = Properties.Settings.Default.MapsApiDeveloperKey;
 
             // Build the API query.
-            if (walking)
+            if (isWalking)
             {
                 queryBuilder.AppendFormat("{0}{1}{2}{3}&mode=walking&departure_time=now&traffic_model=best_guess&key={4}",
                     MAPS_API_BASE_URL, origin, destination, waypointBuilder, apiKey);
