@@ -54,7 +54,7 @@
                                 <div class="form-group">
                                     <div class="btn-group dropdown">
                                         <button id="passenger-location-dropdown" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            GPS <span class="caret"></span>
+                                            Simulate <span class="caret"></span>
                                         </button>
                                         <ul class="dropdown-menu">
                                             <li><a href="#" id="passenger-location-dropdown-gps-action">GPS</a></li>
@@ -73,7 +73,7 @@
                         <div class="col-md-8">
                             <div class="btn-group dropdown">
                                 <button id="bus-location-dropdown" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    GPS <span class="caret"></span>
+                                    Simulate <span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu">
                                     <li><a href="#" id="bus-location-dropdown-gps-action">GPS</a></li>
@@ -125,8 +125,8 @@
 
         //Globals
         var userIsDriver = false;
-        var busSimulationEnabled = false;
-        var passengerSimulationEnabled = false;
+        var busSimulationEnabled = true;
+        var passengerSimulationEnabled = true;
         var passengerOnBoard = false;
 
         var busSimulatorInterval = null;
@@ -151,6 +151,9 @@
             initUserDropDown();
             initPassengerDropDown();
             initBusDropDown();
+
+            startBusSimulation();
+            startPassengerSimulation();
         });
 
         function initUserDropDown() {
@@ -182,8 +185,7 @@
             $("#passenger-location-dropdown-simulate-action").click(function (e) {
                 $('#passenger-location-dropdown').html('Simulate <span class="caret"></span>');
 
-                passengerSimulationEnabled = true;
-                userSimulatorInterval = setInterval(simulateUserLocation, 2000);
+                startPassengerSimulation();
             });
         }
 
@@ -198,12 +200,20 @@
             $("#bus-location-dropdown-simulate-action").click(function (e) {
                 $('#bus-location-dropdown').html('Simulate <span class="caret"></span>');
 
-                busSimulationEnabled = true;
-                simulateBusLocation();
-                busSimulatorInterval = setInterval(simulateBusLocation, 2000);
+                startBusSimulation();
             });
         }
 
+        function startPassengerSimulation() {
+            passengerSimulationEnabled = true;
+            userSimulatorInterval = setInterval(simulateUserLocation, 5000);
+        }
+
+        function startBusSimulation() {
+            busSimulationEnabled = true;
+            simulateBusLocation();
+            busSimulatorInterval = setInterval(simulateBusLocation, 5000);
+        }
 
         /*
         Function: postJourneyStops()
@@ -425,7 +435,7 @@
                         console.log('GET Bus Latitude: ' + response[0].BusLatitude + '   Bus Longitude: ' + response[0].BusLongitude);
                     }
                 });
-            }, 2000);
+            }, 5000);
         }
 
 
@@ -440,6 +450,12 @@
                     } else {
                         Console.log("Geolocation is not supported by this browser.");
                     }
+
+                    console.log('Geolocate User Latitude: ' + marker.getPosition().lat() + '   User Longitude: ' + marker.getPosition().lng());
+                }
+                else
+                {
+                    console.log('Simulate User Latitude: ' + marker.getPosition().lat() + '   User Longitude: ' + marker.getPosition().lng());
                 }
 
                 marker.setPosition(userLocation);
@@ -448,9 +464,7 @@
                     map.setZoom(15);
                     map.setCenter(userLocation);
                 }
-
-                console.log('User Latitude: ' + marker.getPosition().lat() + '   User Longitude: ' + marker.getPosition().lng());
-            }, 2000);
+            }, 5000);
         }
 
 
@@ -483,7 +497,7 @@
     
         function startBusAction() {
             if (busSimulationEnabled == false) {
-                putBusInterval = setInterval(putBusLocation, 2000);
+                putBusInterval = setInterval(putBusLocation, 5000);
             }
         }
 

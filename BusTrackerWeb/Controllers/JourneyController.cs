@@ -115,7 +115,7 @@ namespace BusTrackerWeb.Controllers
             new GeoCoordinate(dashboardModel.UserStop.StopLatitude, dashboardModel.UserStop.StopLongitude)
             };
 
-            List<Route> walkingRoutes = WebApiApplication.DirectionsApiControl.GetDirections(waypoints);
+            List<Route> walkingRoutes = WebApiApplication.DirectionsApiControl.GetDirections(waypoints, true);
 
             double walkingDuration = 0.0;
             
