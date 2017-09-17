@@ -110,6 +110,8 @@
                             </form>
                         </div>
                     </div>
+
+                    <button id="bus-finish-button" type="button" class="btn btn-danger" onclick="updateDepartures()">Update Departures</button>
                 </div>
             </div>
         </div>
@@ -147,6 +149,9 @@
 
             postJourneyStops();
             setInterval(postJourneyStops, 60000);
+
+            updateDepartures();
+            setInterval(updateDepartures, 60000);
 
             initUserDropDown();
             initPassengerDropDown();
@@ -270,7 +275,7 @@
             for (var i = 0; i < departures.length; i++) {
                 var stopId = departures[i].Stop.StopId;
                 var sName = departures[i].Stop.StopName;
-                var sDepartureTime = new Date(parseInt(departures[i].ScheduledDeparture.substr(6)));;
+                var sDepartureTime = new Date(parseInt(departures[i].EstimatedDeparture.substr(6)));;
                 var sLatitude = departures[i].Stop.StopLatitude;
                 var sLongitude = departures[i].Stop.StopLongitude;
                 journeyStops[i] = { stopId: stopId, stopName: sName, departureTime: sDepartureTime, StopLatitude: sLatitude, StopLongitude: sLongitude }
@@ -485,7 +490,7 @@
                 userLocation = busLocation;
             }
         }
-        
+
         function startPassengerAction() {
             passengerOnBoard = true;
         }
@@ -494,7 +499,7 @@
             passengerOnBoard = false;
         }
 
-    
+
         function startBusAction() {
             if (busSimulationEnabled == false) {
                 putBusInterval = setInterval(putBusLocation, 5000);
@@ -521,6 +526,28 @@
                 console.log("Unable to track bus, browser doesn't support geolocation.");
             }
         };
+
+
+        function updateDepartures() {
+            $.ajax({
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'text',
+                type: 'POST',
+                url: '/Journey/UpdateDepartures',
+                data: JSON.stringify({ 'routeId': @ViewBag.RouteId, 'runId': @ViewBag.RunId }),
+                success: function (response) {
+                    updateDeparturesCallback(response)
+                },
+                error: function (textStatus, errorThrown) {
+                    console.log('Error on UpdateDepartures Post');
+                }
+            });
+
+        }
+
+        function updateDeparturesCallback(response) {
+            departures = response;
+        }
 
 
     </script>

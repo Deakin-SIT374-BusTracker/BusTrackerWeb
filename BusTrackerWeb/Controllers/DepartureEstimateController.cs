@@ -10,13 +10,13 @@ namespace BusTrackerWeb.Controllers
 {
     public class DepartureEstimateController : Controller
     {
-        public void EstimateDepartures(List<DepartureModel> departures, List<Leg> routeLegs, string busRegoNumber)
+        public List<DepartureModel> EstimateDepartures(List<DepartureModel> departures, List<Leg> routeLegs, string busRegoNumber)
         {
             // Initialise the first stop estimated departure time.
             departures.First().EstimatedDeparture = departures.First().ScheduledDeparture;
 
             // Calculate and update optimum ETA for each leg of the run.
-            for (int i = 0; i < departures.Count(); i++)
+            for (int i = 0; i < routeLegs.Count(); i++)
             {
                 // Estimate departure of next stop = last stop estimated departure time plus travel time.
                 DateTime estimatedDeparture = departures[i].EstimatedDeparture.AddSeconds(routeLegs[i].duration.value);
@@ -28,7 +28,8 @@ namespace BusTrackerWeb.Controllers
             StopModel lastScheduledStop = departures.First(d => d.ScheduledDeparture >= DateTime.Now).Stop;
 
             // Check if that bus has reached the last scheduled stop.
-            BusModel trackedBus = WebApiApplication.TrackedBuses.First(b => (b.RouteId == departures.First().RouteId) && (b.BusRegoNumber == busRegoNumber));
+            int routeId = departures.First().RouteId;
+            BusModel trackedBus = WebApiApplication.TrackedBuses.Single(b => b.RouteId == routeId);
             int busPreviousStopId = trackedBus.BusPreviousStop.StopId;
             if (busPreviousStopId != lastScheduledStop.StopId)
             {
@@ -52,6 +53,8 @@ namespace BusTrackerWeb.Controllers
                         departures[i].EstimatedDeparture.AddSeconds(busDelaySeconds);
                 }
             }
+
+            return departures;
         }
     }
 }
