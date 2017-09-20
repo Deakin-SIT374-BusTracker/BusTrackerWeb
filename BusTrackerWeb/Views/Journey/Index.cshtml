@@ -144,18 +144,12 @@
         Jquery function called after document has been rendered.
         */
         $(document).ready(function () {
-            postJourneyDashboard();
-            setInterval(postJourneyDashboard, 60000);
-
-            postJourneyStops();
-            setInterval(postJourneyStops, 60000);
-
-            updateDepartures();
-            setInterval(updateDepartures, 60000);
-
             initUserDropDown();
             initPassengerDropDown();
             initBusDropDown();
+
+            updateDepartures();
+            setInterval(updateDepartures, 30000);
 
             startBusSimulation();
             startPassengerSimulation();
@@ -228,14 +222,12 @@
         This function is called to periodically update the departure times.
         */
         function postJourneyStops() {
-            // Get a collection of departures from the Controller.
-            var departures = @Html.Raw(Json.Encode(@ViewBag.Departures));
 
             // Build a new array of stops from the departure collection.
             var stops = []
             for (var i = 0; i < departures.length; i++) {
                 var sName = departures[i].Stop.StopName;
-                var sDepartureTime = new Date(parseInt(departures[i].ScheduledDeparture.substr(6)));;
+                var sDepartureTime = new Date(parseInt(departures[i].EstimatedDeparture.substr(6)));;
                 stops[i] = { stopName: sName, departureTime: sDepartureTime }
             }
 
@@ -267,8 +259,6 @@
 
 
         function postJourneyDashboard() {
-            // Get a collection of departures from the Controller.
-            var departures = @Html.Raw(Json.Encode(@ViewBag.Departures));
 
             // Build a new array of stops from the departure collection.
             var journeyStops = []
@@ -546,7 +536,10 @@
         }
 
         function updateDeparturesCallback(response) {
-            departures = response;
+            departures = JSON.parse(response);
+
+            postJourneyDashboard();
+            postJourneyStops();
         }
 
 
