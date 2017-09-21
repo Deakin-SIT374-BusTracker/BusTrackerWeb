@@ -255,6 +255,9 @@
     <Content Include="Fonts\map-icons.eot" />
     <Content Include="Fonts\map-icons.ttf" />
     <Content Include="Fonts\map-icons.woff" />
+    <Content Include="BusHopWeb.PublishSettings" />
+    <None Include="Properties\PublishProfiles\BusHopWeb - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\BusHopWeb - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\BusTrackerWeb - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\BusTrackerWeb - Web Deploy.pubxml" />
     <None Include="Properties\Settings.settings">
