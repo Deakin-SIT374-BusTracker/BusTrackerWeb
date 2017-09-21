@@ -40,18 +40,36 @@ namespace BusTrackerWeb.Controllers
                 // Find the index of the scheduled stop.
                 int scheduledStopIndex = departures.FindIndex(d => d.Stop.StopId == lastScheduledStop.StopId);
 
-                // Take departures between actual and scheduled.
-                List<Leg> lateLegs = routeLegs.Skip(actualStopIndex).Take(scheduledStopIndex - actualStopIndex).ToList();
+                // Determine if early or late.
+                List<Leg> delayLegs = new List<Leg>();
+                int busDelaySeconds = 0;
+                if (actualStopIndex < scheduledStopIndex)
+                {
+                    // Take all legs running later than scheduled.
+                    delayLegs = routeLegs.Skip(actualStopIndex).Take(scheduledStopIndex - actualStopIndex).ToList();
 
-                // Sum leg durations, this is how late the bus is.
-                int busDelaySeconds = lateLegs.Sum(l => l.duration.value);
+                    // Delay estimated departures for all remaining stops.
+                    busDelaySeconds = delayLegs.Sum(l => l.duration.value);
+                }
+                else
+                {
+                    // Take all legs running ahead of schedule.
+                    delayLegs = routeLegs.Skip(scheduledStopIndex).Take(actualStopIndex - scheduledStopIndex).ToList();
+
+                    // Advance estimted departures fro all reamining stops.
+                    busDelaySeconds = delayLegs.Sum(l => l.duration.value);
+                    busDelaySeconds *= -1;
+                }
 
                 // From the current stop, offset the optimum estimated departure times by how late the bus is.
-                for (int i = (actualStopIndex + 1); i < departures.Count(); i++)
+                for (int i = (actualStopIndex); i < departures.Count(); i++)
                 {
                     departures[i].EstimatedDeparture =
                         departures[i].EstimatedDeparture.AddSeconds(busDelaySeconds);
                 }
+
+                // Discard all past stops.
+                departures = departures.Skip(actualStopIndex).Take(departures.Count()).ToList();
             }
 
             return departures;
