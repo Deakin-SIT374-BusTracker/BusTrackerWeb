@@ -282,5 +282,33 @@ namespace BusTrackerWeb.Controllers
 
             return Json(trackedBus, JsonRequestBehavior.AllowGet);
         }
+
+        public async Task<JsonResult> UpdateDepartures(int routeId, int runId)
+        {
+            DepartureEstimateController estimateControl = new DepartureEstimateController();
+
+            // Get the stopping pattern for the selected run.
+            RouteModel departureRoute = new RouteModel { RouteId = routeId };
+            RunModel departureRun = new RunModel { RunId = runId, Route = departureRoute };
+            StoppingPatternModel pattern = await WebApiApplication.PtvApiControl.GetStoppingPatternAsync(departureRun);
+
+            // Build and array of stop coordinates.
+            List<GeoCoordinate> stopCoordinates = new List<GeoCoordinate>();
+            foreach (DepartureModel departure in pattern.Departures)
+            {
+                stopCoordinates.Add(new GeoCoordinate((double)departure.Stop.StopLatitude, (double)departure.Stop.StopLongitude));
+            }
+
+            // Get directions between stops.
+            List<Route> runRoutes = WebApiApplication.DirectionsApiControl.GetDirections(stopCoordinates.ToArray());
+
+            // If route simulation enabled, pass route legs.
+            List<Leg> routeLegs = new List<Leg>();
+            runRoutes.ForEach(r => routeLegs.AddRange(r.legs));
+
+            List<DepartureModel> updatedDeaprtures = estimateControl.EstimateDepartures(pattern.Departures.ToList(), routeLegs, "SIM001");
+
+            return Json(updatedDeaprtures, JsonRequestBehavior.AllowGet);
+        }
     }
 }
