@@ -146,8 +146,10 @@
             initPassengerDropDown();
             initBusDropDown();
 
+            postJourneyDashboard();
+            postJourneyStops();
             updateDepartures();
-            setInterval(updateDepartures, 30000);
+            setInterval(updateDepartures, 15000);
 
             startBusSimulation();
             startPassengerSimulation();
