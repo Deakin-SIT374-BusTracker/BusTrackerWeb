@@ -69,7 +69,14 @@ namespace BusTrackerWeb.Controllers
                 searchRoutes.Add(new SearchRouteModel(route, directions));
             }
 
-            return PartialView("~/Views/Search/_SearchRoutes.cshtml", searchRoutes);
+            if (searchRoutes.Count() != 0)
+            {
+                return PartialView("~/Views/Search/_SearchRoutes.cshtml", searchRoutes);
+            }
+            else
+            {
+                return PartialView("~/Views/Search/_SearchNoRoutes.cshtml", searchRoutes);
+            }
         }
     }
 }

@@ -103,8 +103,16 @@ namespace BusTrackerWeb.Controllers
             departures = departures.Where(
                 d => d.ScheduledDeparture >= DateTime.Now).ToList();
 
-            return PartialView("~/Views/Departure/_DepartureRuns.cshtml",
-                departures);
+            if (departures.Count != 0)
+            {
+                return PartialView("~/Views/Departure/_DepartureRuns.cshtml",
+                    departures);
+            }
+            else
+            {
+                return PartialView("~/Views/Departure/_DepartureNoRuns.cshtml",
+                    departures);
+            }
         }
     }
 }

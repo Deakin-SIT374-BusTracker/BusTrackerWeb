@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -38,6 +39,7 @@ namespace BusTrackerWeb.Models
         /// <summary>
         /// The scheduled departure time from the associated bus stop.
         /// </summary>
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy hh:mm tt}")]
         public DateTime ScheduledDeparture { get; set; }
 
         /// <summary>

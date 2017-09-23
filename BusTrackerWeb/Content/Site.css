@@ -40,7 +40,7 @@ textarea {
     margin: 0 auto;
     margin-top: 1em;
     min-height: 60px;
-    min-width: 500px
+    min-width: 400px
 }
 
 .search-button {
@@ -55,6 +55,12 @@ textarea {
     text-align: left
 }
 
+.search-error {
+    margin-top: 3em;
+    font-size: x-large;
+    text-align: center;
+}
+
 .departure-prompt {
     font-size: small;
 }
@@ -64,11 +70,17 @@ textarea {
     text-align: center;
 }
 
+.departure-error {
+    margin-top: 3em;
+    font-size: x-large;
+    text-align: center;
+}
+
 .departure-input {
     margin: 0 auto;
     margin-top: 1em;
     min-height: 60px;
-    min-width: 500px
+    min-width: 400px
 }
 
 .journey-header {
@@ -109,5 +121,5 @@ textarea {
 
 
 span.twitter-typeahead {
-    width: 500px
+    width: 400px
 }

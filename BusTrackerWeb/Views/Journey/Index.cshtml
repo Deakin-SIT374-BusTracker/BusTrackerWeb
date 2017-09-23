@@ -353,7 +353,7 @@
                     infowindow.open(map, this);
                 });
 
-                // Ajusted bounds of map based on new marker.
+                // Adjusted bounds of map based on new marker.
                 bounds.extend(newMarker.getPosition());
             }
 
@@ -419,8 +419,9 @@
                 $.get("/api/Bus/GetBusOnRouteLocation", { routeId: @ViewBag.RouteId, busRego: 'SIM001' }, function (response) {
                     if (response.length > 0) {
                         busLocation = new google.maps.LatLng(response[0].BusLatitude, response[0].BusLongitude);
-                        marker.setPosition(busLocation);
                         marker.setTitle(response[0].BusRegoNumber);
+
+                        marker.setPosition(busLocation);
 
                         if (userIsDriver) {
                             map.setZoom(15);
@@ -456,8 +457,11 @@
                 marker.setPosition(userLocation);
 
                 if (!userIsDriver) {
-                    map.setZoom(15);
-                    map.setCenter(userLocation);
+                    // Follow the user location of they are on board.
+                    if (passengerOnBoard) {
+                        map.setZoom(15);
+                        map.setCenter(userLocation);
+                    }
                 }
             }, 5000);
         }

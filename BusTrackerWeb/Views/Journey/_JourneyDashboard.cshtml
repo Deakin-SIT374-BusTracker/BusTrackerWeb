@@ -8,15 +8,15 @@
 
     <table id="scheduleTable" class="table table-borderless journey-table" style="border:none">
         <tr>
-            <td><span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>&nbsp;&nbsp;Your Stop:</td>
+            <td><span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>&nbsp;&nbsp;Your Closest Stop:</td>
             <td>@Html.DisplayFor(modelItem => Model.UserStop.StopName)</td>
         </tr>
         <tr>
-            <td><span class="glyphicon glyphicon-time" aria-hidden="true"></span>&nbsp;&nbsp;Start Walking: </td>
+            <td><span class="glyphicon glyphicon-time" aria-hidden="true"></span>&nbsp;&nbsp;Start Walking to Stop: </td>
             <td>@Html.DisplayFor(modelItem => Model.WalkingDepartureMinutes)</td>
         </tr>
         <tr>
-            <td><span class="glyphicon glyphicon-time" aria-hidden="true"></span>&nbsp;&nbsp;Bus Departs: </td>
+            <td><span class="glyphicon glyphicon-time" aria-hidden="true"></span>&nbsp;&nbsp;Bus Departs Stop: </td>
             <td>@Html.DisplayFor(modelItem => Model.BusDepartureMinutes)</td>
         </tr>
     </table>

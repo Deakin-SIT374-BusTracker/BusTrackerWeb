@@ -307,6 +307,8 @@
     <Content Include="Views\Departure\_DepartureAddress.cshtml" />
     <Content Include="Views\Journey\_JourneyStops.cshtml" />
     <Content Include="Views\Journey\_JourneyDashboard.cshtml" />
+    <Content Include="Views\Departure\_DepartureNoRuns.cshtml" />
+    <Content Include="Views\Search\_SearchNoRoutes.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

@@ -11,6 +11,9 @@
     <div class="search-title">When would you like to leave?</div>
 </div>
 
+<div style="margin-top:1.5em">
+    <div class="departure-prompt">Your current location</div>
+</div>
 
 @* Render users' current address. *@
 <div id="geo-address" style="margin-top:1.5em">
@@ -67,6 +70,7 @@
                 });
             } else {
                 console.log("Browser doesn't support geolocation!");
+                showManualAddress();
             }
         };
 
