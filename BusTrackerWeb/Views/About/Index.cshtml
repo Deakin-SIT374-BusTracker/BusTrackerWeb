@@ -1,4 +1,6 @@
 ﻿
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -27,7 +29,7 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="/Help">Help</a></li>
+                    <li><a href="/About">About</a></li>
                 </ul>
             </div>
         </div>
@@ -39,63 +41,31 @@
             <p class="lead" style="font-style:italic">Keeping commuters on the move >></p>
         </div>
         <div class="row">
-            <div class="col-md-12">
-                <h2>Help</h2>
-                <h3>User Guide</h3>
+            <div class="col-md-6">
+                <h2>About Us</h2>
                 <p>
-                    Welcome and thanks for using Bus Hop! Here is a quick step-by-step guide on how our app works:
-
-                    <b>STEP 1:</b> Our home page requires you to enter a bus route. These bus routes are directly provided to us from PTV. 
-                    <img src="~/Content/Images/Where are you travelling to step 1.png" />
-                </p>
-                <p>
-                    <b>STEP 2:</b> This page uses the geolocaion on your device to find where you are. If you have this switched off, 
-                    the app will need you to manually enter an address.
-                    Once we have your location, we'll need to know the time you'd like to leave.
-                    <img src="~/Content/Images/When would you like to leave step 2.png" />
-
-                </p>
-                <p>
-                    <b>STEP 3:</b> Your journey is displayed. The dashboard tells you the number of minutes you have left before you should leave towards your stop, among other important information.
-                    <img src="~/Content/Images/Your journey step 3.png" />
-
-                </p>
-                <h3>FAQs</h3>
-                <p>
-                    Do you have a question? Review our FAQs to see if it has already been answered.
-                </p>
-                <p>
-                    <b>Where does your data come from?</b> Our application indexes the data returned via the Public Transport of Victoria API. This API provides a public gateway for Bus Tracker client applications to access server side functions.
-        For more information about the API please refer to our API page <a class="btn btn-default" href="../Help">here.</a>
-
-                </p>
-                <p>
-                    <b>I don’t want my browser to know my location, can’t I just enter in a departing location manually?</b> Yes, you can click on the "change your location" button and manually enter an address in Victoria, Australia.
-                </p>
-
-                <p>
-                    <b>Which buses do you provide data on?</b> Our data is limited to Victoria, Australia. It is accessed through PTV’s API which means we can only provide information on buses that PTV has data on.
-
-                </p>
-                <p>
-                    <b>I checked the bus timetable on your website earlier in the day, but then wasn’t notified that it started to be early and ended up missing it. How do I stop that from happening?</b> You'll need to refresh your search and keep an eye on your dashboard to view most up-to-date data and make sure you don't miss your bus.
-                </p>
-                <p>
-                    <b>When will real-time data be available?</b> We are currently in contact with PTV's feedback team and will update our users as soon as we have more information.
-                </p>
-                <p>
-                    <b>Do you track trains too?</b> At the moment we're only tracking buses.
-                </p>
-                <p>
-                    <b>Can I see who else is on the bus using your app?</b> This is not something we've implemented for privacy reasons.
+                    Bus Hop is a GPS tracking solution for Public Transport Victoria bus service
+                    providers and commuters. We set about changing things for the better. We're a believer in using Bus Hop
+                    technology to improve customer experience so we created an application that updates the
+                    customer with schedules and delays. This application helps the user to take back control,
+                    and with the system that offers versatility, transparancy and efficiency. Users can search for
+                    bus stops via suburbs or names. Check out our help page <a href="~/Views/About/Help.cshtml">here</a>.
+                    <i><u>Develop a commercial relationship with this transport application and enjoy the services.</u></i>
                 </p>
             </div>
 
+
+            <div class="col-md-6">
+                <h2>API</h2>
+                <p>
+                    Bus Hop offers a public API for B2B system integration and client application
+                    development.
+                </p>
+                <p><a class="btn btn-default" href="../Help">Learn more &raquo;</a></p>
+            </div>
+
         </div>
-        <hr />
-        <footer>
-            <p>&copy; Deakin University 2017 - SIT302 Bus Tracker (Bus Hop) Project</p>
-        </footer>
+
     </div>
 
     <script src="/bundles/jquery?v=FVs3ACwOLIVInrAl5sdzR2jrCDmVOWFbZMY6g6Q0ulE1"></script>
